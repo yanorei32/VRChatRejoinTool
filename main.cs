@@ -117,7 +117,7 @@ class VRChatRejoinInstance {
 		}
 
 		foreach (Visit v in visitHistory.OrderByDescending(v_ => v_.DateTime)) {
-			if (
+			switch (
 				MessageBox.Show(
 					String.Format(
 						"Do you want to return to \n\n{0}\n\n{1} ?",
@@ -125,13 +125,22 @@ class VRChatRejoinInstance {
 						v.Instance
 					),
 					"Found it.",
-					MessageBoxButtons.YesNo,
+					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
-				) == DialogResult.Yes
+				)
 			) {
-				Process.Start(
-					"vrchat://launch?id=" + v.Instance
-				);
+				case DialogResult.Yes:
+					Process.Start(
+						"vrchat://launch?id=" + v.Instance
+					);
+
+					return;
+
+				case DialogResult.No:
+					continue;
+
+				case DialogResult.Cancel:
+					return;
 			}
 		}
 	}
