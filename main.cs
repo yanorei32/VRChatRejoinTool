@@ -162,6 +162,7 @@ class VRChatRejoinInstance {
 			this.launchVrc.Click	+= new EventHandler(launchVrcButtonClick);
 
 			curW += this.launchVrc.Size.Width;
+			curW += padding;
 
 			this.showInVrcw.Text		= "Detail";
 			this.showInVrcw.Location	= new Point(curW, curH);
