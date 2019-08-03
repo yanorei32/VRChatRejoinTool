@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Resources;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -70,6 +71,7 @@ class VRChatRejoinInstance {
 				padding	= 6;
 
 			int curW = 0, curH = 0;
+			Assembly execAsm = Assembly.GetExecutingAssembly();
 
 			this.logo		= new PictureBox();
 			this.prev		= new Button();
@@ -88,11 +90,9 @@ class VRChatRejoinInstance {
 			\*/
 			this.logo.Location			= new Point(curH, curW);
 			this.logo.Size				= new Size(imgW, imgH);
-			this.logo.BackgroundImage	= (Bitmap) new ResXResourceSet(
-				typeof(VRChatRejoinInstance).Assembly.GetManifestResourceStream(
-					"resources.resx"
-				)
-			).GetObject("logo");
+			this.logo.BackgroundImage	= new Bitmap(
+				execAsm.GetManifestResourceStream("logo")
+			);
 
 			curH += this.logo.Size.Height;
 			curH += padding;
@@ -180,7 +180,7 @@ class VRChatRejoinInstance {
 			this.MinimumSize		= this.Size;
 			this.MaximumSize		= this.Size;
 			this.FormBorderStyle	= FormBorderStyle.FixedSingle;
-
+			this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
 			this.Controls.Add(this.logo);
 			this.Controls.Add(this.launchVrc);
 			this.Controls.Add(this.showInVrcw);

@@ -5,7 +5,10 @@ SRC		= \
 
 DEPS	=
 
-CSC_FLAGS		= /nologo /target:winexe /res:resources.resx
+CSC_FLAGS		= /nologo /target:winexe \
+	/win32icon:res\\icon.ico \
+	/resource:res\\icon.ico,icon \
+	/resource:res\\logo.png,logo
 DEBUG_FLAGS		= 
 RELEASE_FLAGS	= 
 
