@@ -18,7 +18,7 @@ release: CSC_FLAGS+=$(RELEASE_FLAGS)
 release: all
 
 .PHONY: genzip
-genzip: VRChatRejoin.zip
+genzip:
 	zip -r VRChatRejoinTool.zip VRChatRejoinTool
 
 all: $(TARGET)
