@@ -31,6 +31,7 @@ class VRChatRejoinInstance {
 	}
 
 	class Form1 : Form {
+		static Regex publicInstanceRegex = new Regex(@":\d+$");
 		PictureBox logo;
 		Button launchVrc, showInVrcw, next, prev;
 		Label datetime, instance, permission;
@@ -51,6 +52,8 @@ class VRChatRejoinInstance {
 			Process.Start(
 				"vrchat://launch?id=" + sortedHistory[index].Instance
 			);
+
+			this.Close();
 		}
 
 		void showInVrcwButtonClick(object sender, EventArgs e) {
@@ -75,6 +78,7 @@ class VRChatRejoinInstance {
 			this.showInVrcw	= new Button();
 			this.datetime	= new Label();
 			this.instance	= new Label();
+			this.permission	= new Label();
 
 			this.SuspendLayout();
 			curH = curW = margin;
@@ -126,6 +130,18 @@ class VRChatRejoinInstance {
 			curH += padding;
 
 			/*\
+			|*| Permission column
+			\*/
+			this.permission.Text		= "Permission: XXX";
+			this.permission.AutoSize	= false;
+			this.permission.Location	= new Point(curW, curH);
+			this.permission.Size		= new Size(imgW, 20);
+			this.permission.Font		= new Font("Consolas", 14F);
+
+			curH += this.permission.Size.Height;
+			curH += padding;
+
+			/*\
 			|*| Instance column
 			\*/
 			this.instance.Text		= "Instance: wrld_xxx";
@@ -172,13 +188,29 @@ class VRChatRejoinInstance {
 			this.Controls.Add(this.next);
 			this.Controls.Add(this.datetime);
 			this.Controls.Add(this.instance);
+			this.Controls.Add(this.permission);
 			this.ResumeLayout(false);
 		}
 
 		void update() {
+			string permission = "Unknown";
 			Visit v = sortedHistory[index];
+
+			if (v.Instance.Contains("canRequestInvite")) {
+				permission = "Invite+";
+			} else if (v.Instance.Contains("private")) {
+				permission = "Ivite Only";
+			} else if (v.Instance.Contains("friends")) {
+				permission = "Friends";
+			} else if (v.Instance.Contains("hidden")) {
+				permission = "Friends+";
+			} else if (v.Instance.Contains("public") || publicInstanceRegex.IsMatch(v.Instance)) {
+				permission = "Public";
+			}
+
 			this.instance.Text = "Instance:\n" + v.Instance;
 			this.datetime.Text = "Date: " + v.DateTime;
+			this.permission.Text = "Permission: " + permission;
 			this.prev.Enabled = 1 <= index;
 			this.next.Enabled = index <= sortedHistory.Count - 2;
 		}
