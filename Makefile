@@ -19,7 +19,7 @@ release: all
 
 .PHONY: genzip
 genzip: VRChatRejoin.zip
-	zip -r VRChatRejoin.zip VRChatRejoin
+	zip -r VRChatRejoinTool.zip VRChatRejoinTool
 
 all: $(TARGET)
 $(TARGET): $(SRC) $(DEPS)

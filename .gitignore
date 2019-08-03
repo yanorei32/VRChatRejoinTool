@@ -1,4 +1,5 @@
-*.exe
+/*.exe
+!/VRChatRejoin/*.exe
 *.zip
 
 # Created by https://www.gitignore.io/api/vim
