@@ -1,14 +1,14 @@
 CSC		= /cygdrive/c/windows/microsoft.net/framework/v4.0.30319/csc.exe
 TARGET	= VRChatRejoin.exe
-SRC		= \
-	main.cs \
+SRC		= main.cs
 
 DEPS	=
 
-CSC_FLAGS		= /nologo /target:winexe \
-	/win32icon:res\\icon.ico \
-	/resource:res\\icon.ico,icon \
-	/resource:res\\logo.png,logo
+CSC_FLAGS		=	/nologo /target:winexe \
+					/win32icon:res\\icon.ico \
+					/resource:res\\icon.ico,icon \
+					/resource:res\\logo.png,logo \
+					/utf8output
 DEBUG_FLAGS		= 
 RELEASE_FLAGS	= 
 
@@ -26,7 +26,7 @@ genzip:
 
 all: $(TARGET)
 $(TARGET): $(SRC) $(DEPS)
-	$(CSC) $(CSC_FLAGS) /out:$(TARGET) $(SRC) | iconv -f cp932 -t utf-8
+	$(CSC) $(CSC_FLAGS) /out:$(TARGET) $(SRC)
 
 .PHONY: clean
 clean:
