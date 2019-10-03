@@ -11,28 +11,54 @@ using System.Windows.Forms;
 
 class VRChatRejoinInstance {
 	static Regex instanceRegex = new Regex(@"wrld_.+");
+	static Regex publicInstanceRegex = new Regex(@":\d+$");
 	static Regex dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
+
+	static bool noGUI = false, killVrc = false;
+
+	enum Permission { Unknown, InviteOnly, InvitePlus, Friends, FriendsPlus, Public };
 
 	class Visit {
 		string instance;
-		string dateTime;
+		DateTime dateTime;
+		Permission permission;
+
+		public Permission Permission {
+			get { return this.permission; }
+		}
 
 		public string Instance {
 			get { return this.instance; }
 		}
 
-		public string DateTime {
+		public string WorldId {
+			get { return this.instance.Split(':')[0]; }
+		}
+
+		public DateTime DateTime {
 			get { return this.dateTime; }
 		}
 
 		public Visit(string instance, string dateTime) {
 			this.instance = instance;
-			this.dateTime = dateTime;
+			this.dateTime = DateTime.Parse(dateTime);
+
+			this.permission = Permission.Unknown;
+
+			if (instance.Contains("canRequestInvite"))
+				this.permission = Permission.InvitePlus;
+			else if (instance.Contains("private"))
+				this.permission = Permission.InviteOnly;
+			else if (instance.Contains("friends"))
+				this.permission = Permission.Friends;
+			else if (instance.Contains("hidden"))
+				this.permission = Permission.FriendsPlus;
+			else if (instance.Contains("public") || publicInstanceRegex.IsMatch(instance))
+				this.permission = Permission.Public;
 		}
 	}
 
 	class Form1 : Form {
-		static Regex publicInstanceRegex = new Regex(@":\d+$");
 		PictureBox logo;
 		Button launchVrc, showInVrcw, next, prev;
 		Label datetime, instance, permission;
@@ -50,16 +76,13 @@ class VRChatRejoinInstance {
 		}
 
 		void launchVrcButtonClick(object sender, EventArgs e) {
-			Process.Start(
-				"vrchat://launch?id=" + sortedHistory[index].Instance
-			);
-
+			launchVRChat(sortedHistory[index]);
 			this.Close();
 		}
 
 		void showInVrcwButtonClick(object sender, EventArgs e) {
 			Process.Start(
-				"https://www.vrcw.net/world/detail/" + sortedHistory[index].Instance.Split(':')[0]
+				"https://www.vrcw.net/world/detail/" + sortedHistory[index].WorldId
 			);
 		}
 
@@ -194,24 +217,11 @@ class VRChatRejoinInstance {
 		}
 
 		void update() {
-			string permission = "Unknown";
 			Visit v = sortedHistory[index];
 
-			if (v.Instance.Contains("canRequestInvite")) {
-				permission = "Invite+";
-			} else if (v.Instance.Contains("private")) {
-				permission = "Ivite Only";
-			} else if (v.Instance.Contains("friends")) {
-				permission = "Friends";
-			} else if (v.Instance.Contains("hidden")) {
-				permission = "Friends+";
-			} else if (v.Instance.Contains("public") || publicInstanceRegex.IsMatch(v.Instance)) {
-				permission = "Public";
-			}
-
 			this.instance.Text = "Instance:\n" + v.Instance;
-			this.datetime.Text = "Date: " + v.DateTime;
-			this.permission.Text = "Permission: " + permission;
+			this.datetime.Text = "Date: " + v.DateTime.ToString();
+			this.permission.Text = "Permission: " + Enum.GetName(typeof(Permission), v.Permission);
 			this.prev.Enabled = 1 <= index;
 			this.next.Enabled = index <= sortedHistory.Count - 2;
 		}
@@ -247,46 +257,89 @@ class VRChatRejoinInstance {
 		}
 	}
 
-	static FileInfo getNewerLogFile() {
+	static IEnumerable<FileInfo> getLogFiles() {
 		return new DirectoryInfo(
 			Environment.ExpandEnvironmentVariables(
 				@"%AppData%\..\LocalLow\VRChat\VRChat"
 			)
 		).EnumerateFiles(
 			"output_log_*.txt"
-		).OrderByDescending(
-			f => f.CreationTime
-		).FirstOrDefault();
+		);
+	}
+
+	static void ShowMessage(string message, bool noGUI) {
+
+		MessageBox.Show(
+			message,
+			message,
+			MessageBoxButtons.OK,
+			MessageBoxIcon.Asterisk
+		);
+	}
+
+	static void launchVRChat(Visit v) {
+		if (killVrc)
+			foreach (var p in Process.GetProcessesByName("vrchat"))
+				p.Kill();
+
+		Process.Start("vrchat://launch?id=" + v.Instance);
 	}
 
 	public static void Main(string[] Args) {
 		List<Visit> visitHistory = new List<Visit>();
+		List<string> userSelectedLogFiles = new List<string>();
+		List<string> ignoreWorldIds = new List<string>();
+		bool ignorePublic = false;
+		int ignoreByTimeMins = 0;
 
-		if (Args.Length == 0) {
-			FileInfo newerLogFile = getNewerLogFile();
+		Match match;
 
-			if (newerLogFile == null) {
-				MessageBox.Show(
-					"Could not find VRChat log.",
-					"Could not find VRChat log.",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Asterisk
-				);
+		Regex ignoreWorldsArgRegex = new Regex(@"--ignore-worlds=wrld_.+(,wrld_.+)?");
+		Regex ignoreByTimeRegex = new Regex(@"--ignore-by-time=\d+");
 
-				return;
+		/*\
+		|*| Parse arguments
+		\*/
+		foreach (string arg in Args) {
+			if (arg == "--no-gui") {
+				noGUI = true;
+				continue;
 			}
 
-			using (
-				FileStream stream = newerLogFile.Open(
-					FileMode.Open,
-					FileAccess.Read,
-					FileShare.ReadWrite
-				)
-			) {
-				ReadLogfile(stream, visitHistory);
+			if (arg == "--kill-vrc") {
+				killVrc = true;
+				continue;
 			}
-		} else {
-			foreach (string filepath in Args) {
+
+			if (arg == "--ignore-public") {
+				ignorePublic = true;
+				continue;
+			}
+
+			match = ignoreWorldsArgRegex.Match(arg);
+			if (match.Success) {
+				foreach (string world in arg.Split('=')[1].Split(','))
+					ignoreWorldIds.Add(world);
+
+				continue;
+			}
+
+			match = ignoreByTimeRegex.Match(arg);
+			if (match.Success) {
+				ignoreByTimeMins = int.Parse(arg.Split('=')[1]);
+				continue;
+			}
+
+			userSelectedLogFiles.Add(arg);
+		}
+
+
+		/*\
+		|*| Read logfiles
+		|*|  (Find logfiles by AppData if userSelectedLogFiles is empty)
+		\*/
+		if (userSelectedLogFiles.Any()) {
+			foreach (string filepath in userSelectedLogFiles) {
 				using (
 					FileStream stream = new FileStream(
 						filepath,
@@ -298,28 +351,71 @@ class VRChatRejoinInstance {
 					ReadLogfile(stream, visitHistory);
 				}
 			}
+		} else {
+			IEnumerable<FileInfo> logfiles = getLogFiles();
+
+			if (!logfiles.Any()) {
+				ShowMessage("Could not find VRChat log.", noGUI);
+				return;
+			}
+
+			foreach (FileInfo logfile in logfiles) {
+				using (
+					FileStream stream = logfile.Open(
+						FileMode.Open,
+						FileAccess.Read,
+						FileShare.ReadWrite
+					)
+				) {
+					ReadLogfile(stream, visitHistory);
+				}
+			}
 		}
 
-		if (visitHistory.Count == 0) {
-			MessageBox.Show(
-				"Could not find last visited instance.",
-				"Could not find last visited instance.",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Asterisk
-			);
 
+		/*\
+		|*| Filter and Sort
+		\*/
+		DateTime compDate = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
+		List<Visit> sortedVisitHistory = visitHistory.Where(
+			v => (
+				!ignorePublic
+				||
+				(
+					v.Permission != Permission.Public
+					&&
+					v.Permission != Permission.Unknown
+				)
+			)
+			&&
+			(
+				ignoreByTimeMins == 0
+				||
+				compDate < v.DateTime
+			)
+			&&
+			!ignoreWorldIds.Contains(v.WorldId)
+		).OrderByDescending(
+			v => v.DateTime
+		).ToList();
+
+		if (!sortedVisitHistory.Any()) {
+			ShowMessage("Could not find visits from VRChat log.", noGUI);
 			return;
 		}
 
-		visitHistory.Sort(
-			(a, b) => string.Compare(b.DateTime, a.DateTime)
-		);
-
-		Application.EnableVisualStyles();
-		Application.SetCompatibleTextRenderingDefault(false);
-		Application.Run(
-			new Form1(visitHistory)
-		);
+		/*\
+		|*| Action
+		\*/
+		if (noGUI) {
+			launchVRChat(sortedVisitHistory[0]);
+		} else {
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(
+				new Form1(sortedVisitHistory)
+			);
+		}
 	}
 }
 
