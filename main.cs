@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Resources;
 using System.Text.RegularExpressions;
@@ -267,14 +268,17 @@ class VRChatRejoinInstance {
 		);
 	}
 
-	static void ShowMessage(string message, bool noGUI) {
-
-		MessageBox.Show(
-			message,
-			message,
-			MessageBoxButtons.OK,
-			MessageBoxIcon.Asterisk
-		);
+	static void ShowMessage(string message, bool noDialog) {
+		if (noDialog) {
+			SystemSounds.Exclamation.Play();
+		} else {
+			MessageBox.Show(
+				message,
+				message,
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Asterisk
+			);
+		}
 	}
 
 	static void launchVRChat(Visit v) {
@@ -289,7 +293,7 @@ class VRChatRejoinInstance {
 		List<Visit> visitHistory = new List<Visit>();
 		List<string> userSelectedLogFiles = new List<string>();
 		List<string> ignoreWorldIds = new List<string>();
-		bool ignorePublic = false;
+		bool ignorePublic = false, noDialog = false;
 		int ignoreByTimeMins = 0;
 
 		Match match;
@@ -313,6 +317,11 @@ class VRChatRejoinInstance {
 
 			if (arg == "--ignore-public") {
 				ignorePublic = true;
+				continue;
+			}
+
+			if (arg == "--no-dialog") {
+				noDialog = true;
 				continue;
 			}
 
@@ -355,7 +364,7 @@ class VRChatRejoinInstance {
 			IEnumerable<FileInfo> logfiles = getLogFiles();
 
 			if (!logfiles.Any()) {
-				ShowMessage("Could not find VRChat log.", noGUI);
+				ShowMessage("Could not find VRChat log.", noGUI && noDialog);
 				return;
 			}
 
@@ -400,7 +409,7 @@ class VRChatRejoinInstance {
 		).ToList();
 
 		if (!sortedVisitHistory.Any()) {
-			ShowMessage("Could not find visits from VRChat log.", noGUI);
+			ShowMessage("Could not find visits from VRChat log.", noGUI && noDialog);
 			return;
 		}
 
