@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -66,7 +65,7 @@ class Program {
 		bool
 			ignorePublic = false,
 			noDialog = false,
-			killVrc = false,
+			killVRC = false,
 			noGUI = false;
 		int ignoreByTimeMins = 0;
 
@@ -84,7 +83,7 @@ class Program {
 			}
 
 			if (arg == "--kill-vrc") {
-				killVrc = true;
+				killVRC = true;
 				continue;
 			}
 
@@ -189,13 +188,12 @@ class Program {
 		|*| Action
 		\*/
 		if (noGUI) {
-			if (killVrc) VRChat.KillExistProcesses();
-			VRChat.Launch(sortedVisitHistory[0].Instance.Id);
+			VRChat.Launch(sortedVisitHistory[0].Instance.Id, killVRC);
 		} else {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(
-				new MainForm(sortedVisitHistory, killVrc)
+				new MainForm(sortedVisitHistory, killVRC)
 			);
 		}
 	}

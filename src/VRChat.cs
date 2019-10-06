@@ -1,12 +1,15 @@
 using System.Diagnostics;
 
 static class VRChat {
-	public static void KillExistProcesses() {
+	private static void killExistProcesses() {
 		foreach (var p in Process.GetProcessesByName("vrchat"))
 			p.Kill();
 	}
 
-	public static void Launch(string instanceId) {
+	public static void Launch(string instanceId, bool killVRC) {
+		if (killVRC)
+			killExistProcesses();
+
 		Process.Start("vrchat://launch?id=" + instanceId);
 	}
 

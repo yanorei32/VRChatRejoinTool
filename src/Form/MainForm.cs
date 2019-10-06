@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 partial class MainForm : Form {
@@ -8,7 +7,7 @@ partial class MainForm : Form {
 	Button launchVrc, showInVrcw, next, prev;
 	Label datetime, instance, permission;
 	List<Visit> sortedHistory;
-	bool killVRChat;
+	bool killVRC;
 	int index = 0;
 
 	void prevButtonClick(object sender, EventArgs e) {
@@ -22,8 +21,7 @@ partial class MainForm : Form {
 	}
 
 	void launchVrcButtonClick(object sender, EventArgs e) {
-		if (killVRChat) VRChat.KillExistProcesses();
-		VRChat.Launch(sortedHistory[index].Instance.Id);
+		VRChat.Launch(sortedHistory[index].Instance.Id, killVRC);
 		this.Close();
 	}
 
@@ -44,8 +42,8 @@ partial class MainForm : Form {
 		this.next.Enabled = index <= sortedHistory.Count - 2;
 	}
 
-	public MainForm(List<Visit> sortedHistory, bool killVRChat) {
-		this.killVRChat = killVRChat;
+	public MainForm(List<Visit> sortedHistory, bool killVRC) {
+		this.killVRC = killVRC;
 		this.sortedHistory = sortedHistory;
 		InitializeComponent();
 		update();
