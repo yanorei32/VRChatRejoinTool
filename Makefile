@@ -1,10 +1,17 @@
 CSC		= /cygdrive/c/windows/microsoft.net/framework/v4.0.30319/csc.exe
 TARGET	= VRChatRejoin.exe
-SRC		= main.cs
+SRC		=	src\\Program.cs \
+			src\\Permission.cs \
+			src\\Instance.cs \
+			src\\Visit.cs \
+			src\\VRChat.cs \
+			src\\Form\\MainForm.cs \
+			src\\Form\\MainForm.Design.cs
 
 DEPS	=
 
-CSC_FLAGS		=	/nologo /target:winexe \
+CSC_FLAGS		=	/nologo \
+					/target:winexe \
 					/win32icon:res\\icon.ico \
 					/resource:res\\icon.ico,icon \
 					/resource:res\\logo.png,logo \
