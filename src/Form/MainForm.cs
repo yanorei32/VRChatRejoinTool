@@ -38,8 +38,8 @@ partial class MainForm : Form {
 			typeof(Permission),
 			v.Instance.Permission
 		);
-		this.prev.Enabled = 1 <= index;
-		this.next.Enabled = index <= sortedHistory.Count - 2;
+		this.prev.Enabled = 0 < index;
+		this.next.Enabled = index < sortedHistory.Count - 1;
 	}
 
 	public MainForm(List<Visit> sortedHistory, bool killVRC) {
