@@ -45,7 +45,7 @@ partial class MainForm : Form {
 	public MainForm(List<Visit> sortedHistory, bool killVRC) {
 		this.killVRC = killVRC;
 		this.sortedHistory = sortedHistory;
-		InitializeComponent();
+		initializeComponent();
 		update();
 	}
 }

@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 class Program {
-	static void ReadLogfile(FileStream fs, List<Visit> visitHistory) {
+	static void readLogfile(FileStream fs, List<Visit> visitHistory) {
 		Regex instanceRegex = new Regex(@"wrld_.+");
 		Regex dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
 
@@ -43,7 +43,7 @@ class Program {
 		).EnumerateFiles("output_log_*.txt");
 	}
 
-	static void ShowMessage(string message, bool noDialog) {
+	static void showMessage(string message, bool noDialog) {
 		if (noDialog) {
 			SystemSounds.Exclamation.Play();
 		} else {
@@ -112,7 +112,7 @@ class Program {
 			}
 
 			if (!File.Exists(arg)) {
-				ShowMessage(
+				showMessage(
 					"Unknown option or invalid file.: " + arg,
 					noGUI && noDialog
 				);
@@ -138,14 +138,14 @@ class Program {
 						FileShare.ReadWrite
 					)
 				) {
-					ReadLogfile(stream, visitHistory);
+					readLogfile(stream, visitHistory);
 				}
 			}
 		} else {
 			IEnumerable<FileInfo> logfiles = getLogFiles();
 
 			if (!logfiles.Any()) {
-				ShowMessage("Could not find VRChat log.", noGUI && noDialog);
+				showMessage("Could not find VRChat log.", noGUI && noDialog);
 				return;
 			}
 
@@ -157,7 +157,7 @@ class Program {
 						FileShare.ReadWrite
 					)
 				) {
-					ReadLogfile(stream, visitHistory);
+					readLogfile(stream, visitHistory);
 				}
 			}
 		}
@@ -189,7 +189,7 @@ class Program {
 		).ToList();
 
 		if (!sortedVisitHistory.Any()) {
-			ShowMessage("Could not find visits from VRChat log.", noGUI && noDialog);
+			showMessage("Could not find visits from VRChat log.", noGUI && noDialog);
 			return;
 		}
 

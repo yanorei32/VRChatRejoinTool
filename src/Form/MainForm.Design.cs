@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 partial class MainForm : Form {
-	void InitializeComponent() {
+	void initializeComponent() {
 		const int
 			imgW	= 320,
 			imgH	= 84,
