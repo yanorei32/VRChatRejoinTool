@@ -111,6 +111,15 @@ class Program {
 				continue;
 			}
 
+			if (!File.Exists(arg)) {
+				ShowMessage(
+					"Unknown option or invalid file.: " + arg,
+					noGUI && noDialog
+				);
+
+				return;
+			}
+
 			userSelectedLogFiles.Add(arg);
 		}
 
