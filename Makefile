@@ -33,6 +33,11 @@ release: all
 genzip:
 	zip -r VRChatRejoinTool.zip VRChatRejoinTool
 
+.PHONY: genzip-for-malware-analysis
+genzip-for-malware-analysis:
+	zip -P infected -r VRChatRejoinTool.zip VRChatRejoinTool
+
+
 all: $(TARGET)
 $(TARGET): $(SRC) $(DEPS)
 	$(CSC) $(CSC_FLAGS) /out:$(TARGET) $(SRC)
