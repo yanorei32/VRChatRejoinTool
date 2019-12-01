@@ -5,6 +5,8 @@ SRC		=	src\\Program.cs \
 			src\\Instance.cs \
 			src\\Visit.cs \
 			src\\VRChat.cs \
+			src\\InputError.cs \
+			src\\InputErrorLevel.cs \
 			src\\Form\\MainForm.cs \
 			src\\Form\\MainForm.Design.cs
 

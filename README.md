@@ -15,15 +15,18 @@ If you want to use the old log file, read it by drag and drop.
 
 ## Command-line Arguments
 
-| Argument                             | Description                                |
-|:-------------------------------------|:-------------------------------------------|
-| `--kill-vrc`                         | Kill VRChat.exe Processes before launch.   |
-| `--ignore-public`                    | Ignore public and unknown instances.       |
-| `--ignore-by-time=<time in minutes>` | Ignore too old visits.                     |
-| `--ignore-worlds=wrld_xx,wrld_xx`    | Ignore worlds.                             |
-| `--no-gui`                           | No GUI mode (Auto join to first candidate) |
+| Argument                             | Description                                                            |
+|:-------------------------------------|:-----------------------------------------------------------------------|
+| `--kill-vrc`                         | Kill VRChat.exe processes before launch. (for non-VR)                  |
+| `--ignore-public`                    | Ignore public and unknown instances.                                   |
+| `--ignore-by-time=<time in minutes>` | Ignore too old visits.                                                 |
+| `--ignore-worlds=wrld_xx,wrld_xx`    | Ignore worlds.                                                         |
+| `--no-gui`                           | No GUI mode (Auto join to first candidate)                             |
+| `--no-dialog`                        | Don't show error dialogs (Sound only). (works with `--no-gui` option.) |
 
 ### Example
+
+#### Launch from CUI
 
 ```bat
 VRChatRejoin.exe ^
@@ -33,10 +36,21 @@ VRChatRejoin.exe ^
 	--no-gui
 ```
 
+#### Launch from VaniiMenu Launcher
+
+```json
+"App1": {
+	"arguments": "--no-gui --no-dialog --ignore-by-time=540"
+},
+"App2": {
+	"arguments": "--no-gui --no-dialog --ignore-by-time=540 --ignore-public"
+}
+```
+
 ## Build
 
 * Windows 10
-* Cygwin / GNU Make
+* Cygwin / GNU make
 
 ```bash
 git clone https://github.com/yanorei32/VRChatRejoinTool
@@ -44,6 +58,4 @@ cd VRChatRejoinTool
 make
 make genzip # if you need zip file.
 ```
-
-
 

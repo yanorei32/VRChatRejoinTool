@@ -89,7 +89,7 @@ partial class MainForm : Form {
 		this.instance.AutoSize	= false;
 		this.instance.Location	= new Point(curW, curH);
 		this.instance.Size		= new Size(imgW, 75);
-		this.instance.Font		= new Font("Conolas", 9F);
+		this.instance.Font		= new Font("Consolas", 9F);
 
 		curH += this.instance.Size.Height;
 		curH += padding;
@@ -112,7 +112,7 @@ partial class MainForm : Form {
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
-		curH += margin;
+		// curH += margin;
 
 		/*\
 		|*| Form

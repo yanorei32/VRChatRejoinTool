@@ -197,7 +197,7 @@ class Program {
 		|*| Action
 		\*/
 		if (noGUI) {
-			VRChat.Launch(sortedVisitHistory[0].Instance.Id, killVRC);
+			VRChat.Launch(sortedVisitHistory[0].Instance.RawId, killVRC);
 		} else {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);

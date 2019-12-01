@@ -13,8 +13,12 @@ static class VRChat {
 		Process.Start("vrchat://launch?id=" + instanceId);
 	}
 
-	public static void VRCWOpen(string worldId) {
+	public static void OpenVRCW(string worldId) {
 		Process.Start("https://www.vrcw.net/world/detail/" + worldId);
+	}
+
+	public static void OpenOfficialSite(string worldId) {
+		Process.Start("https://vrchat.com/home/world/" + worldId);
 	}
 }
 

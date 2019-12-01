@@ -1,37 +1,271 @@
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 class Instance {
-	static Regex publicRegex = new Regex(@":\d+$");
+	/* VRChat logging style exception message */
+	const string EXCEPTION_BASE_TEXT = "Something Very Bad Happend: ";
+	static Regex safeInstanceNameR = new Regex(@"\A[A-Za-z0-9]+\z");
+	static Regex maybeInstanceNameR = new Regex(@"\A[^ :~]+\z");
+	static Regex nonceR = new Regex(@"\A[A-Za-z\-]+\z");
+	static Regex userIdR = new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+	static Regex worldIdR = new Regex(@"\Awrld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+
+	string rawId;
+
 	Permission permission;
-	string id;
+	string ownerId;
+	string worldId;
+	string nonce;
+	string instanceName;
 
 	public Permission Permission {
 		get { return this.permission; }
+		set {
+			if (value == Permission.Unknown)
+				throw new Exception(
+					EXCEPTION_BASE_TEXT + "This permission value is not settable"
+				);
+
+			rawId = null;
+			this.permission = value;
+		}
+	}
+
+	public string OwnerId {
+		get { return this.ownerId; }
+		set {
+			rawId = null;
+			this.ownerId = value;
+		}
+	}
+
+	public string Nonce {
+		get { return this.nonce; }
+		set {
+			rawId = null;
+			this.nonce = value;
+		}
 	}
 
 	public string WorldId {
-		get { return this.id.Split(':')[0]; }
+		get { return this.worldId; }
+		set {
+			worldId = null;
+			this.worldId = value;
+		}
+	}
+
+	public string RawId {
+		get {
+			if (this.rawId == null)
+				throw new Exception(EXCEPTION_BASE_TEXT + "Raw id is not available.");
+
+			return this.rawId;
+		}
 	}
 
 	public string Id {
-		get { return this.id; }
+		get {
+			if (this.permission == Permission.Unknown)
+				throw new Exception(EXCEPTION_BASE_TEXT + "ID was requested but Permission is Unknown.");
+
+			string id = string.Format(
+				"{0}:{1}", worldId, instanceName
+			);
+
+			if (this.ownerId != null) {
+				id += "~";
+
+				switch (this.permission) {
+					case Permission.Public:
+						id += "public";
+						break;
+
+					case Permission.FriendsPlus:
+						id += "hidden";
+						break;
+
+					case Permission.Friends:
+						id += "friends";
+						break;
+
+					case Permission.InviteOnly:
+						id += "canRequestInvite~invite";
+						break;
+
+					case Permission.InvitePlus:
+						id += "invite";
+						break;
+				}
+
+				if (this.ownerId != null)
+					id += "(" + this.ownerId + ")";
+			}
+
+			if (this.nonce != null)
+				id += "~nonce(" + this.nonce + ")";
+
+			return id;
+		}
 	}
 
-	public Instance(string id) {
-		this.id = id;
+	private bool isValidInstanceName (string instanceName) {
+		return maybeInstanceNameR.Match(instanceName).Success;
+	}
+
+	private bool isSafeInstanceName (string instanceName) {
+		return safeInstanceNameR.Match(instanceName).Success;
+	}
+
+	private bool isValidNonceValue (string nonce) {
+		return nonceR.Match(nonce).Success;
+	}
+
+	private bool isValidWorldId (string worldId) {
+		return worldIdR.Match(worldId).Success;
+	}
+
+	private bool isValidUserId (string userId) {
+		return userIdR.Match(userId).Success;
+	}
+
+	public List<InputError> Errors {
+		get {
+			if (this.permission == Permission.Unknown)
+				throw new Exception(EXCEPTION_BASE_TEXT + "ID was requested but Permission is Unknown.");
+
+			List<InputError> errors = new List<InputError>();
+
+			if (!isValidUserId(this.ownerId))
+				errors.Add(new InputError("Invalid owner id", InputErrorLevel.Error));
+
+			if (!isValidWorldId(this.worldId))
+				errors.Add(new InputError("Invalid world id", InputErrorLevel.Error));
+
+			if (!this.IsUniqueInstance)
+				errors.Add(new InputError("Instance is not unique", InputErrorLevel.Warning));
+
+			if (this.nonce != null && !isValidNonceValue(this.nonce))
+				errors.Add(new InputError("Invalid nonce value", InputErrorLevel.Error));
+
+			if (!isSafeInstanceName(this.instanceName))
+				if (!isValidInstanceName(this.instanceName))
+					errors.Add(new InputError("Invalid instance name", InputErrorLevel.Error));
+				else
+					errors.Add(
+						new InputError(
+							"Instance name has unknown char."
+							+ "Sometimes, It's invalid instance name and sometimes makes buggy client.",
+							InputErrorLevel.Warning
+						)
+					);
+
+			return errors;
+		}
+	}
+
+	public bool IsUniqueInstance {
+		get {
+			switch (this.permission) {
+				case Permission.Public:
+					return (this.instanceName != null);
+
+				case Permission.InviteOnly:
+				case Permission.InvitePlus:
+				case Permission.Friends:
+				case Permission.FriendsPlus:
+					return (this.instanceName != null && this.ownerId != null && this.nonce != null);
+
+				default:
+					return false;
+			}
+		}
+	}
+
+	void parseId(string id) {
+		// NOTE:
+		//   instanceName isn't contains ':'
+		//   nonce, instanceName isn't contains '~'
+		//   non-invite+ instances isn't contains
+		//     "canRequestInvite" parameter
+		//   all non-home instances has instance-name
+		//   Is valid? wrld_xx~aa
+		//
+		//   ほんまか？
+
+		string[] splittedId = id.Split('~');
 
 		this.permission = Permission.Unknown;
 
-		if (id.Contains("canRequestInvite"))
+		string[] visibleInfo = splittedId[0].Split(':');
+
+		this.worldId = visibleInfo[0];
+
+		if (visibleInfo.Length != 2) {
+			this.permission = Permission.Unknown;
+			return;
+		}
+
+		this.permission = Permission.Public;
+		this.instanceName = visibleInfo[1];
+
+		bool containsCanRequestInvite = false;
+		for (int i = 1; i < splittedId.Length; i++) {
+			if (splittedId[i] == "canRequestInvite") {
+				containsCanRequestInvite = true;
+				continue;
+			}
+
+
+			string pKey, pValue;
+			{
+				string[] splittedParam = splittedId[i].Split('(');
+
+				if (2 < splittedParam.Length) continue;
+
+				pKey = splittedParam[0];
+
+				if (splittedParam.Length == 2) {
+					pValue = splittedParam[1].Substring(0, splittedParam[1].Length-1);
+					if (pValue == "") pValue = null;
+				} else {
+					pValue = null;
+				}
+			}
+
+			switch (pKey) {
+				case "nonce":
+					this.nonce = pValue;
+					break;
+				case "public":
+					this.permission = Permission.Public;
+					break;
+				case "private":
+					this.permission = Permission.InviteOnly;
+					this.ownerId = pValue;
+					break;
+				case "friends":
+					this.permission = Permission.Friends;
+					this.ownerId = pValue;
+					break;
+				case "hidden":
+					this.permission = Permission.FriendsPlus;
+					this.ownerId = pValue;
+					break;
+				default:
+					break;
+			}
+
+		}
+
+		if (containsCanRequestInvite)
 			this.permission = Permission.InvitePlus;
-		else if (id.Contains("private"))
-			this.permission = Permission.InviteOnly;
-		else if (id.Contains("friends"))
-			this.permission = Permission.Friends;
-		else if (id.Contains("hidden"))
-			this.permission = Permission.FriendsPlus;
-		else if (id.Contains("public") || publicRegex.IsMatch(id))
-			this.permission = Permission.Public;
+	}
+
+	public Instance(string id) {
+		parseId(id);
+		this.rawId = id;
 	}
 }
 

@@ -21,18 +21,18 @@ partial class MainForm : Form {
 	}
 
 	void launchVrcButtonClick(object sender, EventArgs e) {
-		VRChat.Launch(sortedHistory[index].Instance.Id, killVRC);
+		VRChat.Launch(sortedHistory[index].Instance.RawId, killVRC);
 		this.Close();
 	}
 
 	void showInVrcwButtonClick(object sender, EventArgs e) {
-		VRChat.VRCWOpen(sortedHistory[index].Instance.WorldId);
+		VRChat.OpenVRCW(sortedHistory[index].Instance.WorldId);
 	}
 
 	void update() {
 		Visit v = sortedHistory[index];
 
-		this.instance.Text = "Instance:\n" + v.Instance.Id;
+		this.instance.Text = "Instance:\n" + v.Instance.RawId;
 		this.datetime.Text = "Date: " + v.DateTime.ToString();
 		this.permission.Text = "Permission: " + Enum.GetName(
 			typeof(Permission),
