@@ -1,14 +1,60 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 partial class MainForm : Form {
-	PictureBox logo;
-	Button launchVrc, showInVrcw, next, prev;
-	Label datetime, instance, permission;
-	List<Visit> sortedHistory;
-	bool killVRC;
+	PictureBox	logo;
+	Button		launchVrc,
+				detail,
+				next,
+				prev;
+	Label		datetime,
+				instance,
+				permission;
+	List<Visit>	sortedHistory;
+
+	IContainer			components;
+	ContextMenuStrip	instanceIdContextMenu;
+	ToolStripMenuItem	copyLaunchInstanceLink,
+						copyInstanceLink;
+
 	int index = 0;
+	bool killVRC;
+
+	void copyInstanceLinkClick(object sender, EventArgs e) {
+		Clipboard.SetText(
+			VRChat.GetInstanceLink(
+				sortedHistory[index].Instance
+			)
+		);
+	}
+
+	void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
+		Clipboard.SetText(
+			VRChat.GetLaunchInstanceLink(
+				sortedHistory[index].Instance
+			)
+		);
+	}
+
+	void detailButtonClick(object sender, EventArgs e) {
+		Process.Start(
+			VRChat.GetInstanceLink(
+				sortedHistory[index].Instance
+			)
+		);
+	}
+
+	void launchVrcButtonClick(object sender, EventArgs e) {
+		VRChat.Launch(
+			sortedHistory[index].Instance,
+			killVRC
+		);
+
+		this.Close();
+	}
 
 	void prevButtonClick(object sender, EventArgs e) {
 		index--;
@@ -20,19 +66,10 @@ partial class MainForm : Form {
 		update();
 	}
 
-	void launchVrcButtonClick(object sender, EventArgs e) {
-		VRChat.Launch(sortedHistory[index].Instance.RawId, killVRC);
-		this.Close();
-	}
-
-	void showInVrcwButtonClick(object sender, EventArgs e) {
-		VRChat.OpenVRCW(sortedHistory[index].Instance.WorldId);
-	}
-
 	void update() {
 		Visit v = sortedHistory[index];
 
-		this.instance.Text = "Instance:\n" + v.Instance.RawId;
+		this.instance.Text = "Instance:\n" + v.Instance.Id;
 		this.datetime.Text = "Date: " + v.DateTime.ToString();
 		this.permission.Text = "Permission: " + Enum.GetName(
 			typeof(Permission),

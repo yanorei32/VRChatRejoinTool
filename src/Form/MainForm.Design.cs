@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -14,14 +15,32 @@ partial class MainForm : Form {
 		int curW = 0, curH = 0;
 		Assembly execAsm = Assembly.GetExecutingAssembly();
 
+		this.components				= new Container();
+		this.instanceIdContextMenu	= new ContextMenuStrip(components);
+		this.copyLaunchInstanceLink	= new ToolStripMenuItem();
+		this.copyInstanceLink		= new ToolStripMenuItem();
+
 		this.logo		= new PictureBox();
 		this.prev		= new Button();
 		this.next		= new Button();
 		this.launchVrc	= new Button();
-		this.showInVrcw	= new Button();
+		this.detail		= new Button();
 		this.datetime	= new Label();
 		this.instance	= new Label();
 		this.permission	= new Label();
+
+		this.instanceIdContextMenu.SuspendLayout();
+
+		this.copyInstanceLink.Text			= "Copy Instance (https://) Link (&C)";
+		this.copyInstanceLink.Click			+= new EventHandler(copyInstanceLinkClick);
+
+		this.copyLaunchInstanceLink.Text 	= "Copy Instance (vrchat://) Link (&V)";
+		this.copyLaunchInstanceLink.Click	+= new EventHandler(copyLaunchInstanceLinkClick);
+
+		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
+		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
+
+		this.instanceIdContextMenu.ResumeLayout(false);
 
 		this.SuspendLayout();
 		curH = curW = margin;
@@ -105,10 +124,10 @@ partial class MainForm : Form {
 		curW += this.launchVrc.Size.Width;
 		curW += padding;
 
-		this.showInVrcw.Text		= "Detail";
-		this.showInVrcw.Location	= new Point(curW, curH);
-		this.showInVrcw.Size		= new Size(75, 23);
-		this.showInVrcw.Click		+= new EventHandler(showInVrcwButtonClick);
+		this.detail.Text		= "Detail";
+		this.detail.Location	= new Point(curW, curH);
+		this.detail.Size		= new Size(75, 23);
+		this.detail.Click		+= new EventHandler(detailButtonClick);
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
@@ -123,9 +142,10 @@ partial class MainForm : Form {
 		this.MaximumSize		= this.Size;
 		this.FormBorderStyle	= FormBorderStyle.FixedSingle;
 		this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
+		this.ContextMenuStrip	= instanceIdContextMenu;
 		this.Controls.Add(this.logo);
 		this.Controls.Add(this.launchVrc);
-		this.Controls.Add(this.showInVrcw);
+		this.Controls.Add(this.detail);
 		this.Controls.Add(this.prev);
 		this.Controls.Add(this.next);
 		this.Controls.Add(this.datetime);

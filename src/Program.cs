@@ -56,6 +56,7 @@ class Program {
 		}
 	}
 
+	[STAThread]
 	public static void Main(string[] Args) {
 		List<Visit> visitHistory = new List<Visit>();
 
@@ -197,7 +198,7 @@ class Program {
 		|*| Action
 		\*/
 		if (noGUI) {
-			VRChat.Launch(sortedVisitHistory[0].Instance.RawId, killVRC);
+			VRChat.Launch(sortedVisitHistory[0].Instance, killVRC);
 		} else {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);

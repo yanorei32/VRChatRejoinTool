@@ -22,11 +22,6 @@ class Instance {
 	public Permission Permission {
 		get { return this.permission; }
 		set {
-			if (value == Permission.Unknown)
-				throw new Exception(
-					EXCEPTION_BASE_TEXT + "This permission value is not settable"
-				);
-
 			rawId = null;
 			this.permission = value;
 		}
@@ -51,28 +46,23 @@ class Instance {
 	public string WorldId {
 		get { return this.worldId; }
 		set {
-			worldId = null;
+			rawId = null;
 			this.worldId = value;
 		}
 	}
 
 	public string RawId {
 		get {
-			if (this.rawId == null)
-				throw new Exception(EXCEPTION_BASE_TEXT + "Raw id is not available.");
-
 			return this.rawId;
 		}
 	}
 
-	public string Id {
+	public string IdWithoutWorldId {
 		get {
 			if (this.permission == Permission.Unknown)
-				throw new Exception(EXCEPTION_BASE_TEXT + "ID was requested but Permission is Unknown.");
+				return "";
 
-			string id = string.Format(
-				"{0}:{1}", worldId, instanceName
-			);
+			string id = instanceName;
 
 			if (this.ownerId != null) {
 				id += "~";
@@ -110,6 +100,20 @@ class Instance {
 		}
 	}
 
+	public string Id {
+		get {
+			string id = worldId;
+			string idWithoutWorldId = this.IdWithoutWorldId;
+
+			if (idWithoutWorldId != "") {
+				id += ":";
+				id += idWithoutWorldId;
+			}
+
+			return id;
+		}
+	}
+
 	private bool isValidInstanceName (string instanceName) {
 		return maybeInstanceNameR.Match(instanceName).Success;
 	}
@@ -132,9 +136,6 @@ class Instance {
 
 	public List<InputError> Errors {
 		get {
-			if (this.permission == Permission.Unknown)
-				throw new Exception(EXCEPTION_BASE_TEXT + "ID was requested but Permission is Unknown.");
-
 			List<InputError> errors = new List<InputError>();
 
 			if (!isValidUserId(this.ownerId))
@@ -155,7 +156,7 @@ class Instance {
 				else
 					errors.Add(
 						new InputError(
-							"Instance name has unknown char."
+							"Instance name has unknown char. "
 							+ "Sometimes, It's invalid instance name and sometimes makes buggy client.",
 							InputErrorLevel.Warning
 						)
