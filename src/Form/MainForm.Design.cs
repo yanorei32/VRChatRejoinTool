@@ -34,12 +34,15 @@ partial class MainForm : Form {
 
 		this.copyInstanceLink.Text			= "Copy Instance (https://) Link (&C)";
 		this.copyInstanceLink.Click			+= new EventHandler(copyInstanceLinkClick);
+		this.copyInstanceLink.ShortcutKeys	= Keys.Control | Keys.C;
 
-		this.copyLaunchInstanceLink.Text 	= "Copy Instance (vrchat://) Link (&V)";
-		this.copyLaunchInstanceLink.Click	+= new EventHandler(copyLaunchInstanceLinkClick);
+		this.copyLaunchInstanceLink.Text 			= "Copy Instance (vrchat://) Link (&V)";
+		this.copyLaunchInstanceLink.Click			+= new EventHandler(copyLaunchInstanceLinkClick);
+		this.copyLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.Shift | Keys.C;
 
-		this.saveLaunchInstanceLink.Text	= "Save Instance Shortcut (&S)";
-		this.saveLaunchInstanceLink.Click	+= new EventHandler(saveLaunchInstanceLinkClick);
+		this.saveLaunchInstanceLink.Text			= "Save Instance Shortcut (&S)";
+		this.saveLaunchInstanceLink.Click			+= new EventHandler(saveLaunchInstanceLinkClick);
+		this.saveLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.S;
 
 		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
