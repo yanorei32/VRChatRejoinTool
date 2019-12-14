@@ -81,11 +81,11 @@ class Instance {
 						break;
 
 					case Permission.InviteOnly:
-						id += "canRequestInvite~invite";
+						id += "invite";
 						break;
 
 					case Permission.InvitePlus:
-						id += "invite";
+						id += "canRequestInvite~invite";
 						break;
 				}
 
