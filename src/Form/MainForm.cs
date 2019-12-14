@@ -18,7 +18,8 @@ partial class MainForm : Form {
 	IContainer			components;
 	ContextMenuStrip	instanceIdContextMenu;
 	ToolStripMenuItem	copyLaunchInstanceLink,
-						copyInstanceLink;
+						copyInstanceLink,
+						saveLaunchInstanceLink;
 
 	int index = 0;
 	bool killVRC;
@@ -29,6 +30,33 @@ partial class MainForm : Form {
 				sortedHistory[index].Instance
 			)
 		);
+	}
+
+	void saveInstanceToShortcutGUI(Instance i) {
+		var sfd = new SaveFileDialog();
+
+		var filename = i.WorldId;
+		var idWithoutWorldId = i.IdWithoutWorldId;
+
+		if (idWithoutWorldId != "") {
+			filename += "-";
+			filename += idWithoutWorldId;
+		}
+
+		filename += ".lnk";
+
+		sfd.FileName = filename;
+
+		sfd.Filter = "Link (*.lnk)|*.lnk|All files (*.*)|*.*";
+		sfd.Title = "Save Instance";
+
+		if (sfd.ShowDialog() != DialogResult.OK) return;
+
+		VRChat.SaveInstanceToShortcut(i, sfd.FileName);
+	}
+
+	void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
+		saveInstanceToShortcutGUI(sortedHistory[index].Instance);
 	}
 
 	void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
@@ -57,12 +85,12 @@ partial class MainForm : Form {
 	}
 
 	void prevButtonClick(object sender, EventArgs e) {
-		index--;
+		index --;
 		update();
 	}
 
 	void nextButtonClick(object sender, EventArgs e) {
-		index++;
+		index ++;
 		update();
 	}
 

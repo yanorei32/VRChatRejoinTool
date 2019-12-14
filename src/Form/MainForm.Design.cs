@@ -19,6 +19,7 @@ partial class MainForm : Form {
 		this.instanceIdContextMenu	= new ContextMenuStrip(components);
 		this.copyLaunchInstanceLink	= new ToolStripMenuItem();
 		this.copyInstanceLink		= new ToolStripMenuItem();
+		this.saveLaunchInstanceLink	= new ToolStripMenuItem();
 
 		this.logo		= new PictureBox();
 		this.prev		= new Button();
@@ -37,8 +38,12 @@ partial class MainForm : Form {
 		this.copyLaunchInstanceLink.Text 	= "Copy Instance (vrchat://) Link (&V)";
 		this.copyLaunchInstanceLink.Click	+= new EventHandler(copyLaunchInstanceLinkClick);
 
+		this.saveLaunchInstanceLink.Text	= "Save Instance Shortcut (&S)";
+		this.saveLaunchInstanceLink.Click	+= new EventHandler(saveLaunchInstanceLinkClick);
+
 		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
+		this.instanceIdContextMenu.Items.Add(this.saveLaunchInstanceLink);
 
 		this.instanceIdContextMenu.ResumeLayout(false);
 
