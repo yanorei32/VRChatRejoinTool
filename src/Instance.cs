@@ -10,8 +10,6 @@ class Instance {
 	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 	static Regex worldIdR	= new Regex(@"\Awrld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 
-	string rawId;
-
 	Permission permission;
 	string worldId;
 	string ownerId;
@@ -21,7 +19,6 @@ class Instance {
 	public Permission Permission {
 		get { return this.permission; }
 		set {
-			rawId = null;
 			this.permission = value;
 		}
 	}
@@ -29,7 +26,6 @@ class Instance {
 	public string OwnerId {
 		get { return this.ownerId; }
 		set {
-			rawId = null;
 			this.ownerId = value;
 		}
 	}
@@ -37,7 +33,6 @@ class Instance {
 	public string Nonce {
 		get { return this.nonce; }
 		set {
-			rawId = null;
 			this.nonce = value;
 		}
 	}
@@ -45,7 +40,6 @@ class Instance {
 	public string WorldId {
 		get { return this.worldId; }
 		set {
-			rawId = null;
 			this.worldId = value;
 		}
 	}
@@ -53,14 +47,7 @@ class Instance {
 	public string InstanceName {
 		get { return this.instanceName; }
 		set {
-			rawId = null;
 			this.instanceName = value;
-		}
-	}
-
-	public string RawId {
-		get {
-			return this.rawId;
 		}
 	}
 
@@ -226,7 +213,6 @@ class Instance {
 
 	public Instance(string id) {
 		parseId(id);
-		this.rawId = id;
 	}
 }
 
