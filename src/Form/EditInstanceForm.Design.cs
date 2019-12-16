@@ -37,6 +37,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.saveLaunchInstanceLink.Click			+= new EventHandler(saveLaunchInstanceLinkClick);
 		this.saveLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.S;
 
+		this.instanceIdContextMenu.Opened	+= new EventHandler(openContextMenu);
 		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.saveLaunchInstanceLink);
@@ -220,6 +221,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.FormBorderStyle	= FormBorderStyle.FixedSingle;
 		this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
 		this.ContextMenuStrip	= instanceIdContextMenu;
+
 		this.Controls.Add(this.worldIdLabel);
 		this.Controls.Add(this.worldId);
 		this.Controls.Add(this.permissionLabel);

@@ -61,12 +61,19 @@ partial class EditInstanceForm : RejoinToolForm {
 		\*/
 		instanceNameLabel.Text = "Instance Name";
 
-		if (!instance.IsValidInstanceName()) {
-			instanceNameLabel.Text += " (maybe-invalid)";
-			instanceNameLabel.ForeColor = Color.Red;
-		} else if (!instance.IsSafeInstanceName()) {
-			instanceNameLabel.Text += " (maybe-valid)";
-			instanceNameLabel.ForeColor = Color.Orange;
+		if (instance.Permission != Permission.Unknown) {
+			if (instance.InstanceName == null) {
+				instanceNameLabel.Text += " (required)";
+				instanceNameLabel.ForeColor = Color.Red;
+			} else if (!instance.IsValidInstanceName()) {
+				instanceNameLabel.Text += " (maybe-invalid)";
+				instanceNameLabel.ForeColor = Color.Red;
+			} else if (!instance.IsSafeInstanceName()) {
+				instanceNameLabel.Text += " (maybe-valid)";
+				instanceNameLabel.ForeColor = Color.Orange;
+			} else {
+				instanceNameLabel.ForeColor = Color.Black;
+			}
 		} else {
 			instanceNameLabel.ForeColor = Color.Black;
 		}
@@ -157,7 +164,25 @@ partial class EditInstanceForm : RejoinToolForm {
 		copyLaunchInstanceLinkToClipboard(instance);
 	}
 
+	void openContextMenu(object sender, EventArgs e) {
+		// dirty Ctrl+C override avoidance (1/2)
+		if (ActiveControl.GetType().Name == "TextBox") {
+			TextBox t = (TextBox) ActiveControl;
+			t.DeselectAll();
+		}
+	}
+
 	void copyInstanceLinkClick(object sender, EventArgs e) {
+		// dirty Ctrl+C override avoidance (2/2)
+		if (ActiveControl.GetType().Name == "TextBox") {
+			TextBox t = (TextBox) ActiveControl;
+
+			if (t.SelectionLength != 0) {
+				Clipboard.SetText(t.SelectedText);
+				return;
+			}
+		}
+
 		copyInstanceLinkToClipboard(instance);
 	}
 

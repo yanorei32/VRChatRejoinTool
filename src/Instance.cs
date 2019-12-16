@@ -18,37 +18,27 @@ class Instance {
 
 	public Permission Permission {
 		get { return this.permission; }
-		set {
-			this.permission = value;
-		}
+		set { this.permission = value; }
 	}
 
 	public string OwnerId {
 		get { return this.ownerId; }
-		set {
-			this.ownerId = value;
-		}
+		set { this.ownerId = value; }
 	}
 
 	public string Nonce {
 		get { return this.nonce; }
-		set {
-			this.nonce = value;
-		}
+		set { this.nonce = value; }
 	}
 
 	public string WorldId {
 		get { return this.worldId; }
-		set {
-			this.worldId = value;
-		}
+		set { this.worldId = value; }
 	}
 
 	public string InstanceName {
 		get { return this.instanceName; }
-		set {
-			this.instanceName = value;
-		}
+		set { this.instanceName = value; }
 	}
 
 	public string IdWithoutWorldId {
@@ -87,7 +77,6 @@ class Instance {
 
 			if (this.nonce != null)
 				id += "~nonce(" + this.nonce + ")";
-
 			return id;
 		}
 	}
@@ -159,7 +148,6 @@ class Instance {
 				containsCanRequestInvite = true;
 				continue;
 			}
-
 
 			string pKey, pValue;
 
