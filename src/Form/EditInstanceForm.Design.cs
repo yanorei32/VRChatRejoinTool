@@ -221,6 +221,8 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.FormBorderStyle	= FormBorderStyle.FixedSingle;
 		this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
 		this.ContextMenuStrip	= instanceIdContextMenu;
+		this.KeyDown			+= new KeyEventHandler(windowKeyDown);
+		this.KeyPreview			= true;
 
 		this.Controls.Add(this.worldIdLabel);
 		this.Controls.Add(this.worldId);

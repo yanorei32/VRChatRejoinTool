@@ -164,6 +164,11 @@ partial class EditInstanceForm : RejoinToolForm {
 		copyLaunchInstanceLinkToClipboard(instance);
 	}
 
+	void windowKeyDown(object sender, KeyEventArgs e) {
+		if ((e.KeyData & e.KeyCode) == Keys.Escape)
+			this.Close();
+	}
+
 	void openContextMenu(object sender, EventArgs e) {
 		// dirty Ctrl+C override avoidance (1/2)
 		if (ActiveControl.GetType().Name == "TextBox") {
