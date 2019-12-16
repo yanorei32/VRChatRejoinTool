@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 class Instance {
-	/* VRChat logging style exception message */
-	const string EXCEPTION_BASE_TEXT = "Something Very Bad Happend: ";
-
 	static Regex safeInstanceNameR	= new Regex(@"\A[A-Za-z0-9]+\z");
 	static Regex maybeInstanceNameR	= new Regex(@"\A[^ :~]*\z");
 
