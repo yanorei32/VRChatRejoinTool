@@ -5,17 +5,19 @@ using System.Text.RegularExpressions;
 class Instance {
 	/* VRChat logging style exception message */
 	const string EXCEPTION_BASE_TEXT = "Something Very Bad Happend: ";
-	static Regex safeInstanceNameR = new Regex(@"\A[A-Za-z0-9]+\z");
-	static Regex maybeInstanceNameR = new Regex(@"\A[^ :~]+\z");
-	static Regex nonceR = new Regex(@"\A[A-Za-z\-]+\z");
-	static Regex userIdR = new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
-	static Regex worldIdR = new Regex(@"\Awrld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+
+	static Regex safeInstanceNameR	= new Regex(@"\A[A-Za-z0-9]+\z");
+	static Regex maybeInstanceNameR	= new Regex(@"\A[^ :~]*\z");
+
+	static Regex nonceR		= new Regex(@"\A[A-Za-z0-9\-]+\z");
+	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+	static Regex worldIdR	= new Regex(@"\Awrld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 
 	string rawId;
 
 	Permission permission;
-	string ownerId;
 	string worldId;
+	string ownerId;
 	string nonce;
 	string instanceName;
 
@@ -51,6 +53,14 @@ class Instance {
 		}
 	}
 
+	public string InstanceName {
+		get { return this.instanceName; }
+		set {
+			rawId = null;
+			this.instanceName = value;
+		}
+	}
+
 	public string RawId {
 		get {
 			return this.rawId;
@@ -64,34 +74,32 @@ class Instance {
 
 			string id = instanceName;
 
-			if (this.ownerId != null) {
-				id += "~";
+			id += "~";
 
-				switch (this.permission) {
-					case Permission.Public:
-						id += "public";
-						break;
+			switch (this.permission) {
+				case Permission.Public:
+					id += "public";
+					break;
 
-					case Permission.FriendsPlus:
-						id += "hidden";
-						break;
+				case Permission.FriendsPlus:
+					id += "hidden";
+					break;
 
-					case Permission.Friends:
-						id += "friends";
-						break;
+				case Permission.Friends:
+					id += "friends";
+					break;
 
-					case Permission.InviteOnly:
-						id += "invite";
-						break;
+				case Permission.InvitePlus:
+					id += "canRequestInvite~private";
+					break;
 
-					case Permission.InvitePlus:
-						id += "canRequestInvite~invite";
-						break;
-				}
-
-				if (this.ownerId != null)
-					id += "(" + this.ownerId + ")";
+				case Permission.InviteOnly:
+					id += "private";
+					break;
 			}
+
+			if (this.ownerId != null)
+				id += "(" + this.ownerId + ")";
 
 			if (this.nonce != null)
 				id += "~nonce(" + this.nonce + ")";
@@ -114,74 +122,24 @@ class Instance {
 		}
 	}
 
-	private bool isValidInstanceName (string instanceName) {
-		return maybeInstanceNameR.Match(instanceName).Success;
+	public bool IsValidInstanceName() {
+		return maybeInstanceNameR.Match(this.instanceName).Success;
 	}
 
-	private bool isSafeInstanceName (string instanceName) {
-		return safeInstanceNameR.Match(instanceName).Success;
+	public bool IsSafeInstanceName() {
+		return safeInstanceNameR.Match(this.instanceName).Success;
 	}
 
-	private bool isValidNonceValue (string nonce) {
-		return nonceR.Match(nonce).Success;
+	public bool IsValidNonceValue() {
+		return nonceR.Match(this.nonce).Success;
 	}
 
-	private bool isValidWorldId (string worldId) {
-		return worldIdR.Match(worldId).Success;
+	public bool IsValidWorldId() {
+		return worldIdR.Match(this.worldId).Success;
 	}
 
-	private bool isValidUserId (string userId) {
-		return userIdR.Match(userId).Success;
-	}
-
-	public List<InputError> Errors {
-		get {
-			List<InputError> errors = new List<InputError>();
-
-			if (!isValidUserId(this.ownerId))
-				errors.Add(new InputError("Invalid owner id", InputErrorLevel.Error));
-
-			if (!isValidWorldId(this.worldId))
-				errors.Add(new InputError("Invalid world id", InputErrorLevel.Error));
-
-			if (!this.IsUniqueInstance)
-				errors.Add(new InputError("Instance is not unique", InputErrorLevel.Warning));
-
-			if (this.nonce != null && !isValidNonceValue(this.nonce))
-				errors.Add(new InputError("Invalid nonce value", InputErrorLevel.Error));
-
-			if (!isSafeInstanceName(this.instanceName))
-				if (!isValidInstanceName(this.instanceName))
-					errors.Add(new InputError("Invalid instance name", InputErrorLevel.Error));
-				else
-					errors.Add(
-						new InputError(
-							"Instance name has unknown char. "
-							+ "Sometimes, It's invalid instance name and sometimes makes buggy client.",
-							InputErrorLevel.Warning
-						)
-					);
-
-			return errors;
-		}
-	}
-
-	public bool IsUniqueInstance {
-		get {
-			switch (this.permission) {
-				case Permission.Public:
-					return (this.instanceName != null);
-
-				case Permission.InviteOnly:
-				case Permission.InvitePlus:
-				case Permission.Friends:
-				case Permission.FriendsPlus:
-					return (this.instanceName != null && this.ownerId != null && this.nonce != null);
-
-				default:
-					return false;
-			}
-		}
+	public bool IsValidUserId() {
+		return userIdR.Match(this.ownerId).Success;
 	}
 
 	void parseId(string id) {
@@ -220,6 +178,7 @@ class Instance {
 
 
 			string pKey, pValue;
+
 			{
 				string[] splittedParam = splittedId[i].Split('(');
 
@@ -262,6 +221,10 @@ class Instance {
 
 		if (containsCanRequestInvite)
 			this.permission = Permission.InvitePlus;
+	}
+
+	public Instance ShallowCopy() {
+		return (Instance) this.MemberwiseClone();
 	}
 
 	public Instance(string id) {

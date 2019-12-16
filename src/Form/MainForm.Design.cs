@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-partial class MainForm : Form {
+partial class MainForm : RejoinToolForm {
 	void initializeComponent() {
 		const int
 			imgW	= 320,
@@ -15,20 +15,15 @@ partial class MainForm : Form {
 		int curW = 0, curH = 0;
 		Assembly execAsm = Assembly.GetExecutingAssembly();
 
+		/*\
+		|*| Contextmenu Initialization
+		\*/
 		this.components				= new Container();
 		this.instanceIdContextMenu	= new ContextMenuStrip(components);
 		this.copyLaunchInstanceLink	= new ToolStripMenuItem();
 		this.copyInstanceLink		= new ToolStripMenuItem();
 		this.saveLaunchInstanceLink	= new ToolStripMenuItem();
-
-		this.logo		= new PictureBox();
-		this.prev		= new Button();
-		this.next		= new Button();
-		this.launchVrc	= new Button();
-		this.detail		= new Button();
-		this.datetime	= new Label();
-		this.instance	= new Label();
-		this.permission	= new Label();
+		this.editInstance			= new ToolStripMenuItem();
 
 		this.instanceIdContextMenu.SuspendLayout();
 
@@ -44,11 +39,28 @@ partial class MainForm : Form {
 		this.saveLaunchInstanceLink.Click			+= new EventHandler(saveLaunchInstanceLinkClick);
 		this.saveLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.S;
 
+		this.editInstance.Text			= "Edit Instance (&E)";
+		this.editInstance.Click			+= new EventHandler(editInstanceClick);
+		this.editInstance.ShortcutKeys	= Keys.Control | Keys.E;
+
 		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.saveLaunchInstanceLink);
+		this.instanceIdContextMenu.Items.Add(this.editInstance);
 
 		this.instanceIdContextMenu.ResumeLayout(false);
+
+		/*\
+		|*| UI Initialization
+		\*/
+		this.logo		= new PictureBox();
+		this.prev		= new Button();
+		this.next		= new Button();
+		this.launchVrc	= new Button();
+		this.detail		= new Button();
+		this.datetime	= new Label();
+		this.instance	= new Label();
+		this.permission	= new Label();
 
 		this.SuspendLayout();
 		curH = curW = margin;
@@ -92,7 +104,7 @@ partial class MainForm : Form {
 		this.datetime.AutoSize	= false;
 		this.datetime.Location	= new Point(curW, curH);
 		this.datetime.Size		= new Size(imgW, 22);
-		this.datetime.Font		= new Font("Conolas", 16F);
+		this.datetime.Font		= new Font("Consolas", 16F);
 
 		curH += this.datetime.Size.Height;
 		curH += padding;

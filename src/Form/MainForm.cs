@@ -1,58 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms;
 
-partial class MainForm : Form {
+partial class MainForm : RejoinToolForm {
+	// UI Elements
 	PictureBox	logo;
-	Button		launchVrc,
-				detail,
-				next,
-				prev;
-	Label		datetime,
-				instance,
-				permission;
-	List<Visit>	sortedHistory;
 
+	Button	launchVrc,
+			detail,
+			next,
+			prev;
+
+	Label	datetime,
+			instance,
+			permission;
+
+	// ContextMenu
 	IContainer			components;
 	ContextMenuStrip	instanceIdContextMenu;
 	ToolStripMenuItem	copyLaunchInstanceLink,
 						copyInstanceLink,
-						saveLaunchInstanceLink;
+						saveLaunchInstanceLink,
+						editInstance;
 
+	// Other instance variables
+	List<Visit>	sortedHistory;
 	int index = 0;
 	bool killVRC;
 
-	void copyInstanceLinkClick(object sender, EventArgs e) {
-		Clipboard.SetText(
-			VRChat.GetInstanceLink(
-				sortedHistory[index].Instance
-			)
-		);
+	void editInstanceClick(object sender, EventArgs e) {
+		Instance i = sortedHistory[index].Instance.ShallowCopy();
+		(new EditInstanceForm(i, killVRC)).Show();
 	}
 
-	void saveInstanceToShortcutGUI(Instance i) {
-		var sfd = new SaveFileDialog();
-
-		var filename = i.WorldId;
-		var idWithoutWorldId = i.IdWithoutWorldId;
-
-		if (idWithoutWorldId != "") {
-			filename += "-";
-			filename += idWithoutWorldId;
-		}
-
-		filename += ".lnk";
-
-		sfd.FileName = filename;
-
-		sfd.Filter = "Link (*.lnk)|*.lnk|All files (*.*)|*.*";
-		sfd.Title = "Save Instance";
-
-		if (sfd.ShowDialog() != DialogResult.OK) return;
-
-		VRChat.SaveInstanceToShortcut(i, sfd.FileName);
+	void copyInstanceLinkClick(object sender, EventArgs e) {
+		copyInstanceLinkToClipboard(sortedHistory[index].Instance);
 	}
 
 	void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
@@ -60,26 +43,15 @@ partial class MainForm : Form {
 	}
 
 	void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
-		Clipboard.SetText(
-			VRChat.GetLaunchInstanceLink(
-				sortedHistory[index].Instance
-			)
-		);
+		copyLaunchInstanceLinkToClipboard(sortedHistory[index].Instance);
 	}
 
 	void detailButtonClick(object sender, EventArgs e) {
-		Process.Start(
-			VRChat.GetInstanceLink(
-				sortedHistory[index].Instance
-			)
-		);
+		showDetail(sortedHistory[index].Instance);
 	}
 
 	void launchVrcButtonClick(object sender, EventArgs e) {
-		VRChat.Launch(
-			sortedHistory[index].Instance,
-			killVRC
-		);
+		VRChat.Launch(sortedHistory[index].Instance, killVRC);
 
 		this.Close();
 	}
