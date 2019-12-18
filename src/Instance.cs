@@ -170,21 +170,26 @@ class Instance {
 				case "nonce":
 					this.nonce = pValue;
 					break;
+
 				case "public":
 					this.permission = Permission.Public;
 					break;
+
 				case "private":
 					this.permission = Permission.InviteOnly;
 					this.ownerId = pValue;
 					break;
+
 				case "friends":
 					this.permission = Permission.Friends;
 					this.ownerId = pValue;
 					break;
+
 				case "hidden":
 					this.permission = Permission.FriendsPlus;
 					this.ownerId = pValue;
 					break;
+
 				default:
 					break;
 			}

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Resources;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -67,7 +68,8 @@ class Program {
 			ignorePublic = false,
 			noDialog = false,
 			killVRC = false,
-			noGUI = false;
+			noGUI = false,
+			quickSave = false;
 		int ignoreByTimeMins = 0;
 
 		Match match;
@@ -78,6 +80,11 @@ class Program {
 		|*| Parse arguments
 		\*/
 		foreach (string arg in Args) {
+			if (arg == "--quick-save") {
+				quickSave = true;
+				continue;
+			}
+
 			if (arg == "--no-gui") {
 				noGUI = true;
 				continue;
@@ -198,13 +205,70 @@ class Program {
 		|*| Action
 		\*/
 		if (noGUI) {
-			VRChat.Launch(sortedVisitHistory[0].Instance, killVRC);
+			var v = sortedVisitHistory[0];
+			var i = v.Instance;
+
+			if (quickSave) {
+				string saveDir = Path.GetDirectoryName(
+					Assembly.GetExecutingAssembly().Location
+				) + @"\saves";
+
+				try {
+					if (!Directory.Exists(saveDir))
+						Directory.CreateDirectory(saveDir);
+				} catch (Exception e) {
+					showMessage(
+						"[QuickSave] Make Directory:\n" + e.Message,
+						noDialog
+					);
+
+					throw e;
+				}
+
+				string instanceString = i.WorldId;
+				string idWithoutWorldId = i.IdWithoutWorldId;
+
+				if (idWithoutWorldId != "") {
+					instanceString += "-";
+					instanceString += idWithoutWorldId;
+				}
+
+				var existsLinks = new DirectoryInfo(saveDir).EnumerateFiles("*.lnk");
+				foreach (FileInfo link in existsLinks) {
+					if (link.Name.EndsWith(instanceString + ".lnk")) {
+						File.SetLastWriteTime(link.FullName, DateTime.Now);
+						return;
+					}
+				}
+
+				string filepath = string.Format(
+					@"{0}\{1}{2}.lnk",
+					saveDir,
+					v.DateTime.ToString("yyyyMMdd-hhmmss-"),
+					instanceString
+				);
+
+				try {
+					VRChat.SaveInstanceToShortcut(i, filepath);
+				} catch (Exception e) {
+					showMessage(
+						"[QuickSave] Create Shortcut:\n" + e.Message,
+						noDialog
+					);
+
+					throw e;
+				}
+			} else {
+				VRChat.Launch(i, killVRC);
+			}
+
 		} else {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(
 				new MainForm(sortedVisitHistory, killVRC)
 			);
+
 		}
 	}
 }
