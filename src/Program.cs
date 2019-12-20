@@ -64,17 +64,22 @@ class Program {
 		// Arguments
 		List<string> userSelectedLogFiles = new List<string>();
 		List<string> ignoreWorldIds = new List<string>();
+
 		bool
-			ignorePublic = false,
-			noDialog = false,
-			killVRC = false,
-			noGUI = false,
-			quickSave = false;
-		int ignoreByTimeMins = 0;
+			ignorePublic	= false,
+			noDialog		= false,
+			killVRC			= false,
+			noGUI			= false,
+			quickSave		= false;
+
+		int
+			ignoreByTimeMins	= 0,
+			index				= 0;
 
 		Match match;
-		Regex ignoreWorldsArgRegex = new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
-		Regex ignoreByTimeRegex = new Regex(@"\A--ignore-by-time=\d+\z");
+		Regex ignoreWorldsArgRegex	= new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
+		Regex ignoreByTimeRegex		= new Regex(@"\A--ignore-by-time=\d+\z");
+		Regex indexRegex			= new Regex(@"\A--index=\d+\z");
 
 		/*\
 		|*| Parse arguments
@@ -102,6 +107,12 @@ class Program {
 
 			if (arg == "--no-dialog") {
 				noDialog = true;
+				continue;
+			}
+
+			match = indexRegex.Match(arg);
+			if (match.Success) {
+				index = int.Parse(arg.Split('=')[1]);
 				continue;
 			}
 
@@ -205,7 +216,12 @@ class Program {
 		|*| Action
 		\*/
 		if (noGUI) {
-			var v = sortedVisitHistory[0];
+			if (index >= sortedVisitHistory.Count) {
+				showMessage("Out of bounds index: " + index.ToString(), noDialog);
+				return;
+			}
+
+			var v = sortedVisitHistory[index];
 			var i = v.Instance;
 
 			if (quickSave) {
