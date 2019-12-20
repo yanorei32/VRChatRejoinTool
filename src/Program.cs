@@ -73,8 +73,8 @@ class Program {
 		int ignoreByTimeMins = 0;
 
 		Match match;
-		Regex ignoreWorldsArgRegex = new Regex(@"--ignore-worlds=wrld_.+(,wrld_.+)?");
-		Regex ignoreByTimeRegex = new Regex(@"--ignore-by-time=\d+");
+		Regex ignoreWorldsArgRegex = new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
+		Regex ignoreByTimeRegex = new Regex(@"\A--ignore-by-time=\d+\z");
 
 		/*\
 		|*| Parse arguments
