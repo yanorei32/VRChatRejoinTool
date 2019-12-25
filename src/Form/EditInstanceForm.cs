@@ -84,7 +84,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		ownerIdLabel.Text = "Owner ID";
 
 		if (instance.Permission != Permission.Unknown) {
-			if (instance.Permission != Permission.Public) {
+			if (instance.Permission != Permission.Public && instance.Permission != Permission.PublicWithIdentifier) {
 				if (instance.OwnerId == null) {
 					ownerIdLabel.Text += " (required)";
 					ownerIdLabel.ForeColor = Color.Red;
@@ -108,7 +108,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		nonceLabel.Text = "Nonce";
 
 		if (instance.Permission != Permission.Unknown) {
-			if (instance.Permission != Permission.Public) {
+			if (instance.Permission != Permission.Public && instance.Permission != Permission.PublicWithIdentifier) {
 				if (instance.Nonce == null) {
 					nonceLabel.Text += " (required)";
 					nonceLabel.ForeColor = Color.Red;
