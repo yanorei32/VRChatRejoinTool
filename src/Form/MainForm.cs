@@ -70,7 +70,7 @@ partial class MainForm : RejoinToolForm {
 		Visit v = sortedHistory[index];
 
 		this.instance.Text = "Instance:\n" + v.Instance.Id;
-		this.datetime.Text = "Date: " + v.DateTime.ToString();
+		this.datetime.Text = "Date: " + v.DateTime.ToString("yyyy/MM/dd hh:mm:ss");
 		this.permission.Text = "Permission: " + Enum.GetName(
 			typeof(Permission),
 			v.Instance.Permission
