@@ -192,6 +192,8 @@ class Program {
 				(
 					v.Instance.Permission != Permission.Public
 					&&
+					v.Instance.Permission != Permission.PublicWithIdentifier
+					&&
 					v.Instance.Permission != Permission.Unknown
 				)
 			)

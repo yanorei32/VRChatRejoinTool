@@ -24,6 +24,7 @@ If you want to use the old log file, read it by drag and drop.
 | `--no-gui`                           | No GUI mode (Auto join to first candidate)                                      |
 | `--no-dialog`                        | Don't show error dialogs (Sound only). (works with `--no-gui` option.)          |
 | `--quick-save`                       | Quick-save instance shortcut to `AppDir/saves/`  (works with `--no-gui` option) |
+| `--index=<n>`                        | Set visit by index (default: 0). (works with `--no-gui` option.)                |
 
 ### Example
 

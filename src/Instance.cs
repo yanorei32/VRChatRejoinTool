@@ -48,10 +48,13 @@ class Instance {
 
 			string id = instanceName;
 
+			if (this.permission == Permission.Public)
+				return id;
+
 			id += "~";
 
 			switch (this.permission) {
-				case Permission.Public:
+				case Permission.PublicWithIdentifier:
 					id += "public";
 					break;
 
@@ -77,6 +80,7 @@ class Instance {
 
 			if (this.nonce != null)
 				id += "~nonce(" + this.nonce + ")";
+
 			return id;
 		}
 	}
@@ -172,7 +176,7 @@ class Instance {
 					break;
 
 				case "public":
-					this.permission = Permission.Public;
+					this.permission = Permission.PublicWithIdentifier;
 					break;
 
 				case "private":

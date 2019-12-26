@@ -4,6 +4,7 @@ enum Permission {
 	InvitePlus,
 	Friends,
 	FriendsPlus,
+	PublicWithIdentifier,
 	Public,
 };
 
