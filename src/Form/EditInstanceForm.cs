@@ -65,7 +65,7 @@ partial class EditInstanceForm : RejoinToolForm {
 			if (instance.InstanceName == null) {
 				instanceNameLabel.Text += " (required)";
 				instanceNameLabel.ForeColor = Color.Red;
-			} else if (!instance.IsValidInstanceName()) {
+			} else if (!instance.IsMaybeValidInstanceName()) {
 				instanceNameLabel.Text += " (maybe-invalid)";
 				instanceNameLabel.ForeColor = Color.Red;
 			} else if (!instance.IsSafeInstanceName()) {

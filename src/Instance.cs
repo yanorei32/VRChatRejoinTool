@@ -99,8 +99,8 @@ class Instance {
 		}
 	}
 
-	public bool IsValidInstanceName() {
-		return maybeInstanceNameR.Match(this.instanceName).Success;
+	public bool IsMaybeValidInstanceName() {
+		return failableInstanceNameR.Match(this.instanceName).Success;
 	}
 
 	public bool IsSafeInstanceName() {
