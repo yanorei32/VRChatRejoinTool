@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 class Instance {
 	static Regex safeInstanceNameR		= new Regex(@"\A[A-Za-z0-9_\-]+\z");
-	static Regex failableInstanceNameR	= new Regex(@"\A[A-Za-z0-9_\-()]\z");
+	static Regex failableInstanceNameR	= new Regex(@"\A[A-Za-z0-9_\-()]+\z");
 
 	static Regex nonceR		= new Regex(@"\A[A-Za-z0-9\-]+\z");
 	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
