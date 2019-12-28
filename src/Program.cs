@@ -37,11 +37,15 @@ class Program {
 	}
 
 	static IEnumerable<FileInfo> getLogFiles() {
-		return new DirectoryInfo(
-			Environment.ExpandEnvironmentVariables(
-				@"%AppData%\..\LocalLow\VRChat\VRChat"
-			)
-		).EnumerateFiles("output_log_*.txt");
+		string path = Environment.ExpandEnvironmentVariables(
+			@"%AppData%\..\LocalLow\VRChat\VRChat"
+		);
+
+		if (!Directory.Exists(path)) {
+			return null;
+		}
+
+		return new DirectoryInfo(path).EnumerateFiles("output_log_*.txt");
 	}
 
 	static void showMessage(string message, bool noDialog) {
@@ -162,6 +166,11 @@ class Program {
 			}
 		} else {
 			IEnumerable<FileInfo> logfiles = getLogFiles();
+
+			if (logfiles == null) {
+				showMessage("Failed to lookup VRChat log directory.", noGUI && noDialog);
+				return;
+			}
 
 			if (!logfiles.Any()) {
 				showMessage("Could not find VRChat log.", noGUI && noDialog);
