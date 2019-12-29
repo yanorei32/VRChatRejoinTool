@@ -74,7 +74,8 @@ class Program {
 			noDialog		= false,
 			killVRC			= false,
 			noGUI			= false,
-			quickSave		= false;
+			quickSave		= false,
+			quickSaveHTTP	= false;
 
 		int
 			ignoreByTimeMins	= 0,
@@ -91,6 +92,11 @@ class Program {
 		foreach (string arg in Args) {
 			if (arg == "--quick-save") {
 				quickSave = true;
+				continue;
+			}
+
+			if (arg == "--quick-save-http") {
+				quickSaveHTTP = true;
 				continue;
 			}
 
@@ -144,6 +150,15 @@ class Program {
 			}
 
 			userSelectedLogFiles.Add(arg);
+		}
+
+		if (quickSave && quickSaveHTTP) {
+			showMessage(
+				"The combination of --quick-save and --quick-save-http cannot be used.",
+				noGUI && noDialog
+			);
+
+			return;
 		}
 
 
@@ -235,7 +250,7 @@ class Program {
 			var v = sortedVisitHistory[index];
 			var i = v.Instance;
 
-			if (quickSave) {
+			if (quickSave || quickSaveHTTP) {
 				string saveDir = Path.GetDirectoryName(
 					Assembly.GetExecutingAssembly().Location
 				) + @"\saves";
@@ -260,8 +275,15 @@ class Program {
 					instanceString += idWithoutWorldId;
 				}
 
-				var existsLinks = new DirectoryInfo(saveDir).EnumerateFiles("*.lnk");
+				var existsLinks = new DirectoryInfo(saveDir).EnumerateFiles(
+					quickSaveHTTP ? "web-*.lnk" : "*.lnk"
+				);
+
 				foreach (FileInfo link in existsLinks) {
+					if (quickSave && link.Name.StartsWith("web-")) {
+						continue;
+					}
+
 					if (link.Name.EndsWith(instanceString + ".lnk")) {
 						File.SetLastWriteTime(link.FullName, DateTime.Now);
 						return;
@@ -269,14 +291,15 @@ class Program {
 				}
 
 				string filepath = string.Format(
-					@"{0}\{1}{2}.lnk",
+					@"{0}\{3}{1}{2}.lnk",
 					saveDir,
 					v.DateTime.ToString("yyyyMMdd-hhmmss-"),
-					instanceString
+					instanceString,
+					quickSaveHTTP ? "web-" : string.Empty
 				);
 
 				try {
-					VRChat.SaveInstanceToShortcut(i, filepath);
+					VRChat.SaveInstanceToShortcut(i, filepath, quickSaveHTTP);
 				} catch (Exception e) {
 					showMessage(
 						"[QuickSave] Create Shortcut:\n" + e.Message,

@@ -22,6 +22,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.copyLaunchInstanceLink	= new ToolStripMenuItem();
 		this.copyInstanceLink		= new ToolStripMenuItem();
 		this.saveLaunchInstanceLink	= new ToolStripMenuItem();
+		this.saveInstanceLink		= new ToolStripMenuItem();
 
 		this.instanceIdContextMenu.SuspendLayout();
 
@@ -33,14 +34,19 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.copyLaunchInstanceLink.Click			+= new EventHandler(copyLaunchInstanceLinkClick);
 		this.copyLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.Shift | Keys.C;
 
-		this.saveLaunchInstanceLink.Text			= "Save Instance Shortcut (&S)";
+		this.saveLaunchInstanceLink.Text			= "Save Instance (vrchat://) Shortcut (&S)";
 		this.saveLaunchInstanceLink.Click			+= new EventHandler(saveLaunchInstanceLinkClick);
 		this.saveLaunchInstanceLink.ShortcutKeys	= Keys.Control | Keys.S;
+
+		this.saveInstanceLink.Text			= "Save Instance (https://) Shortcut (&S)";
+		this.saveInstanceLink.Click			+= new EventHandler(saveInstanceLinkClick);
+		this.saveInstanceLink.ShortcutKeys	= Keys.Control | Keys.Shift | Keys.S;
 
 		this.instanceIdContextMenu.Opened	+= new EventHandler(openContextMenu);
 		this.instanceIdContextMenu.Items.Add(this.copyLaunchInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.copyInstanceLink);
 		this.instanceIdContextMenu.Items.Add(this.saveLaunchInstanceLink);
+		this.instanceIdContextMenu.Items.Add(this.saveInstanceLink);
 
 		this.instanceIdContextMenu.ResumeLayout(false);
 

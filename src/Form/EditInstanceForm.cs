@@ -28,7 +28,8 @@ partial class EditInstanceForm : RejoinToolForm {
 	ContextMenuStrip	instanceIdContextMenu;
 	ToolStripMenuItem	copyLaunchInstanceLink,
 						copyInstanceLink,
-						saveLaunchInstanceLink;
+						saveLaunchInstanceLink,
+						saveInstanceLink;
 	
 	// Other instance variables
 	Instance	instance;
@@ -193,6 +194,10 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
 		saveInstanceToShortcutGUI(instance);
+	}
+
+	void saveInstanceLinkClick(object sender, EventArgs e) {
+		saveInstanceToShortcutGUI(instance, true);
 	}
 
 	public EditInstanceForm(Instance instance, bool killVRC) {

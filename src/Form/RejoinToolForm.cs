@@ -2,11 +2,14 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 class RejoinToolForm : Form {
-	protected void saveInstanceToShortcutGUI(Instance i) {
+	protected void saveInstanceToShortcutGUI(Instance i, bool httpLink = false) {
 		var sfd = new SaveFileDialog();
 
 		var filename = i.WorldId;
 		var idWithoutWorldId = i.IdWithoutWorldId;
+
+		if (httpLink)
+			filename = "web-" + filename;
 
 		if (idWithoutWorldId != "") {
 			filename += "-";
@@ -22,7 +25,7 @@ class RejoinToolForm : Form {
 
 		if (sfd.ShowDialog() != DialogResult.OK) return;
 
-		VRChat.SaveInstanceToShortcut(i, sfd.FileName);
+		VRChat.SaveInstanceToShortcut(i, sfd.FileName, httpLink);
 	}
 
 	protected void copyLaunchInstanceLinkToClipboard(Instance i) {

@@ -21,6 +21,7 @@ partial class MainForm : RejoinToolForm {
 	ContextMenuStrip	instanceIdContextMenu;
 	ToolStripMenuItem	copyLaunchInstanceLink,
 						copyInstanceLink,
+						saveInstanceLink,
 						saveLaunchInstanceLink,
 						editInstance;
 
@@ -36,6 +37,10 @@ partial class MainForm : RejoinToolForm {
 
 	void copyInstanceLinkClick(object sender, EventArgs e) {
 		copyInstanceLinkToClipboard(sortedHistory[index].Instance);
+	}
+
+	void saveInstanceLinkClick(object sender, EventArgs e) {
+		saveInstanceToShortcutGUI(sortedHistory[index].Instance, true);
 	}
 
 	void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
