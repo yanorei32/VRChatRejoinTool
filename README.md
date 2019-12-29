@@ -15,16 +15,17 @@ If you want to use the old log file, read it by drag and drop.
 
 ## Command-line Arguments
 
-| Argument                             | Description                                                                     |
-|:-------------------------------------|:--------------------------------------------------------------------------------|
-| `--kill-vrc`                         | Kill VRChat.exe processes before launch. (for non-VR)                           |
-| `--ignore-public`                    | Ignore public and unknown instances.                                            |
-| `--ignore-by-time=<time in minutes>` | Ignore too old visits.                                                          |
-| `--ignore-worlds=wrld_xx,wrld_xx`    | Ignore worlds.                                                                  |
-| `--no-gui`                           | No GUI mode (Auto join to first candidate)                                      |
-| `--no-dialog`                        | Don't show error dialogs (Sound only). (works with `--no-gui` option.)          |
-| `--quick-save`                       | Quick-save instance shortcut to `AppDir/saves/`  (works with `--no-gui` option) |
-| `--index=<n>`                        | Set visit by index (default: 0). (works with `--no-gui` option.)                |
+| Argument                             | Description                                                                              |
+|:-------------------------------------|:-----------------------------------------------------------------------------------------|
+| `--kill-vrc`                         | Kill VRChat.exe processes before launch. (for non-VR)                                    |
+| `--ignore-public`                    | Ignore public and unknown instances.                                                     |
+| `--ignore-by-time=<time in minutes>` | Ignore too old visits.                                                                   |
+| `--ignore-worlds=wrld_xx,wrld_xx`    | Ignore worlds.                                                                           |
+| `--no-gui`                           | No GUI mode (Auto join to first candidate)                                               |
+| `--no-dialog`                        | Don't show error dialogs (Sound only). (works with `--no-gui` option.)                   |
+| `--quick-save`                       | Quick-save instance shortcut (vrchat) to `AppDir/saves/`  (works with `--no-gui` option) |
+| `--quick-save-http`                  | Quick-save instance shortcut (http) to `AppDir/saves/`  (works with `--no-gui` option)   |
+| `--index=<n>`                        | Set visit by index (default: 0). (works with `--no-gui` option.)                         |
 
 ### Example
 
@@ -48,7 +49,7 @@ VRChatRejoin.exe ^
 	"arguments": "--no-gui --no-dialog --ignore-by-time=540 --ignore-public"
 }
 "App3": {
-	"arguments": "--no-gui --no-dialog --quick-save"
+	"arguments": "--no-gui --no-dialog --quick-save-http"
 }
 ```
 
