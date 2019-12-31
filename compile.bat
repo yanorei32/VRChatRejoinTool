@@ -6,6 +6,7 @@
 	/resource:res\icon.ico,icon ^
 	/resource:res\logo.png,logo ^
 	/out:VRChatRejoin.exe ^
+	/nologo ^
 	src\Program.cs ^
 	src\Permission.cs ^
 	src\Instance.cs ^
@@ -17,5 +18,7 @@
 	src\Form\EditInstanceForm.cs ^
 	src\Form\EditInstanceForm.Design.cs
 
-pause
+if not %errorlevel% == 0 (
+	pause
+)
 
