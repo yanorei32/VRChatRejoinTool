@@ -27,37 +27,26 @@ If you want to use the old log file, read it by drag and drop.
 | `--quick-save-http`                  | Quick-save instance shortcut (http) to `AppDir/saves/`  (works with `--no-gui` option)   |
 | `--index=<n>`                        | Set visit by index (default: 0). (works with `--no-gui` option.)                         |
 
-### Example
+### Example (VaNii Menu)
 
-#### Launch from CUI
-
-```bat
-VRChatRejoin.exe ^
-	--kill-vrc ^
-	--ignore-public ^
-	--ignore-by-time=540 ^
-	--no-gui
-```
-
-#### Launch from VaniiMenu Launcher
-
-```json
-"App1": {
-	"arguments": "--no-gui --no-dialog --ignore-by-time=540"
-},
-"App2": {
-	"arguments": "--no-gui --no-dialog --ignore-by-time=540 --ignore-public"
-}
-"App3": {
-	"arguments": "--no-gui --no-dialog --quick-save-http"
-}
-```
+https://pastebin.com/axeK0ePs
 
 ## Build
+
+### Easily
+
+* Windows 10
+
+1. Download Source Code from [Download ZIP](https://github.com/Yanorei32/VRChatRejoinTool/archive/master.zip) and Extract
+1. Run `compile.bat`
+
+
+### Advanced (official)
 
 * Windows 10
 * Cygwin / GNU make
 
+1. Run commands in Cygwin environment:
 ```bash
 git clone https://github.com/yanorei32/VRChatRejoinTool
 cd VRChatRejoinTool
