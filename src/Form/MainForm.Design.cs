@@ -86,18 +86,21 @@ partial class MainForm : RejoinToolForm {
 		/*\
 		|*| Prev/Next button column
 		\*/
-		this.prev.Text		= "< Newer";
-		this.prev.Size		= new Size(75, 23);
-		this.prev.Location	= new Point(curW, curH);
-		this.prev.Click		+= new EventHandler(prevButtonClick);
+		this.prev.Text			= "< Newer (&N)";
+		this.prev.Size			= new Size(75, 23);
+		this.prev.Location		= new Point(curW, curH);
+		this.prev.Click			+= new EventHandler(prevButtonClick);
+		this.prev.UseMnemonic	= true;
+
 
 		curW += this.prev.Size.Width;
 		curW += padding;
 
-		this.next.Text		= "Older >";
-		this.next.Size		= new Size(75, 23);
-		this.next.Location	= new Point(curW, curH);
-		this.next.Click		+= new EventHandler(nextButtonClick);
+		this.next.Text			= "(&O) Older >";
+		this.next.Size			= new Size(75, 23);
+		this.next.Location		= new Point(curW, curH);
+		this.next.Click			+= new EventHandler(nextButtonClick);
+		this.next.UseMnemonic	= true;
 
 		curW = margin;
 		curH += this.next.Size.Height;
@@ -142,18 +145,20 @@ partial class MainForm : RejoinToolForm {
 		/*\
 		|*| Launch button column
 		\*/
-		this.launchVrc.Text		= "Launch";
-		this.launchVrc.Location	= new Point(curW, curH);
-		this.launchVrc.Size		= new Size(75, 23);
-		this.launchVrc.Click	+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.Text			= "Launch (&L)";
+		this.launchVrc.Location		= new Point(curW, curH);
+		this.launchVrc.Size			= new Size(75, 23);
+		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.UseMnemonic	= true;
 
 		curW += this.launchVrc.Size.Width;
 		curW += padding;
 
-		this.detail.Text		= "Detail";
+		this.detail.Text		= "Detail (&D)";
 		this.detail.Location	= new Point(curW, curH);
 		this.detail.Size		= new Size(75, 23);
 		this.detail.Click		+= new EventHandler(detailButtonClick);
+		this.detail.UseMnemonic	= true;
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;

@@ -201,18 +201,20 @@ partial class EditInstanceForm : RejoinToolForm {
 		/*\
 		|*| Buttons
 		\*/
-		this.launchVrc.Text		= "Launch";
-		this.launchVrc.Location	= new Point(curW, curH);
-		this.launchVrc.Size		= new Size(75, 23);
-		this.launchVrc.Click	+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.Text			= "Launch (&L)";
+		this.launchVrc.Location		= new Point(curW, curH);
+		this.launchVrc.Size			= new Size(75, 23);
+		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.UseMnemonic	= true;
 
 		curW += this.launchVrc.Size.Width;
 		curW += padding;
 
-		this.detail.Text		= "Detail";
+		this.detail.Text		= "Detail (&D)";
 		this.detail.Location	= new Point(curW, curH);
 		this.detail.Size		= new Size(75, 23);
 		this.detail.Click		+= new EventHandler(detailButtonClick);
+		this.detail.UseMnemonic	= true;
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
