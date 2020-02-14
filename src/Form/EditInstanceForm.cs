@@ -153,6 +153,10 @@ partial class EditInstanceForm : RejoinToolForm {
 		updateInstanceId();
 	}
 
+	void nonceLabelDoubleClick(object sender, EventArgs e) {
+		nonce.Text = Guid.NewGuid().ToString();
+	}
+
 	void launchVrcButtonClick(object sender, EventArgs e) {
 		VRChat.Launch(instance, this.killVRC);
 	}

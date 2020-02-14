@@ -164,6 +164,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.nonceLabel.Location	= new Point(curW, curH);
 		this.nonceLabel.Size		= new Size(textBoxW, 18);
 		this.nonceLabel.Font		= new Font("Consolas", 12F);
+		this.nonceLabel.DoubleClick	+= new EventHandler(nonceLabelDoubleClick);
 
 		curH += this.nonceLabel.Size.Height;
 		curH += padding;
