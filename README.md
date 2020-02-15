@@ -54,3 +54,7 @@ make
 make genzip # if you need zip file.
 ```
 
+## Special thanks
+
+* New logo created by [@FUMI23_VRC](https://twitter.com/intent/user?user_id=1217010323695128578)
+
