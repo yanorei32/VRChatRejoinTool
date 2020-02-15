@@ -154,6 +154,9 @@ partial class EditInstanceForm : RejoinToolForm {
 	}
 
 	void nonceLabelDoubleClick(object sender, EventArgs e) {
+		if (instance.Permission == Permission.Unknown)
+			return;
+
 		nonce.Text = Guid.NewGuid().ToString();
 	}
 
