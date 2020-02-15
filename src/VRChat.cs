@@ -34,6 +34,13 @@ static class VRChat {
 		);
 	}
 
+	public static string GetUserIdLink(Instance i) {
+		return string.Format(
+			"https://vrchat.com/home/user/{0}",
+			i.OwnerId
+		);
+	}
+
 	public static void Launch(Instance i, bool killVRC) {
 		if (killVRC)
 			foreach (var p in Process.GetProcessesByName("vrchat"))

@@ -67,6 +67,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.instanceId			= new Label();
 		this.launchVrc			= new Button();
 		this.detail				= new Button();
+		this.userDetail			= new Button();
 
 		this.SuspendLayout();
 		curH = curW = margin;
@@ -217,6 +218,15 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.detail.Click		+= new EventHandler(detailButtonClick);
 		this.detail.UseMnemonic	= true;
 
+		curW += this.detail.Size.Width;
+		curW += padding;
+
+		this.userDetail.Text		= "User (&U)";
+		this.userDetail.Location	= new Point(curW, curH);
+		this.userDetail.Size		= new Size(75, 23);
+		this.userDetail.Click		+= new EventHandler(userDetailButtonClick);
+		this.userDetail.UseMnemonic	= true;
+
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
 
@@ -247,6 +257,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.Controls.Add(this.instanceId);
 		this.Controls.Add(this.launchVrc);
 		this.Controls.Add(this.detail);
+		this.Controls.Add(this.userDetail);
 
 		this.ResumeLayout(false);
 	}

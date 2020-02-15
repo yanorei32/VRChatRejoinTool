@@ -64,6 +64,7 @@ partial class MainForm : RejoinToolForm {
 		this.next		= new Button();
 		this.launchVrc	= new Button();
 		this.detail		= new Button();
+		this.userDetail	= new Button();
 		this.datetime	= new Label();
 		this.instance	= new Label();
 		this.permission	= new Label();
@@ -160,6 +161,15 @@ partial class MainForm : RejoinToolForm {
 		this.detail.Click		+= new EventHandler(detailButtonClick);
 		this.detail.UseMnemonic	= true;
 
+		curW += this.detail.Size.Width;
+		curW += padding;
+
+		this.userDetail.Text		= "User (&U)";
+		this.userDetail.Location	= new Point(curW, curH);
+		this.userDetail.Size		= new Size(75, 23);
+		this.userDetail.Click		+= new EventHandler(userDetailButtonClick);
+		this.userDetail.UseMnemonic	= true;
+
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
 		// curH += margin;
@@ -177,6 +187,7 @@ partial class MainForm : RejoinToolForm {
 		this.Controls.Add(this.logo);
 		this.Controls.Add(this.launchVrc);
 		this.Controls.Add(this.detail);
+		this.Controls.Add(this.userDetail);
 		this.Controls.Add(this.prev);
 		this.Controls.Add(this.next);
 		this.Controls.Add(this.datetime);

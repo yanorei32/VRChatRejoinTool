@@ -39,5 +39,9 @@ class RejoinToolForm : Form {
 	protected void showDetail(Instance i) {
 		Process.Start(VRChat.GetInstanceLink(i));
 	}
+
+	protected void showUserDetail(Instance i) {
+		Process.Start(VRChat.GetUserIdLink(i));
+	}
 }
 

@@ -10,7 +10,8 @@ partial class MainForm : RejoinToolForm {
 	Button	launchVrc,
 			detail,
 			next,
-			prev;
+			prev,
+			userDetail;
 
 	Label	datetime,
 			instance,
@@ -55,6 +56,10 @@ partial class MainForm : RejoinToolForm {
 		showDetail(sortedHistory[index].Instance);
 	}
 
+	void userDetailButtonClick(object sender, EventArgs e) {
+		showUserDetail(sortedHistory[index].Instance);
+	}
+
 	void launchVrcButtonClick(object sender, EventArgs e) {
 		VRChat.Launch(sortedHistory[index].Instance, killVRC);
 
@@ -82,6 +87,7 @@ partial class MainForm : RejoinToolForm {
 		);
 		this.prev.Enabled = 0 < index;
 		this.next.Enabled = index < sortedHistory.Count - 1;
+		this.userDetail.Enabled = v.Instance.OwnerId != null;
 	}
 
 	public MainForm(List<Visit> sortedHistory, bool killVRC) {

@@ -21,7 +21,8 @@ partial class EditInstanceForm : RejoinToolForm {
 				instanceIdLabel;
 
 	Button		launchVrc,
-				detail;
+				detail,
+				userDetail;
 
 	// ContextMenu
 	IContainer			components;
@@ -126,6 +127,8 @@ partial class EditInstanceForm : RejoinToolForm {
 		} else {
 			nonceLabel.ForeColor = Color.Black;
 		}
+
+		userDetail.Enabled = instance.OwnerId != null;
 	}
 
 	void updatePermission() {
@@ -166,6 +169,10 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void detailButtonClick(object sender, EventArgs e) {
 		showDetail(instance);
+	}
+
+	void userDetailButtonClick(object sender, EventArgs e) {
+		showUserDetail(instance);
 	}
 
 	void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
