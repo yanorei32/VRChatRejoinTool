@@ -9,7 +9,8 @@ This software helps rejoin the instance.
 
 If you want to use the old log file, read it by drag and drop.
 
-[Download](https://github.com/Yanorei32/VRChatRejoinTool/releases)
+## Latest release
+[Download](https://github.com/Yanorei32/VRChatRejoinTool/releases/latest)
 
 [Download from BOOTH (for boost)](https://yanorei32.booth.pm/items/1489700)
 
