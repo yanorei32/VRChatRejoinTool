@@ -8,7 +8,7 @@ class Instance {
 
 	static Regex nonceR		= new Regex(@"\A[A-Za-z0-9\-]+\z");
 	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
-	static Regex worldIdR	= new Regex(@"\Awrld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+	static Regex worldIdR	= new Regex(@"\Awr?ld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 
 	Permission permission;
 	string worldId;
