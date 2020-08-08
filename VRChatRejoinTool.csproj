@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net40;netcoreapp3.1</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>res\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="res\icon.ico" />
+    <None Remove="res\logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="res\icon.ico" LogicalName="icon" />
+    <EmbeddedResource Include="res\logo.png" LogicalName="logo" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

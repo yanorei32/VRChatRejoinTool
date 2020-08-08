@@ -41,12 +41,17 @@ static class VRChat {
 		);
 	}
 
-	public static void Launch(Instance i, bool killVRC) {
+	public static void Launch(Instance i, bool killVRC)
+	{
 		if (killVRC)
 			foreach (var p in Process.GetProcessesByName("vrchat"))
 				p.Kill();
 
-		Process.Start(GetLaunchInstanceLink(i));
+		Process.Start(new ProcessStartInfo()
+		{
+			FileName = GetLaunchInstanceLink(i),
+			UseShellExecute = true,
+		});
 	}
 }
 
