@@ -7,3 +7,4 @@ if not %errorlevel% == 0 (
 )
 
 del .\VRChatRejoinTool.exe.config
+
