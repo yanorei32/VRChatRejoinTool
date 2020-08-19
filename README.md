@@ -41,11 +41,10 @@ https://pastebin.com/axeK0ePs
 1. Download Source Code from [Download ZIP](https://github.com/Yanorei32/VRChatRejoinTool/archive/master.zip) and Extract
 1. Run `compile.bat`
 
-
 ### Advanced (official)
 
 * Windows 10
-* Cygwin / GNU make
+* Cygwin or WSL or WSL2 / GNU make
 
 1. Run commands in Cygwin environment:
 ```bash
@@ -55,7 +54,14 @@ make
 make genzip # if you need zip file.
 ```
 
+### dotnet compiler
+
+* dotnet compiler
+
+1. Run `release-dotnet.bat`
+
 ## Special thanks
 
 * New logo created by [@FUMI23_VRC](https://twitter.com/intent/user?user_id=1217010323695128578)
+* Dotnet compiler supported by [@Ram_Type64_Mod0](https://twitter.com/intent/user?user_id=164613634)
 
