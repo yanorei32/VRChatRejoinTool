@@ -37,11 +37,19 @@ class RejoinToolForm : Form {
 	}
 
 	protected void showDetail(Instance i) {
-		Process.Start(VRChat.GetInstanceLink(i));
+		Process.Start(new ProcessStartInfo()
+		{
+			FileName = VRChat.GetInstanceLink(i),
+			UseShellExecute = true,
+		});
 	}
 
 	protected void showUserDetail(Instance i) {
-		Process.Start(VRChat.GetUserIdLink(i));
+		Process.Start(new ProcessStartInfo()
+		{
+			FileName = VRChat.GetUserIdLink(i),
+			UseShellExecute = true,
+		});
 	}
 }
 

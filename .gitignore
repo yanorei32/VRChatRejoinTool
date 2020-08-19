@@ -29,3 +29,10 @@ tags
 
 # End of https://www.gitignore.io/api/vim
 
+
+
+/.vs
+/VRChatRejoinTool.sln
+/VRChatRejoinTool.csproj.user
+/bin/
+/obj/
