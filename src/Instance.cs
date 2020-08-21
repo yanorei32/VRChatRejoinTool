@@ -10,50 +10,29 @@ class Instance {
 	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 	static Regex worldIdR	= new Regex(@"\Awr?ld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 
-	Permission permission;
-	string worldId;
-	string ownerId;
-	string nonce;
-	string instanceName;
+    public Permission Permission { get; set; }
 
-	public Permission Permission {
-		get { return this.permission; }
-		set { this.permission = value; }
-	}
+    public string OwnerId { get; set; }
 
-	public string OwnerId {
-		get { return this.ownerId; }
-		set { this.ownerId = value; }
-	}
+    public string Nonce { get; set; }
 
-	public string Nonce {
-		get { return this.nonce; }
-		set { this.nonce = value; }
-	}
+    public string WorldId { get; set; }
 
-	public string WorldId {
-		get { return this.worldId; }
-		set { this.worldId = value; }
-	}
+    public string InstanceName { get; set; }
 
-	public string InstanceName {
-		get { return this.instanceName; }
-		set { this.instanceName = value; }
-	}
-
-	public string IdWithoutWorldId {
+    public string IdWithoutWorldId {
 		get {
-			if (this.permission == Permission.Unknown)
+			if (this.Permission == Permission.Unknown)
 				return "";
 
-			string id = instanceName;
+			string id = InstanceName;
 
-			if (this.permission == Permission.Public)
+			if (this.Permission == Permission.Public)
 				return id;
 
 			id += "~";
 
-			switch (this.permission) {
+			switch (this.Permission) {
 				case Permission.PublicWithIdentifier:
 					id += "public";
 					break;
@@ -75,11 +54,11 @@ class Instance {
 					break;
 			}
 
-			if (this.ownerId != null)
-				id += "(" + this.ownerId + ")";
+			if (this.OwnerId != null)
+				id += "(" + this.OwnerId + ")";
 
-			if (this.nonce != null)
-				id += "~nonce(" + this.nonce + ")";
+			if (this.Nonce != null)
+				id += "~nonce(" + this.Nonce + ")";
 
 			return id;
 		}
@@ -87,7 +66,7 @@ class Instance {
 
 	public string Id {
 		get {
-			string id = worldId;
+			string id = WorldId;
 			string idWithoutWorldId = this.IdWithoutWorldId;
 
 			if (idWithoutWorldId != "") {
@@ -100,23 +79,23 @@ class Instance {
 	}
 
 	public bool IsMaybeValidInstanceName() {
-		return failableInstanceNameR.Match(this.instanceName).Success;
+		return failableInstanceNameR.Match(this.InstanceName).Success;
 	}
 
 	public bool IsSafeInstanceName() {
-		return safeInstanceNameR.Match(this.instanceName).Success;
+		return safeInstanceNameR.Match(this.InstanceName).Success;
 	}
 
 	public bool IsValidNonceValue() {
-		return nonceR.Match(this.nonce).Success;
+		return nonceR.Match(this.Nonce).Success;
 	}
 
 	public bool IsValidWorldId() {
-		return worldIdR.Match(this.worldId).Success;
+		return worldIdR.Match(this.WorldId).Success;
 	}
 
 	public bool IsValidUserId() {
-		return userIdR.Match(this.ownerId).Success;
+		return userIdR.Match(this.OwnerId).Success;
 	}
 
 	void parseId(string id) {
@@ -132,19 +111,19 @@ class Instance {
 
 		string[] splittedId = id.Split('~');
 
-		this.permission = Permission.Unknown;
+		this.Permission = Permission.Unknown;
 
 		string[] visibleInfo = splittedId[0].Split(':');
 
-		this.worldId = visibleInfo[0];
+		this.WorldId = visibleInfo[0];
 
 		if (visibleInfo.Length != 2) {
-			this.permission = Permission.Unknown;
+			this.Permission = Permission.Unknown;
 			return;
 		}
 
-		this.permission = Permission.Public;
-		this.instanceName = visibleInfo[1];
+		this.Permission = Permission.Public;
+		this.InstanceName = visibleInfo[1];
 
 		bool containsCanRequestInvite = false;
 		for (int i = 1; i < splittedId.Length; i++) {
@@ -172,26 +151,26 @@ class Instance {
 
 			switch (pKey) {
 				case "nonce":
-					this.nonce = pValue;
+					this.Nonce = pValue;
 					break;
 
 				case "public":
-					this.permission = Permission.PublicWithIdentifier;
+					this.Permission = Permission.PublicWithIdentifier;
 					break;
 
 				case "private":
-					this.permission = Permission.InviteOnly;
-					this.ownerId = pValue;
+					this.Permission = Permission.InviteOnly;
+					this.OwnerId = pValue;
 					break;
 
 				case "friends":
-					this.permission = Permission.Friends;
-					this.ownerId = pValue;
+					this.Permission = Permission.Friends;
+					this.OwnerId = pValue;
 					break;
 
 				case "hidden":
-					this.permission = Permission.FriendsPlus;
-					this.ownerId = pValue;
+					this.Permission = Permission.FriendsPlus;
+					this.OwnerId = pValue;
 					break;
 
 				default:
@@ -201,7 +180,7 @@ class Instance {
 		}
 
 		if (containsCanRequestInvite)
-			this.permission = Permission.InvitePlus;
+			this.Permission = Permission.InvitePlus;
 	}
 
 	public Instance ShallowCopy() {
