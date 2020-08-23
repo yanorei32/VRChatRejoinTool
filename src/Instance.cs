@@ -10,17 +10,17 @@ class Instance {
 	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 	static Regex worldIdR	= new Regex(@"\Awr?ld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
 
-    public Permission Permission { get; set; }
+	public Permission Permission { get; set; }
 
-    public string OwnerId { get; set; }
+	public string OwnerId { get; set; }
 
-    public string Nonce { get; set; }
+	public string Nonce { get; set; }
 
-    public string WorldId { get; set; }
+	public string WorldId { get; set; }
 
-    public string InstanceName { get; set; }
+	public string InstanceName { get; set; }
 
-    public string IdWithoutWorldId {
+	public string IdWithoutWorldId {
 		get {
 			if (this.Permission == Permission.Unknown)
 				return "";
@@ -103,7 +103,7 @@ class Instance {
 		//   instanceName isn't contains ':'
 		//   nonce, instanceName isn't contains '~'
 		//   non-invite+ instances isn't contains
-		//     "canRequestInvite" parameter
+		//	 "canRequestInvite" parameter
 		//   all non-home instances has instance-name
 		//   Is valid? wrld_xx~aa
 		//
