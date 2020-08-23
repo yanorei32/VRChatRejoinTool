@@ -5,7 +5,7 @@
 	/win32icon:res\icon.ico ^
 	/resource:res\icon.ico,icon ^
 	/resource:res\logo.png,logo ^
-	/out:VRChatRejoin.exe ^
+	/out:VRChatRejoinTool.exe ^
 	/nologo ^
 	src\Program.cs ^
 	src\Permission.cs ^
