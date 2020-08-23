@@ -1,20 +1,14 @@
 using System;
 
 class Visit {
-	DateTime dateTime;
-	Instance instance;
+    public DateTime DateTime { get; private set; }
 
-	public DateTime DateTime {
-		get { return this.dateTime; }
-	}
+    public Instance Instance { get; private set; }
 
-	public Instance Instance {
-		get { return this.instance; }
-	}
-
-	public Visit(Instance instance, string dateTime) {
-		this.instance = instance;
-		this.dateTime = DateTime.Parse(dateTime);
+    public Visit(Instance instance, string dateTime) 
+    {
+		this.Instance = instance;
+		this.DateTime = DateTime.Parse(dateTime);
 	}
 }
 
