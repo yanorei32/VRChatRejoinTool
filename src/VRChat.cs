@@ -51,5 +51,17 @@ static class VRChat {
 			UseShellExecute = true,
 		});
 	}
+
+	public static int InviteMe(Instance i, string vrcInviteMePath) {
+		var proc = Process.Start(new ProcessStartInfo() {
+			FileName = vrcInviteMePath,
+			Arguments = GetLaunchInstanceLink(i),
+			UseShellExecute = true,
+		});
+
+		proc.WaitForExit();
+
+		return proc.ExitCode;
+	}
 }
 

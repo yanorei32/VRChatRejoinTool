@@ -72,6 +72,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.launchVrc			= new Button();
 		this.detail				= new Button();
 		this.userDetail			= new Button();
+		if (vrcInviteMePath != null) this.inviteMe = new Button();
 
 		this.SuspendLayout();
 		curH = padding;
@@ -246,6 +247,17 @@ partial class EditInstanceForm : RejoinToolForm {
 		/*\
 		|*| Buttons
 		\*/
+		if (vrcInviteMePath != null) {
+			this.inviteMe.Text			= "Invite Me (&I)";
+			this.inviteMe.Location		= new Point(curW, curH);
+			this.inviteMe.Size			= new Size(75, 23);
+			this.inviteMe.Click			+= new EventHandler(inviteMeButtonClick);
+			this.inviteMe.UseMnemonic	= true;
+
+			curW += this.inviteMe.Size.Width;
+			curW += padding;
+		}
+
 		this.launchVrc.Text			= "Launch (&L)";
 		this.launchVrc.Location		= new Point(curW, curH);
 		this.launchVrc.Size			= new Size(75, 23);
@@ -311,6 +323,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.Controls.Add(this.instanceId);
 		this.Controls.Add(this.instanceIdLabel);
 		this.Controls.Add(this.instanceId);
+		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.launchVrc);
 		this.Controls.Add(this.detail);
 		this.Controls.Add(this.userDetail);

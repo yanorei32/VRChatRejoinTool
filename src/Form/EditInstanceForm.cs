@@ -26,6 +26,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	Button		orderUp,
 				orderDown,
 				launchVrc,
+				inviteMe,
 				detail,
 				userDetail;
 
@@ -40,6 +41,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	// Other instance variables
 	Instance	instance;
 	bool		killVRC;
+	string		vrcInviteMePath;
 
 	protected override void OnLoad(EventArgs e) {
 		base.OnLoad(e);
@@ -218,6 +220,14 @@ partial class EditInstanceForm : RejoinToolForm {
 		VRChat.Launch(instance, this.killVRC);
 	}
 
+	void inviteMeButtonClick(object sender, EventArgs e) {
+		if (VRChat.InviteMe(instance, vrcInviteMePath) == 0) {
+			this.Close();
+		} else {
+			MessageBox.Show("Check your vrc-invite-me.exe setting");
+		}
+	}
+
 	void detailButtonClick(object sender, EventArgs e) {
 		showDetail(instance);
 	}
@@ -265,8 +275,9 @@ partial class EditInstanceForm : RejoinToolForm {
 		saveInstanceToShortcutGUI(instance, true);
 	}
 
-	public EditInstanceForm(Instance instance, bool killVRC) {
+	public EditInstanceForm(Instance instance, bool killVRC, string vrcInviteMePath) {
 		this.instance = instance;
+		this.vrcInviteMePath = vrcInviteMePath;
 		this.killVRC = killVRC;
 
 		initializeComponent();

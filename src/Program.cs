@@ -36,6 +36,28 @@ class Program {
 		}
 	}
 
+	static string FindInPath(string filename) {
+		var path = Path.Combine(
+			Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString(),
+			filename
+		);
+
+		if (File.Exists(path)) return path;
+
+		foreach (var dir in Environment.GetEnvironmentVariable("PATH").Split(';')) {
+			path = Path.Combine(dir, filename);
+			if (File.Exists(path)) return path;
+		}
+
+		foreach (var dir in Environment.GetEnvironmentVariable("PATHEXT").Split(';')) {
+			path = Path.Combine(dir, filename);
+			if (File.Exists(path)) return path;
+		}
+
+
+		return null;
+	}
+
 	static IEnumerable<FileInfo> getLogFiles() {
 		string path = Environment.ExpandEnvironmentVariables(
 			@"%AppData%\..\LocalLow\VRChat\VRChat"
@@ -69,13 +91,16 @@ class Program {
 		List<string> userSelectedLogFiles = new List<string>();
 		List<string> ignoreWorldIds = new List<string>();
 
+		string vrcInviteMePath = FindInPath("vrc-invite-me.exe");
+
 		bool
 			ignorePublic	= false,
 			noDialog		= false,
 			killVRC			= false,
 			noGUI			= false,
 			quickSave		= false,
-			quickSaveHTTP	= false;
+			quickSaveHTTP	= false,
+			inviteMe		= false;
 
 		int
 			ignoreByTimeMins	= 0,
@@ -120,6 +145,11 @@ class Program {
 				continue;
 			}
 
+			if (arg == "--invite-me") {
+				inviteMe = true;
+				continue;
+			}
+
 			match = indexRegex.Match(arg);
 			if (match.Success) {
 				index = int.Parse(arg.Split('=')[1]);
@@ -150,6 +180,11 @@ class Program {
 			}
 
 			userSelectedLogFiles.Add(arg);
+		}
+
+		if (inviteMe && vrcInviteMePath == null) {
+			showMessage("Failed to find vrc-invite-me.exe", noGUI && noDialog);
+			return;
 		}
 
 		if (quickSave && quickSaveHTTP) {
@@ -308,6 +343,13 @@ class Program {
 
 					throw e;
 				}
+			} else if (inviteMe) {
+				if (VRChat.InviteMe(i, vrcInviteMePath) != 0) {
+					showMessage(
+						"Check your vrc-invite-me.exe settings",
+						noDialog
+					);
+				}
 			} else {
 				VRChat.Launch(i, killVRC);
 			}
@@ -316,7 +358,7 @@ class Program {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(
-				new MainForm(sortedVisitHistory, killVRC)
+				new MainForm(sortedVisitHistory, killVRC, vrcInviteMePath)
 			);
 
 		}

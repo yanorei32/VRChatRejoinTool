@@ -8,6 +8,7 @@ partial class MainForm : RejoinToolForm {
 	PictureBox	logo;
 
 	Button	launchVrc,
+			inviteMe,
 			detail,
 			next,
 			prev,
@@ -30,10 +31,11 @@ partial class MainForm : RejoinToolForm {
 	List<Visit>	sortedHistory;
 	int index = 0;
 	bool killVRC;
+	string vrcInviteMePath;
 
 	void editInstanceClick(object sender, EventArgs e) {
 		Instance i = sortedHistory[index].Instance.ShallowCopy();
-		(new EditInstanceForm(i, killVRC)).Show();
+		(new EditInstanceForm(i, killVRC, vrcInviteMePath)).Show();
 	}
 
 	void copyInstanceLinkClick(object sender, EventArgs e) {
@@ -58,6 +60,14 @@ partial class MainForm : RejoinToolForm {
 
 	void userDetailButtonClick(object sender, EventArgs e) {
 		showUserDetail(sortedHistory[index].Instance);
+	}
+
+	void inviteMeButtonClick(object sender, EventArgs e) {
+		if (VRChat.InviteMe(sortedHistory[index].Instance, vrcInviteMePath) == 0) {
+			this.Close();
+		} else {
+			MessageBox.Show("Check your vrc-invite-me.exe setting");
+		}
 	}
 
 	void launchVrcButtonClick(object sender, EventArgs e) {
@@ -90,7 +100,8 @@ partial class MainForm : RejoinToolForm {
 		this.userDetail.Enabled = v.Instance.OwnerId != null;
 	}
 
-	public MainForm(List<Visit> sortedHistory, bool killVRC) {
+	public MainForm(List<Visit> sortedHistory, bool killVRC, string vrcInviteMePath) {
+		this.vrcInviteMePath = vrcInviteMePath;
 		this.killVRC = killVRC;
 		this.sortedHistory = sortedHistory;
 		initializeComponent();

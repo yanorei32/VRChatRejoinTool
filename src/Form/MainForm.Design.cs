@@ -68,6 +68,7 @@ partial class MainForm : RejoinToolForm {
 		this.datetime	= new Label();
 		this.instance	= new Label();
 		this.permission	= new Label();
+		if (vrcInviteMePath != null) this.inviteMe = new Button();
 
 		this.SuspendLayout();
 		curH = padding;
@@ -147,6 +148,17 @@ partial class MainForm : RejoinToolForm {
 		/*\
 		|*| Launch button column
 		\*/
+		if (vrcInviteMePath != null) {
+			this.inviteMe.Text			= "Invite Me (&I)";
+			this.inviteMe.Location		= new Point(curW, curH);
+			this.inviteMe.Size			= new Size(75, 23);
+			this.inviteMe.Click			+= new EventHandler(inviteMeButtonClick);
+			this.inviteMe.UseMnemonic	= true;
+
+			curW += this.inviteMe.Size.Width;
+			curW += padding;
+		}
+
 		this.launchVrc.Text			= "Launch (&L)";
 		this.launchVrc.Location		= new Point(curW, curH);
 		this.launchVrc.Size			= new Size(75, 23);
@@ -193,6 +205,7 @@ partial class MainForm : RejoinToolForm {
 		this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
 		this.ContextMenuStrip	= instanceIdContextMenu;
 		this.Controls.Add(this.logo);
+		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.launchVrc);
 		this.Controls.Add(this.detail);
 		this.Controls.Add(this.userDetail);
