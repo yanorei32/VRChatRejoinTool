@@ -1,11 +1,13 @@
 @echo off
 
+mkdir bin\csc\
+
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\csc.exe ^
 	/target:winexe ^
 	/win32icon:res\icon.ico ^
 	/resource:res\icon.ico,icon ^
 	/resource:res\logo.png,logo ^
-	/out:VRChatRejoinTool.exe ^
+	/out:bin\csc\VRChatRejoinTool.exe ^
 	/nologo ^
 	src\Program.cs ^
 	src\Permission.cs ^

@@ -39,7 +39,7 @@ https://pastebin.com/axeK0ePs
 * Windows 10
 
 1. Download Source Code from [Download ZIP](https://github.com/Yanorei32/VRChatRejoinTool/archive/master.zip) and Extract
-1. Run `compile.bat`
+1. Run `build-csc.bat`
 
 ### Advanced (official)
 
@@ -58,7 +58,7 @@ make genzip # if you need zip file.
 
 * dotnet compiler
 
-1. Run `release-dotnet.bat`
+1. Run `build-dotnet-release.bat`
 
 ## Special thanks
 

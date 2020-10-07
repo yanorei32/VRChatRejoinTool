@@ -9,7 +9,7 @@ partial class MainForm : RejoinToolForm {
 		const int
 			imgW	= 320,
 			imgH	= 84,
-			margin	= 13,
+			margin	= 12,
 			padding	= 6;
 
 		int curW = 0, curH = 0;
@@ -70,7 +70,8 @@ partial class MainForm : RejoinToolForm {
 		this.permission	= new Label();
 
 		this.SuspendLayout();
-		curH = curW = margin;
+		curH = padding;
+		curW = margin;
 
 		/*\
 		|*| Logo column
@@ -172,13 +173,20 @@ partial class MainForm : RejoinToolForm {
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
-		// curH += margin;
+		curH += padding;
 
 		/*\
 		|*| Form
 		\*/
 		this.Text				= "VRChat RejoinTool";
+
+#if NETCOREAPP
 		this.ClientSize			= new Size(imgW + (margin * 2), curH);
+#else
+		// net framework special fix
+		this.ClientSize			= new Size(imgW + (margin * 2) - 10, curH - 10);
+#endif
+
 		this.MinimumSize		= this.Size;
 		this.MaximumSize		= this.Size;
 		this.FormBorderStyle	= FormBorderStyle.FixedSingle;

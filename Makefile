@@ -1,7 +1,8 @@
 PREFIX		= $(shell if [ "`uname`" = "CYGWIN_NT-10.0" ]; then echo cygdrive; else echo mnt; fi)
 CSC			= /$(PREFIX)/c/windows/microsoft.net/framework/v4.0.30319/csc.exe
 PROJ_NAME	= VRChatRejoinTool
-TARGET		= $(PROJ_NAME).exe
+TARGET_DIR	= bin\\csc
+TARGET		= $(TARGET_DIR)\\$(PROJ_NAME).exe
 
 SRC			=	src/Program.cs \
 				src/Permission.cs \
@@ -58,6 +59,7 @@ genzip-for-malware-analysis: $(PROJ_NAME)-malware-analysis.zip
 
 all: $(TARGET)
 $(TARGET): $(SRC) $(DEPS)
+	-mkdir $(TARGET_DIR)
 	$(CSC) $(CSC_FLAGS) /out:$(TARGET) $(SRC_)
 
 .PHONY: clean

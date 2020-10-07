@@ -8,7 +8,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	void initializeComponent() {
 		const int
 			textBoxW = 320,
-			margin	= 13,
+			margin	= 12,
 			padding	= 6;
 
 		int curW = 0, curH = 0;
@@ -74,7 +74,8 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.userDetail			= new Button();
 
 		this.SuspendLayout();
-		curH = curW = margin;
+		curH = padding;
+		curW = margin;
 
 		/*\
 		|*| World ID
@@ -271,12 +272,20 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		curW = margin;
 		curH += this.launchVrc.Size.Height;
+		curH += padding;
 
 		/*\
 		|*| Form
 		\*/
 		this.Text				= "Edit Instance - VRChat RejoinTool";
+
+#if NETCOREAPP
 		this.ClientSize			= new Size(textBoxW + (margin * 2), curH);
+#else
+		// net framework special fix
+		this.ClientSize			= new Size(textBoxW + (margin * 2) - 10, curH - 10);
+#endif
+
 		this.MinimumSize		= this.Size;
 		this.MaximumSize		= this.Size;
 		this.FormBorderStyle	= FormBorderStyle.FixedSingle;
