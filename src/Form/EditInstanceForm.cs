@@ -12,15 +12,20 @@ partial class EditInstanceForm : RejoinToolForm {
 				ownerId,
 				nonce;
 
+	ListBox		argumentOrder;
+
 	Label		worldIdLabel,
 				permissionLabel,
 				instanceNameLabel,
 				ownerIdLabel,
 				nonceLabel,
+				argumentOrderLabel,
 				instanceId,
 				instanceIdLabel;
 
-	Button		launchVrc,
+	Button		orderUp,
+				orderDown,
+				launchVrc,
 				detail,
 				userDetail;
 
@@ -43,6 +48,21 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void updateInstanceId() {
 		this.instanceId.Text = instance.Id;
+	}
+
+	void updateListBox() {
+		argumentOrder.BeginUpdate();
+		argumentOrder.Items.Clear();
+
+		for (int i = 0; i < instance.ArgumentOrder.Length; i++) {
+			argumentOrder.Items.Add(
+				Enum.GetName(typeof(InstanceArgument), instance.ArgumentOrder[i])
+			);
+		}
+
+		argumentOrder.EndUpdate();
+
+		updateOrderButton();
 	}
 
 	void updateTextBox() {
@@ -163,6 +183,37 @@ partial class EditInstanceForm : RejoinToolForm {
 		nonce.Text = Guid.NewGuid().ToString();
 	}
 
+	void updateOrderButton() {
+		orderUp.Enabled = 0 < argumentOrder.SelectedIndex;
+		orderDown.Enabled = argumentOrder.SelectedIndex != -1 && argumentOrder.SelectedIndex < instance.ArgumentOrder.Length - 1;
+	}
+
+	void argumentOrderSelectedIndexChanged(object sender, EventArgs e) {
+		updateOrderButton();
+	}
+
+	void orderDownButtonClick(object sender, EventArgs e) {
+		int i = argumentOrder.SelectedIndex;
+		InstanceArgument temp = instance.ArgumentOrder[i];
+		instance.ArgumentOrder[i] = instance.ArgumentOrder[i+1];
+		instance.ArgumentOrder[i+1] = temp;
+		updateListBox();
+		argumentOrder.SelectedIndex = i+1;
+		updateOrderButton();
+		updateInstanceId();
+	}
+
+	void orderUpButtonClick(object sender, EventArgs e) {
+		int i = argumentOrder.SelectedIndex;
+		InstanceArgument temp = instance.ArgumentOrder[i];
+		instance.ArgumentOrder[i] = instance.ArgumentOrder[i-1];
+		instance.ArgumentOrder[i-1] = temp;
+		updateListBox();
+		argumentOrder.SelectedIndex = i-1;
+		updateOrderButton();
+		updateInstanceId();
+	}
+
 	void launchVrcButtonClick(object sender, EventArgs e) {
 		VRChat.Launch(instance, this.killVRC);
 	}
@@ -220,6 +271,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		initializeComponent();
 
+		updateListBox();
 		updatePermission();
 		updateTextBox();
 		updateInstanceId();
