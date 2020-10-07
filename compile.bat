@@ -10,6 +10,7 @@
 	src\Program.cs ^
 	src\Permission.cs ^
 	src\Instance.cs ^
+	src\InstanceArgument.cs ^
 	src\Visit.cs ^
 	src\VRChat.cs ^
 	src\Form\RejoinToolForm.cs ^
