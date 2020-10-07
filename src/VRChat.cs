@@ -53,6 +53,10 @@ static class VRChat {
 	}
 
 	public static int InviteMe(Instance i, string vrcInviteMePath) {
+		if (!File.Exists(vrcInviteMePath)) {
+			return -1;
+		}
+
 		var proc = Process.Start(new ProcessStartInfo() {
 			FileName = vrcInviteMePath,
 			Arguments = GetLaunchInstanceLink(i),

@@ -19,6 +19,7 @@ If you want to use the old log file, read it by drag and drop.
 | Argument                             | Description                                                                              |
 |:-------------------------------------|:-----------------------------------------------------------------------------------------|
 | `--kill-vrc`                         | Kill VRChat.exe processes before launch. (for non-VR)                                    |
+| `--invite-me`                        | Use vrc-invite-me.exe integration  (works with `--no-gui` option)                        |
 | `--ignore-public`                    | Ignore public and unknown instances.                                                     |
 | `--ignore-by-time=<time in minutes>` | Ignore too old visits.                                                                   |
 | `--ignore-worlds=wrld_xx,wrld_xx`    | Ignore worlds.                                                                           |
