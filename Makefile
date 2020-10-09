@@ -30,7 +30,7 @@ CSC_FLAGS		=	/nologo \
 					/utf8output
 
 DEBUG_FLAGS		= 
-RELEASE_FLAGS	= 
+RELEASE_FLAGS	= /optimize
 
 .PHONY: debug
 debug: CSC_FLAGS+=$(DEBUG_FLAGS)

@@ -9,6 +9,7 @@ mkdir bin\csc\
 	/resource:res\logo.png,logo ^
 	/out:bin\csc\VRChatRejoinTool.exe ^
 	/nologo ^
+	/optimize ^
 	src\Program.cs ^
 	src\Permission.cs ^
 	src\Instance.cs ^
