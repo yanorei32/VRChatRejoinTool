@@ -19,7 +19,7 @@ class Program {
 			Match match;
 
 			while ((lineString = reader.ReadLine()) != null) {
-				if (!lineString.Contains("[VRCFlowManagerVRC] Destination set: "))
+				if (!lineString.Contains("Destination set: "))
 					continue;
 
 				match = instanceRegex.Match(lineString);
