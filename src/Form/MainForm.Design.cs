@@ -65,7 +65,7 @@ partial class MainForm : Form {
 		this.datetime.AutoSize	= false;
 		this.datetime.Location	= new Point(curW, curH);
 		this.datetime.Size		= new Size(imgW, 22);
-		this.datetime.Font		= new Font("Conolas", 16F);
+		this.datetime.Font		= new Font("Consolas", 16F);
 
 		curH += this.datetime.Size.Height;
 		curH += padding;
