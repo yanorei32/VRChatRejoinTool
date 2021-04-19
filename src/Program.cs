@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 class Program {
 	static void readLogfile(FileStream fs, List<Visit> visitHistory) {
-		Regex instanceRegex = new Regex(@"wrld_.+");
+		Regex instanceRegex = new Regex(@"wr?ld_.+");
 		Regex dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
 
 		using (
