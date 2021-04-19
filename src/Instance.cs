@@ -15,6 +15,8 @@ class Instance {
 
 	public Permission Permission { get; set; }
 
+	public string WorldName { get; set; }
+
 	public string OwnerId { get; set; }
 
 	public string Nonce { get; set; }
@@ -237,9 +239,10 @@ class Instance {
 		return (Instance) this.MemberwiseClone();
 	}
 
-	public Instance(string id) {
+	public Instance(string id, string worldName) {
 		ArgumentOrder = new InstanceArgument[3];
 		parseId(id);
+		this.WorldName = worldName;
 	}
 }
 

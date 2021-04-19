@@ -68,6 +68,7 @@ partial class MainForm : RejoinToolForm {
 		this.datetime	= new Label();
 		this.instance	= new Label();
 		this.permission	= new Label();
+		this.worldname	= new Label();
 		if (vrcInviteMePath != null) this.inviteMe = new Button();
 
 		this.SuspendLayout();
@@ -110,21 +111,21 @@ partial class MainForm : RejoinToolForm {
 		curH += padding;
 
 		/*\
-		|*| Joined date time column
+		|*| World column
 		\*/
-		this.datetime.Text		= "Date: 0000.00.00 00:00:00";
-		this.datetime.AutoSize	= false;
-		this.datetime.Location	= new Point(curW, curH);
-		this.datetime.Size		= new Size(imgW, 22);
-		this.datetime.Font		= new Font("Consolas", 16F);
+		this.worldname.Text		= "XXX";
+		this.worldname.AutoSize	= false;
+		this.worldname.Location	= new Point(curW, curH);
+		this.worldname.Size		= new Size(imgW, 22);
+		this.worldname.Font		= new Font("Consolas", 16F);
 
-		curH += this.datetime.Size.Height;
+		curH += this.worldname.Size.Height;
 		curH += padding;
 
 		/*\
 		|*| Permission column
 		\*/
-		this.permission.Text		= "Permission: XXX";
+		this.permission.Text		= "Invite";
 		this.permission.AutoSize	= false;
 		this.permission.Location	= new Point(curW, curH);
 		this.permission.Size		= new Size(imgW, 20);
@@ -134,9 +135,21 @@ partial class MainForm : RejoinToolForm {
 		curH += padding;
 
 		/*\
+		|*| Joined date time column
+		\*/
+		this.datetime.Text		= "0000.00.00 00:00:00";
+		this.datetime.AutoSize	= false;
+		this.datetime.Location	= new Point(curW, curH);
+		this.datetime.Size		= new Size(imgW, 20);
+		this.datetime.Font		= new Font("Consolas", 14F);
+
+		curH += this.datetime.Size.Height;
+		curH += padding;
+
+		/*\
 		|*| Instance column
 		\*/
-		this.instance.Text		= "Instance: wrld_xxx";
+		this.instance.Text		= "wrld_xxx";
 		this.instance.AutoSize	= false;
 		this.instance.Location	= new Point(curW, curH);
 		this.instance.Size		= new Size(imgW, 75);
@@ -214,6 +227,7 @@ partial class MainForm : RejoinToolForm {
 		this.Controls.Add(this.datetime);
 		this.Controls.Add(this.instance);
 		this.Controls.Add(this.permission);
+		this.Controls.Add(this.worldname);
 		this.ResumeLayout(false);
 	}
 }

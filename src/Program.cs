@@ -16,23 +16,61 @@ class Program {
 		using (
 			StreamReader reader = new StreamReader(fs)
 		) {
-			string lineString, dateTime, instance;
+			int state = 0;
+			const int DESTINATION_SET_FOUND	= 1 << 0;
+			const int WORLD_NAME_FOUND		= 1 << 1;
+
+			string lineString, dateTime = "", instance = "", worldName = "";
 			Match match;
 
 			while ((lineString = reader.ReadLine()) != null) {
-				if (!lineString.Contains("Destination set: "))
+				if (lineString.Contains("[Behaviour] Destination set: w")) {
+					match = instanceRegex.Match(lineString);
+
+					if (!match.Success) continue;
+					instance = match.Value;
+
+					match = dateTimeRegex.Match(lineString);
+					if (!match.Success) continue;
+					dateTime = match.Value;
+
+					// push
+					if ((state & DESTINATION_SET_FOUND) != 0)
+						visitHistory.Add(new Visit(
+							new Instance(instance, (state & WORLD_NAME_FOUND) != 0 ? worldName : null),
+							dateTime
+						));
+
+					state = DESTINATION_SET_FOUND;
+
 					continue;
+				}
 
-				match = instanceRegex.Match(lineString);
-				if (!match.Success) continue;
-				instance = match.Value;
+				if (lineString.Contains("[Behaviour] Joining w")) {
+					match = instanceRegex.Match(lineString);
 
-				match = dateTimeRegex.Match(lineString);
-				if (!match.Success) continue;
-				dateTime = match.Value;
+					if (!match.Success) continue;
+					instance = match.Value;
 
-				visitHistory.Add(new Visit(new Instance(instance), dateTime));
+					continue;
+				}
+
+				if (
+					lineString.Contains("[Behaviour] Entering Room: ")
+					||
+					lineString.Contains("[Behaviour] Joining or Creating Room: ")
+				) {
+					worldName = lineString.Split(':')[3].TrimStart();
+					state |= WORLD_NAME_FOUND;
+				}
 			}
+
+			// push
+			if ((state & DESTINATION_SET_FOUND) != 0)
+				visitHistory.Add(new Visit(
+					new Instance(instance, (state & WORLD_NAME_FOUND) != 0 ? worldName : null),
+					dateTime
+				));
 		}
 	}
 

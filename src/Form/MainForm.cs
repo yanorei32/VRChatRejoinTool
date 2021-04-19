@@ -16,6 +16,7 @@ partial class MainForm : RejoinToolForm {
 
 	Label	datetime,
 			instance,
+			worldname,
 			permission;
 
 	// ContextMenu
@@ -35,6 +36,7 @@ partial class MainForm : RejoinToolForm {
 
 	void editInstanceClick(object sender, EventArgs e) {
 		Instance i = sortedHistory[index].Instance.ShallowCopy();
+		i.WorldName = null;
 		(new EditInstanceForm(i, killVRC, vrcInviteMePath)).Show();
 	}
 
@@ -89,9 +91,10 @@ partial class MainForm : RejoinToolForm {
 	void update() {
 		Visit v = sortedHistory[index];
 
-		this.instance.Text = "Instance:\n" + v.Instance.Id;
-		this.datetime.Text = "Date: " + v.DateTime.ToString("yyyy/MM/dd HH:mm:ss");
-		this.permission.Text = "Permission: " + Enum.GetName(
+		this.worldname.Text = v.Instance.WorldName == null ? "[Unknown]" : v.Instance.WorldName;
+		this.instance.Text = v.Instance.Id;
+		this.datetime.Text = " " + v.DateTime.ToString("yyyy/MM/dd HH:mm:ss");
+		this.permission.Text = " " + Enum.GetName(
 			typeof(Permission),
 			v.Instance.Permission
 		);
