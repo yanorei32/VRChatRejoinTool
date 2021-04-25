@@ -97,7 +97,7 @@ partial class MainForm : RejoinToolForm {
 		this.permission.Text = " " + Enum.GetName(
 			typeof(Permission),
 			v.Instance.Permission
-		);
+		) + ":" + v.Instance.InstanceName;
 		this.prev.Enabled = 0 < index;
 		this.next.Enabled = index < sortedHistory.Count - 1;
 		this.userDetail.Enabled = v.Instance.OwnerId != null;
