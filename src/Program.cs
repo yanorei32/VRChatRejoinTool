@@ -16,15 +16,27 @@ class Program {
 		using (
 			StreamReader reader = new StreamReader(fs)
 		) {
-			int state = 0;
+			const int CLEARED				= 0;
 			const int DESTINATION_SET_FOUND	= 1 << 0;
 			const int WORLD_NAME_FOUND		= 1 << 1;
+
+			int state = CLEARED;
 
 			string lineString, dateTime = "", instance = "", worldName = "";
 			Match match;
 
 			while ((lineString = reader.ReadLine()) != null) {
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
+					// Push current instance if not cleared.
+					if (state != CLEARED)
+						visitHistory.Add(new Visit(
+							new Instance(
+								instance,
+								(state & WORLD_NAME_FOUND) != 0 ? worldName : null
+							),
+							dateTime
+						));
+
 					match = instanceRegex.Match(lineString);
 
 					if (!match.Success) continue;
@@ -33,13 +45,6 @@ class Program {
 					match = dateTimeRegex.Match(lineString);
 					if (!match.Success) continue;
 					dateTime = match.Value;
-
-					// push
-					if ((state & DESTINATION_SET_FOUND) != 0)
-						visitHistory.Add(new Visit(
-							new Instance(instance, (state & WORLD_NAME_FOUND) != 0 ? worldName : null),
-							dateTime
-						));
 
 					state = DESTINATION_SET_FOUND;
 
@@ -65,10 +70,13 @@ class Program {
 				}
 			}
 
-			// push
-			if ((state & DESTINATION_SET_FOUND) != 0)
+			// Push current instance if not cleared.
+			if (state != CLEARED)
 				visitHistory.Add(new Visit(
-					new Instance(instance, (state & WORLD_NAME_FOUND) != 0 ? worldName : null),
+					new Instance(
+						instance,
+						(state & WORLD_NAME_FOUND) != 0 ? worldName : null
+					),
 					dateTime
 				));
 		}
