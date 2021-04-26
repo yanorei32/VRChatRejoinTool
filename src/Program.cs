@@ -28,7 +28,7 @@ class Program {
 			while ((lineString = reader.ReadLine()) != null) {
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
-					if (state != CLEARED)
+					if ((state & DESTINATION_SET_FOUND) != 0)
 						visitHistory.Add(new Visit(
 							new Instance(
 								instance,
@@ -36,6 +36,8 @@ class Program {
 							),
 							dateTime
 						));
+
+					state = CLEARED;
 
 					match = instanceRegex.Match(lineString);
 
@@ -71,7 +73,7 @@ class Program {
 			}
 
 			// Push current instance if not cleared.
-			if (state != CLEARED)
+			if ((state & DESTINATION_SET_FOUND) != 0)
 				visitHistory.Add(new Visit(
 					new Instance(
 						instance,
