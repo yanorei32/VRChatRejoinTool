@@ -248,6 +248,7 @@ partial class EditInstanceForm : RejoinToolForm {
 		|*| Buttons
 		\*/
 		if (vrcInviteMePath != null) {
+			// FIXME: (&I) will not shown if netcoreapp3.1
 			this.inviteMe.Text			= "Invite Me (&I)";
 			this.inviteMe.Location		= new Point(curW, curH);
 			this.inviteMe.Size			= new Size(75, 23);

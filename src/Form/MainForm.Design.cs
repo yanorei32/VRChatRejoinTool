@@ -90,6 +90,7 @@ partial class MainForm : RejoinToolForm {
 		/*\
 		|*| Prev/Next button column
 		\*/
+		// FIXME: (&N) will not shown if netcoreapp3.1
 		this.prev.Text			= "< Newer (&N)";
 		this.prev.Size			= new Size(75, 23);
 		this.prev.Location		= new Point(curW, curH);
@@ -162,6 +163,7 @@ partial class MainForm : RejoinToolForm {
 		|*| Launch button column
 		\*/
 		if (vrcInviteMePath != null) {
+			// FIXME: (&I) will not shown if netcoreapp3.1
 			this.inviteMe.Text			= "Invite Me (&I)";
 			this.inviteMe.Location		= new Point(curW, curH);
 			this.inviteMe.Size			= new Size(75, 23);
