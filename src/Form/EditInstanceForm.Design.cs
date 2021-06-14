@@ -247,6 +247,15 @@ partial class EditInstanceForm : RejoinToolForm {
 		/*\
 		|*| Buttons
 		\*/
+		this.launchVrc.Text			= "Launch (&L)";
+		this.launchVrc.Location		= new Point(curW, curH);
+		this.launchVrc.Size			= new Size(75, 23);
+		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.UseMnemonic	= true;
+
+		curW += this.launchVrc.Size.Width;
+		curW += padding;
+
 		if (vrcInviteMePath != null) {
 			// FIXME: (&I) will not shown if netcoreapp3.1
 			this.inviteMe.Text			= "Invite Me (&I)";
@@ -258,15 +267,6 @@ partial class EditInstanceForm : RejoinToolForm {
 			curW += this.inviteMe.Size.Width;
 			curW += padding;
 		}
-
-		this.launchVrc.Text			= "Launch (&L)";
-		this.launchVrc.Location		= new Point(curW, curH);
-		this.launchVrc.Size			= new Size(75, 23);
-		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
-		this.launchVrc.UseMnemonic	= true;
-
-		curW += this.launchVrc.Size.Width;
-		curW += padding;
 
 		this.detail.Text		= "Detail (&D)";
 		this.detail.Location	= new Point(curW, curH);
@@ -324,8 +324,8 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.Controls.Add(this.instanceId);
 		this.Controls.Add(this.instanceIdLabel);
 		this.Controls.Add(this.instanceId);
-		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.launchVrc);
+		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.detail);
 		this.Controls.Add(this.userDetail);
 

@@ -162,6 +162,15 @@ partial class MainForm : RejoinToolForm {
 		/*\
 		|*| Launch button column
 		\*/
+		this.launchVrc.Text			= "Launch (&L)";
+		this.launchVrc.Location		= new Point(curW, curH);
+		this.launchVrc.Size			= new Size(75, 23);
+		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
+		this.launchVrc.UseMnemonic	= true;
+
+		curW += this.launchVrc.Size.Width;
+		curW += padding;
+
 		if (vrcInviteMePath != null) {
 			// FIXME: (&I) will not shown if netcoreapp3.1
 			this.inviteMe.Text			= "Invite Me (&I)";
@@ -173,15 +182,6 @@ partial class MainForm : RejoinToolForm {
 			curW += this.inviteMe.Size.Width;
 			curW += padding;
 		}
-
-		this.launchVrc.Text			= "Launch (&L)";
-		this.launchVrc.Location		= new Point(curW, curH);
-		this.launchVrc.Size			= new Size(75, 23);
-		this.launchVrc.Click		+= new EventHandler(launchVrcButtonClick);
-		this.launchVrc.UseMnemonic	= true;
-
-		curW += this.launchVrc.Size.Width;
-		curW += padding;
 
 		this.detail.Text		= "Detail (&D)";
 		this.detail.Location	= new Point(curW, curH);
@@ -220,8 +220,8 @@ partial class MainForm : RejoinToolForm {
 		this.Icon				= new Icon(execAsm.GetManifestResourceStream("icon"));
 		this.ContextMenuStrip	= instanceIdContextMenu;
 		this.Controls.Add(this.logo);
-		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.launchVrc);
+		if (vrcInviteMePath != null) this.Controls.Add(this.inviteMe);
 		this.Controls.Add(this.detail);
 		this.Controls.Add(this.userDetail);
 		this.Controls.Add(this.prev);
