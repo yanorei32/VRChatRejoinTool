@@ -108,6 +108,19 @@ class Instance {
 		return userIdR.Match(this.OwnerId).Success;
 	}
 
+	public bool IsValidArgumentOrder() {
+		var reference = new InstanceArgument[3];
+		reference[0] = InstanceArgument.Permission;
+		reference[1] = InstanceArgument.CanRequestInvite;
+		reference[2] = InstanceArgument.Nonce;
+
+		for (int i = 0; i < 3; ++i)
+			if (ArgumentOrder[i] != reference[i])
+				return false;
+
+		return true;
+	}
+
 	void parseId(string id) {
 		// NOTE:
 		//   instanceName isn't contains ':'

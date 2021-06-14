@@ -64,6 +64,14 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		argumentOrder.EndUpdate();
 
+		argumentOrderLabel.Text = "Argument Order";
+		if (!instance.IsValidArgumentOrder()) {
+			argumentOrderLabel.Text += " (mustbe P/CRI/N)";
+			argumentOrderLabel.ForeColor = Color.Red;
+		} else {
+			argumentOrderLabel.ForeColor = Color.Black;
+		}
+
 		updateOrderButton();
 	}
 
@@ -134,7 +142,7 @@ partial class EditInstanceForm : RejoinToolForm {
 					nonceLabel.Text += " (required)";
 					nonceLabel.ForeColor = Color.Red;
 				} else if (!instance.IsValidNonceValue()) {
-					nonceLabel.Text += " (maybe-invalid)";
+					nonceLabel.Text += " (invalid)";
 					nonceLabel.ForeColor = Color.Red;
 				} else {
 					nonceLabel.ForeColor = Color.Black;
