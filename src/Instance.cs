@@ -108,6 +108,10 @@ class Instance {
 		return userIdR.Match(this.OwnerId).Success;
 	}
 
+	public bool IsValidPermission() {
+		return this.Permission != Permission.PublicWithIdentifier;
+	}
+
 	public bool IsValidArgumentOrder() {
 		var reference = new InstanceArgument[3];
 		reference[0] = InstanceArgument.Permission;
@@ -115,7 +119,7 @@ class Instance {
 		reference[2] = InstanceArgument.Nonce;
 
 		for (int i = 0; i < 3; ++i)
-			if (ArgumentOrder[i] != reference[i])
+			if (this.ArgumentOrder[i] != reference[i])
 				return false;
 
 		return true;

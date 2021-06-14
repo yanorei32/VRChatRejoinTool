@@ -163,6 +163,15 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= instance.Permission != Permission.Unknown;
+
+		permissionLabel.Text = "Permission";
+
+		if (!instance.IsValidPermission()) {
+			permissionLabel.Text += " (obsolete)";
+			permissionLabel.ForeColor = Color.Red;
+		} else {
+			permissionLabel.ForeColor = Color.Black;
+		}
 	}
 
 	void permissionChanged(object sender, EventArgs e) {
