@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 class Instance {
-	static Regex safeInstanceNameR		= new Regex(@"\A[A-Za-z0-9_\-]+\z");
-	static Regex failableInstanceNameR	= new Regex(@"\A[A-Za-z0-9_\-()]+\z");
-
-	static Regex nonceR		= new Regex(@"\A[A-Za-z0-9\-]+\z");
-	static Regex userIdR	= new Regex(@"\Ausr_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
-	static Regex worldIdR	= new Regex(@"\Awr?ld_[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}\z");
+	static Regex instanceNameR	= new Regex(@"\A[A-Za-z0-9]+\z");
+	static Regex nonceR			= new Regex(@"\A([0-9A-F]{64}|[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12})\z");
+	static Regex userIdR		= new Regex(@"\Ausr_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}\z");
+	static Regex worldIdR		= new Regex(@"\Awr?ld_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}\z");
 
 	public InstanceArgument[] ArgumentOrder { get; set; }
 
@@ -94,12 +92,8 @@ class Instance {
 		}
 	}
 
-	public bool IsMaybeValidInstanceName() {
-		return failableInstanceNameR.Match(this.InstanceName).Success;
-	}
-
-	public bool IsSafeInstanceName() {
-		return safeInstanceNameR.Match(this.InstanceName).Success;
+	public bool IsValidInstanceName() {
+		return instanceNameR.Match(this.InstanceName).Success;
 	}
 
 	public bool IsValidNonceValue() {
