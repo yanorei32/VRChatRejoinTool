@@ -183,7 +183,8 @@ partial class EditInstanceForm : RejoinToolForm {
 	}
 
 	void updateRegion() {
-		customRegion.Enabled = instance.Region == ServerRegion.Custom;
+		customRegion.Enabled = region.Enabled &&
+			(instance.Region == ServerRegion.Custom);
 	}
 
 	void updatePermission() {
@@ -191,7 +192,6 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= region.Enabled
-			= customRegion.Enabled
 			= instance.Permission != Permission.Unknown;
 
 		permissionLabel.Text = "Permission";
