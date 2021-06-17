@@ -5,7 +5,7 @@ This software helps rejoin the instance.
 1. Run `VRChatRejoin.exe`
    + Instances are automatically suggested based on the VRChat log file.
 
-![image](https://user-images.githubusercontent.com/11992915/122329856-15428d00-cf6d-11eb-9bf0-5cbf8816a83d.png)
+![image](https://user-images.githubusercontent.com/11992915/122331166-56d43780-cf6f-11eb-90dc-56a63b9e898b.png)
 
 If you want to use the old log file, read it by drag and drop.
 
