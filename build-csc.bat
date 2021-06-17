@@ -12,7 +12,7 @@ mkdir bin\csc\
 	/optimize ^
 	src\Program.cs ^
 	src\Permission.cs ^
-	src\Region.cs ^
+	src\ServerRegion.cs ^
 	src\Instance.cs ^
 	src\InstanceArgument.cs ^
 	src\Visit.cs ^
