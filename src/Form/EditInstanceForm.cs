@@ -5,9 +5,11 @@ using System.Windows.Forms;
 
 partial class EditInstanceForm : RejoinToolForm {
 	// UI Elements
-	ComboBox	permission;
+	ComboBox	permission,
+				region;
 
 	TextBox		worldId,
+				customRegion,
 				instanceName,
 				ownerId,
 				nonce;
@@ -15,6 +17,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	ListBox		argumentOrder;
 
 	Label		worldIdLabel,
+				regionLabel,
 				permissionLabel,
 				instanceNameLabel,
 				ownerIdLabel,
@@ -46,6 +49,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	protected override void OnLoad(EventArgs e) {
 		base.OnLoad(e);
 		this.permission.SelectedItem = this.instance.Permission;
+		this.region.SelectedItem = this.instance.Region;
 	}
 
 	void updateInstanceId() {
@@ -66,7 +70,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		argumentOrderLabel.Text = "Argument Order";
 		if (!instance.IsValidArgumentOrder()) {
-			argumentOrderLabel.Text += " (mustbe P/CRI/N)";
+			argumentOrderLabel.Text += " (mustbe P/CRI/R/N)";
 			argumentOrderLabel.ForeColor = Color.Red;
 		} else {
 			argumentOrderLabel.ForeColor = Color.Black;
@@ -86,6 +90,26 @@ partial class EditInstanceForm : RejoinToolForm {
 			worldIdLabel.ForeColor = Color.Red;
 		} else {
 			worldIdLabel.ForeColor = Color.Black;
+		}
+
+		/*\
+		|*| Region
+		\*/
+		regionLabel.Text = "Region";
+
+		if (instance.Permission != Permission.Unknown) {
+			if (
+				instance.Region == ServerRegion.Custom
+				&&
+				!instance.IsValidCustomRegionName()
+			) {
+				regionLabel.Text += " (invalid)";
+				regionLabel.ForeColor = Color.Red;
+			} else {
+				regionLabel.ForeColor = Color.Black;
+			}
+		} else {
+			regionLabel.ForeColor = Color.Black;
 		}
 
 		/*\
@@ -158,10 +182,16 @@ partial class EditInstanceForm : RejoinToolForm {
 		userDetail.Enabled = instance.OwnerId != null;
 	}
 
+	void updateRegion() {
+		customRegion.Enabled = instance.Region == ServerRegion.Custom;
+	}
+
 	void updatePermission() {
 		nonce.Enabled
 			= instanceName.Enabled
 			= ownerId.Enabled
+			= region.Enabled
+			= customRegion.Enabled
 			= instance.Permission != Permission.Unknown;
 
 		permissionLabel.Text = "Permission";
@@ -172,6 +202,8 @@ partial class EditInstanceForm : RejoinToolForm {
 		} else {
 			permissionLabel.ForeColor = Color.Black;
 		}
+
+		updateRegion();
 	}
 
 	void permissionChanged(object sender, EventArgs e) {
@@ -182,9 +214,18 @@ partial class EditInstanceForm : RejoinToolForm {
 		updateInstanceId();
 	}
 
+	void regionChanged(object sender, EventArgs e) {
+		instance.Region = (ServerRegion) region.SelectedItem;
+
+		updateRegion();
+		updateTextBox();
+		updateInstanceId();
+	}
+
 	void textBoxChanged(object sender, EventArgs e) {
 		instance.WorldId = worldId.Text;
 		instance.InstanceName = instanceName.Text;
+		instance.CustomRegion = customRegion.Text;
 		instance.OwnerId = ownerId.Text == "" ? null : ownerId.Text;
 		instance.Nonce = nonce.Text == "" ? null : nonce.Text;
 
@@ -298,6 +339,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		updateListBox();
 		updatePermission();
+		updateRegion();
 		updateTextBox();
 		updateInstanceId();
 	}

@@ -8,10 +8,14 @@ class Instance {
 	static Regex nonceR			= new Regex(@"\A([0-9A-F]{48}|[0-9A-F]{64}|[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12})\z");
 	static Regex userIdR		= new Regex(@"\Ausr_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}\z");
 	static Regex worldIdR		= new Regex(@"\Awr?ld_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}\z");
+	static Regex regionR		= new Regex(@"\A[a-z]{2}\z");
 
 	public InstanceArgument[] ArgumentOrder { get; set; }
 
 	public Permission Permission { get; set; }
+
+	public ServerRegion Region { get; set; }
+	public string CustomRegion { get; set; }
 
 	public string WorldName { get; set; }
 
@@ -30,12 +34,33 @@ class Instance {
 
 			string id = InstanceName;
 
-			if (this.Permission == Permission.Public)
-				return id;
-
 			for (int i = 0; i < ArgumentOrder.Length; i++ ) {
 				switch (ArgumentOrder[i]) {
+					case InstanceArgument.Region:
+						switch (this.Region) {
+							case ServerRegion.JP:
+								id += "~region(jp)";
+								break;
+
+							case ServerRegion.EU:
+								id += "~region(eu)";
+								break;
+
+							case ServerRegion.US:
+								id += "";
+								break;
+
+							case ServerRegion.Custom:
+								id += "~region(" + this.CustomRegion + ")";
+								break;
+						}
+
+						break;
+
 					case InstanceArgument.Permission:
+						if (this.Permission == Permission.Public)
+							break;
+
 						switch (this.Permission) {
 							case Permission.PublicWithIdentifier:
 								id += "~public";
@@ -92,6 +117,10 @@ class Instance {
 		}
 	}
 
+	public bool IsValidCustomRegionName() {
+		return regionR.Match(this.CustomRegion).Success;
+	}
+
 	public bool IsValidInstanceName() {
 		return instanceNameR.Match(this.InstanceName).Success;
 	}
@@ -113,12 +142,13 @@ class Instance {
 	}
 
 	public bool IsValidArgumentOrder() {
-		var reference = new InstanceArgument[3];
+		var reference = new InstanceArgument[4];
 		reference[0] = InstanceArgument.Permission;
 		reference[1] = InstanceArgument.CanRequestInvite;
-		reference[2] = InstanceArgument.Nonce;
+		reference[2] = InstanceArgument.Region;
+		reference[3] = InstanceArgument.Nonce;
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < reference.Length; ++i)
 			if (this.ArgumentOrder[i] != reference[i])
 				return false;
 
@@ -139,11 +169,14 @@ class Instance {
 		var argumentPositions = new SortedDictionary<InstanceArgument, int>();
 		argumentPositions.Add(InstanceArgument.Permission, -1);
 		argumentPositions.Add(InstanceArgument.CanRequestInvite, -1);
+		argumentPositions.Add(InstanceArgument.Region, -1);
 		argumentPositions.Add(InstanceArgument.Nonce, -1);
 
 		string[] splittedId = id.Split('~');
 
 		this.Permission = Permission.Unknown;
+		this.Region = ServerRegion.US;
+		this.CustomRegion = "";
 
 		string[] visibleInfo = splittedId[0].Split(':');
 
@@ -154,7 +187,8 @@ class Instance {
 
 			ArgumentOrder[0] = InstanceArgument.Permission;
 			ArgumentOrder[1] = InstanceArgument.CanRequestInvite;
-			ArgumentOrder[2] = InstanceArgument.Nonce;
+			ArgumentOrder[2] = InstanceArgument.Region;
+			ArgumentOrder[3] = InstanceArgument.Nonce;
 
 			return;
 		}
@@ -190,6 +224,26 @@ class Instance {
 			}
 
 			switch (pKey) {
+				case "region":
+					argumentPositions[InstanceArgument.Region] = i * 10;
+
+					switch (pValue) {
+						case "eu":
+							this.Region = ServerRegion.EU;
+							break;
+
+						case "jp":
+							this.Region = ServerRegion.JP;
+							break;
+
+						default:
+							this.Region = ServerRegion.Custom;
+							this.CustomRegion = pValue;
+							break;
+					}
+
+					break;
+
 				case "nonce":
 					argumentPositions[InstanceArgument.Nonce] = i * 10;
 					this.Nonce = pValue;
@@ -230,9 +284,13 @@ class Instance {
 			argumentPositions[InstanceArgument.CanRequestInvite]
 				= argumentPositions[InstanceArgument.Permission] + 1;
 
+		if (argumentPositions[InstanceArgument.Region] == -1)
+			argumentPositions[InstanceArgument.Region]
+				= argumentPositions[InstanceArgument.CanRequestInvite] + 1;
+
 		if (argumentPositions[InstanceArgument.Nonce] == -1)
 			argumentPositions[InstanceArgument.Nonce]
-				= argumentPositions[InstanceArgument.CanRequestInvite] + 1;
+				= argumentPositions[InstanceArgument.Region] + 1;
 
 		int j = 0;
 		foreach (
@@ -251,7 +309,7 @@ class Instance {
 	}
 
 	public Instance(string id, string worldName) {
-		ArgumentOrder = new InstanceArgument[3];
+		ArgumentOrder = new InstanceArgument[4];
 		parseId(id);
 		this.WorldName = worldName;
 	}

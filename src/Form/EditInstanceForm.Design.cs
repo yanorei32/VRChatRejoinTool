@@ -57,6 +57,9 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.worldId			= new TextBox();
 		this.permissionLabel	= new Label();
 		this.permission			= new ComboBox();
+		this.regionLabel		= new Label();
+		this.region				= new ComboBox();
+		this.customRegion		= new TextBox();
 		this.instanceName		= new TextBox();
 		this.instanceNameLabel	= new Label();
 		this.nonce				= new TextBox();
@@ -119,6 +122,37 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.permission.SelectedIndexChanged	+= new EventHandler(permissionChanged);
 
 		curH += this.permission.Size.Height;
+		curH += padding;
+
+		/*\
+		|*| Region
+		\*/
+		this.regionLabel.Text		= "Region";
+		this.regionLabel.AutoSize	= false;
+		this.regionLabel.Location	= new Point(curW, curH);
+		this.regionLabel.Size		= new Size(textBoxW, 18);
+		this.regionLabel.Font		= new Font("Consolas", 12F);
+
+		curH += this.regionLabel.Size.Height;
+		curH += padding;
+
+		this.region.DataSource				= Enum.GetValues(typeof(ServerRegion));
+		this.region.DropDownStyle			= ComboBoxStyle.DropDownList;
+		this.region.Size					= new Size(textBoxW, 20);
+		this.region.Font					= new Font("Consolas", 9F);
+		this.region.Location				= new Point(curW, curH);
+		this.region.SelectedIndexChanged	+= new EventHandler(regionChanged);
+
+		curH += this.region.Size.Height;
+		curH += padding;
+
+		this.customRegion.Text			= this.instance.CustomRegion;
+		this.customRegion.Size			= new Size(textBoxW, 20);
+		this.customRegion.Font			= new Font("Consolas", 9F);
+		this.customRegion.Location		= new Point(curW, curH);
+		this.customRegion.TextChanged	+= new EventHandler(textBoxChanged);
+
+		curH += this.customRegion.Size.Height;
 		curH += padding;
 
 		/*\
@@ -199,7 +233,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		this.argumentOrder.AutoSize				= false;
 		this.argumentOrder.Location				= new Point(curW, curH);
-		this.argumentOrder.Size					= new Size(textBoxW, 47);
+		this.argumentOrder.Size					= new Size(textBoxW, 63);
 		this.argumentOrder.Font					= new Font("Consolas", 9F);
 		this.argumentOrder.SelectedIndexChanged	+= new EventHandler(argumentOrderSelectedIndexChanged);
 
@@ -311,6 +345,9 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.Controls.Add(this.worldId);
 		this.Controls.Add(this.permissionLabel);
 		this.Controls.Add(this.permission);
+		this.Controls.Add(this.regionLabel);
+		this.Controls.Add(this.region);
+		this.Controls.Add(this.customRegion);
 		this.Controls.Add(this.instanceNameLabel);
 		this.Controls.Add(this.instanceName);
 		this.Controls.Add(this.ownerIdLabel);

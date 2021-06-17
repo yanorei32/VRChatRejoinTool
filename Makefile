@@ -7,6 +7,7 @@ TARGET		= $(TARGET_DIR_)\\$(PROJ_NAME).exe
 
 SRC			=	src/Program.cs \
 				src/Permission.cs \
+				src/Region.cs \
 				src/Instance.cs \
 				src/InstanceArgument.cs \
 				src/Visit.cs \
