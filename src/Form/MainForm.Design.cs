@@ -153,7 +153,7 @@ partial class MainForm : RejoinToolForm {
 		this.instance.Text		= "wrld_xxx";
 		this.instance.AutoSize	= false;
 		this.instance.Location	= new Point(curW, curH);
-		this.instance.Size		= new Size(imgW, 60);
+		this.instance.Size		= new Size(imgW, 75);
 		this.instance.Font		= new Font("Consolas", 9F);
 
 		curH += this.instance.Size.Height;
