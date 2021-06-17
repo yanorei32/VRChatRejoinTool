@@ -172,14 +172,13 @@ partial class EditInstanceForm : RejoinToolForm {
 			permissionLabel.Text += " (obsolete)";
 			permissionLabel.ForeColor = Color.Red;
 		}
-
-		updateRegion();
 	}
 
 	void permissionChanged(object sender, EventArgs e) {
 		instance.Permission = (Permission) permission.SelectedItem;
 
 		updatePermission();
+		updateRegion();
 		updateTextBox();
 		updateInstanceId();
 	}
