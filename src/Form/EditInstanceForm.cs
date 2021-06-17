@@ -69,11 +69,11 @@ partial class EditInstanceForm : RejoinToolForm {
 		argumentOrder.EndUpdate();
 
 		argumentOrderLabel.Text = "Argument Order";
+		argumentOrderLabel.ForeColor = Color.Black;
+
 		if (!instance.IsValidArgumentOrder()) {
 			argumentOrderLabel.Text += " (mustbe P/CRI/R/N)";
 			argumentOrderLabel.ForeColor = Color.Red;
-		} else {
-			argumentOrderLabel.ForeColor = Color.Black;
 		}
 
 		updateOrderButton();
@@ -84,112 +84,76 @@ partial class EditInstanceForm : RejoinToolForm {
 		|*| World ID
 		\*/
 		worldIdLabel.Text = "World ID";
+		worldIdLabel.ForeColor = Color.Black;
 
 		if (!instance.IsValidWorldId()) {
 			worldIdLabel.Text += " (invalid)";
 			worldIdLabel.ForeColor = Color.Red;
-		} else {
-			worldIdLabel.ForeColor = Color.Black;
 		}
 
 		/*\
 		|*| Region
 		\*/
 		regionLabel.Text = "Region";
+		regionLabel.ForeColor = Color.Black;
 
-		if (
-			instance.Permission != Permission.Unknown
-			&&
-			instance.Permission != Permission.PublicWithIdentifier
-		) {
-			if (
-				instance.Region == ServerRegion.Custom
-				&&
-				!instance.IsValidCustomRegionName()
-			) {
+		if (customRegion.Enabled) {
+			if (!instance.IsValidCustomRegionName()) {
 				regionLabel.Text += " (invalid)";
 				regionLabel.ForeColor = Color.Red;
-			} else {
-				regionLabel.ForeColor = Color.Black;
 			}
-		} else {
-			regionLabel.ForeColor = Color.Black;
 		}
 
 		/*\
 		|*| Instance Name
 		\*/
 		instanceNameLabel.Text = "Instance Name";
+		instanceNameLabel.ForeColor = Color.Black;
 
-		if (
-			instance.Permission != Permission.Unknown
-			&&
-			instance.Permission != Permission.PublicWithIdentifier
-		) {
+		if (instanceName.Enabled) {
 			if (instance.InstanceName == null) {
 				instanceNameLabel.Text += " (required)";
 				instanceNameLabel.ForeColor = Color.Red;
 			} else if (!instance.IsValidInstanceName()) {
 				instanceNameLabel.Text += " (invalid)";
 				instanceNameLabel.ForeColor = Color.Red;
-			} else {
-				instanceNameLabel.ForeColor = Color.Black;
 			}
-		} else {
-			instanceNameLabel.ForeColor = Color.Black;
 		}
 
 		/*\
 		|*| Owner ID
 		\*/
 		ownerIdLabel.Text = "Owner ID";
+		ownerIdLabel.ForeColor = Color.Black;
 
-		if (
-			instance.Permission != Permission.Unknown
-			&&
-			instance.Permission != Permission.PublicWithIdentifier
-		) {
+		if (ownerId.Enabled) {
 			if (instance.OwnerId == null) {
 				ownerIdLabel.Text += " (required)";
 				ownerIdLabel.ForeColor = Color.Red;
 			} else if (!instance.IsValidUserId()) {
 				ownerIdLabel.Text += " (invalid)";
 				ownerIdLabel.ForeColor = Color.Red;
-			} else {
-				ownerIdLabel.ForeColor = Color.Black;
 			}
-		} else {
-			ownerIdLabel.ForeColor = Color.Black;
 		}
 
 		/*\
 		|*| Nonce
 		\*/
 		nonceLabel.Text = "Nonce";
+		nonceLabel.ForeColor = Color.Black;
 
-		if (
-			instance.Permission != Permission.Unknown
-			&&
-			instance.Permission != Permission.PublicWithIdentifier
-		) {
-			if (instance.Nonce == null) {
-				nonceLabel.ForeColor = Color.Black;
-			} else if (!instance.IsValidNonceValue()) {
+		if (nonce.Enabled) {
+			if (instance.Nonce != null && !instance.IsValidNonceValue()) {
 				nonceLabel.Text += " (invalid)";
 				nonceLabel.ForeColor = Color.Red;
-			} else {
-				nonceLabel.ForeColor = Color.Black;
 			}
-		} else {
-			nonceLabel.ForeColor = Color.Black;
 		}
 
 		userDetail.Enabled = instance.OwnerId != null;
 	}
 
 	void updateRegion() {
-		customRegion.Enabled = region.Enabled &&
-			(instance.Region == ServerRegion.Custom);
+		customRegion.Enabled = region.Enabled && (instance.Region == ServerRegion.Custom);
 	}
 
 	void updatePermission() {
@@ -197,21 +161,16 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= region.Enabled
-			= (
-				instance.Permission != Permission.Unknown
-				&&
-				instance.Permission != Permission.PublicWithIdentifier
-			);
+			= instance.IsValidPermission();
 
 		ownerId.Enabled &= instance.Permission != Permission.Public;
 
 		permissionLabel.Text = "Permission";
+		permissionLabel.ForeColor = Color.Black;
 
-		if (!instance.IsValidPermission()) {
+		if (instance.IsObsoletePermission()) {
 			permissionLabel.Text += " (obsolete)";
 			permissionLabel.ForeColor = Color.Red;
-		} else {
-			permissionLabel.ForeColor = Color.Black;
 		}
 
 		updateRegion();
