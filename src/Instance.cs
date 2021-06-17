@@ -117,6 +117,21 @@ class Instance {
 		}
 	}
 
+	public string RegionName {
+		get {
+			switch (this.Region) {
+				case ServerRegion.US:
+					return "US";
+				case ServerRegion.EU:
+					return "EU";
+				case ServerRegion.JP:
+					return "JP";
+				default:
+					return this.CustomRegion.ToUpper();
+			}
+		}
+	}
+
 	public bool IsValidCustomRegionName() {
 		return regionR.Match(this.CustomRegion).Success;
 	}
