@@ -97,7 +97,11 @@ partial class EditInstanceForm : RejoinToolForm {
 		\*/
 		regionLabel.Text = "Region";
 
-		if (instance.Permission != Permission.Unknown) {
+		if (
+			instance.Permission != Permission.Unknown
+			&&
+			instance.Permission != Permission.PublicWithIdentifier
+		) {
 			if (
 				instance.Region == ServerRegion.Custom
 				&&
@@ -117,7 +121,11 @@ partial class EditInstanceForm : RejoinToolForm {
 		\*/
 		instanceNameLabel.Text = "Instance Name";
 
-		if (instance.Permission != Permission.Unknown) {
+		if (
+			instance.Permission != Permission.Unknown
+			&&
+			instance.Permission != Permission.PublicWithIdentifier
+		) {
 			if (instance.InstanceName == null) {
 				instanceNameLabel.Text += " (required)";
 				instanceNameLabel.ForeColor = Color.Red;
@@ -136,20 +144,19 @@ partial class EditInstanceForm : RejoinToolForm {
 		\*/
 		ownerIdLabel.Text = "Owner ID";
 
-		if (instance.Permission != Permission.Unknown) {
-			if (instance.Permission != Permission.Public && instance.Permission != Permission.PublicWithIdentifier) {
-				if (instance.OwnerId == null) {
-					ownerIdLabel.Text += " (required)";
-					ownerIdLabel.ForeColor = Color.Red;
-				} else if (!instance.IsValidUserId()) {
-					ownerIdLabel.Text += " (invalid)";
-					ownerIdLabel.ForeColor = Color.Red;
-				} else {
-					ownerIdLabel.ForeColor = Color.Black;
-				}
+		if (
+			instance.Permission != Permission.Unknown
+			&&
+			instance.Permission != Permission.PublicWithIdentifier
+		) {
+			if (instance.OwnerId == null) {
+				ownerIdLabel.Text += " (required)";
+				ownerIdLabel.ForeColor = Color.Red;
+			} else if (!instance.IsValidUserId()) {
+				ownerIdLabel.Text += " (invalid)";
+				ownerIdLabel.ForeColor = Color.Red;
 			} else {
-				ownerIdLabel.Text += " (invalid when set)";
-				ownerIdLabel.ForeColor = instance.OwnerId == null ? Color.Black : Color.Red;
+				ownerIdLabel.ForeColor = Color.Black;
 			}
 		} else {
 			ownerIdLabel.ForeColor = Color.Black;
@@ -160,20 +167,18 @@ partial class EditInstanceForm : RejoinToolForm {
 		\*/
 		nonceLabel.Text = "Nonce";
 
-		if (instance.Permission != Permission.Unknown) {
-			if (instance.Permission != Permission.Public && instance.Permission != Permission.PublicWithIdentifier) {
-				if (instance.Nonce == null) {
-					nonceLabel.Text += " (required)";
-					nonceLabel.ForeColor = Color.Red;
-				} else if (!instance.IsValidNonceValue()) {
-					nonceLabel.Text += " (invalid)";
-					nonceLabel.ForeColor = Color.Red;
-				} else {
-					nonceLabel.ForeColor = Color.Black;
-				}
+		if (
+			instance.Permission != Permission.Unknown
+			&&
+			instance.Permission != Permission.PublicWithIdentifier
+		) {
+			if (instance.Nonce == null) {
+				nonceLabel.ForeColor = Color.Black;
+			} else if (!instance.IsValidNonceValue()) {
+				nonceLabel.Text += " (invalid)";
+				nonceLabel.ForeColor = Color.Red;
 			} else {
-				nonceLabel.Text += " (invalid when set)";
-				nonceLabel.ForeColor = instance.Nonce == null ? Color.Black : Color.Red;
+				nonceLabel.ForeColor = Color.Black;
 			}
 		} else {
 			nonceLabel.ForeColor = Color.Black;
@@ -192,7 +197,13 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= region.Enabled
-			= instance.Permission != Permission.Unknown;
+			= (
+				instance.Permission != Permission.Unknown
+				&&
+				instance.Permission != Permission.PublicWithIdentifier
+			);
+
+		ownerId.Enabled &= instance.Permission != Permission.Public;
 
 		permissionLabel.Text = "Permission";
 
@@ -234,7 +245,7 @@ partial class EditInstanceForm : RejoinToolForm {
 	}
 
 	void nonceLabelDoubleClick(object sender, EventArgs e) {
-		if (instance.Permission == Permission.Unknown)
+		if (!nonce.Enabled)
 			return;
 
 		nonce.Text = Guid.NewGuid().ToString();

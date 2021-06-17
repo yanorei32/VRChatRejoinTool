@@ -80,14 +80,16 @@ class Instance {
 								break;
 						}
 
-						if (this.OwnerId != null)
-							id += "(" + this.OwnerId + ")";
+						if (this.Permission != Permission.PublicWithIdentifier)
+							if (this.OwnerId != null)
+								id += "(" + this.OwnerId + ")";
 
 						break;
 
 					case InstanceArgument.Nonce:
-						if (this.Nonce != null)
-							id += "~nonce(" + this.Nonce + ")";
+						if (this.Permission != Permission.PublicWithIdentifier)
+							if (this.Nonce != null)
+								id += "~nonce(" + this.Nonce + ")";
 
 						break;
 
