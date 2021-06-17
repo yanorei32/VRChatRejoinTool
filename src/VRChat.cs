@@ -29,8 +29,9 @@ static class VRChat {
 
 	public static string GetInstanceLink(Instance i) {
 		return string.Format(
-			"https://vrchat.com/home/launch?worldId={0}&instanceId={1}",
+			"https://vrchat.com/home/launch?worldId={0}{1}{2}",
 			i.WorldId,
+			i.IdWithoutWorldId == "" ? "" : "&instanceId=",
 			i.IdWithoutWorldId
 		);
 	}
