@@ -37,6 +37,9 @@ class Instance {
 			for (int i = 0; i < ArgumentOrder.Length; i++ ) {
 				switch (ArgumentOrder[i]) {
 					case InstanceArgument.Region:
+						if (this.Permission == Permission.PublicWithIdentifier)
+							continue;
+
 						switch (this.Region) {
 							case ServerRegion.JP:
 								id += "~region(jp)";
