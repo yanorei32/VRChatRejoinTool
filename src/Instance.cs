@@ -41,16 +41,20 @@ class Instance {
 							continue;
 
 						switch (this.Region) {
+							case ServerRegion.US:
+								id += "";
+								break;
+
+							case ServerRegion.USWithIdentifier:
+								id += "~region(us)";
+								break;
+
 							case ServerRegion.JP:
 								id += "~region(jp)";
 								break;
 
 							case ServerRegion.EU:
 								id += "~region(eu)";
-								break;
-
-							case ServerRegion.US:
-								id += "";
 								break;
 
 							case ServerRegion.Custom:
@@ -126,6 +130,7 @@ class Instance {
 		get {
 			switch (this.Region) {
 				case ServerRegion.US:
+				case ServerRegion.USWithIdentifier:
 					return "US";
 				case ServerRegion.EU:
 					return "EU";
@@ -252,6 +257,10 @@ class Instance {
 					argumentPositions[InstanceArgument.Region] = i * 10;
 
 					switch (pValue) {
+						case "us":
+							this.Region = ServerRegion.USWithIdentifier;
+							break;
+
 						case "eu":
 							this.Region = ServerRegion.EU;
 							break;
