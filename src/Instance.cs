@@ -157,17 +157,11 @@ class Instance {
 		return userIdR.Match(this.OwnerId).Success;
 	}
 
-	public bool IsValidPermission() {
-		return !(
-			this.Permission == Permission.PublicWithIdentifier
-			||
-			this.Permission == Permission.Unknown
-		);
-	}
-
 	public bool IsObsoletePermission() {
 		return (
 			this.Permission == Permission.PublicWithIdentifier
+			||
+			this.Permission == Permission.Unknown
 		);
 	}
 

@@ -149,7 +149,7 @@ partial class EditInstanceForm : RejoinToolForm {
 			}
 		}
 
-		userDetail.Enabled = instance.OwnerId != null;
+		userDetail.Enabled = ownerId.Enabled && instance.OwnerId != null;
 	}
 
 	void updateRegion() {
@@ -161,7 +161,7 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= region.Enabled
-			= instance.IsValidPermission();
+			= !instance.IsObsoletePermission();
 
 		ownerId.Enabled &= instance.Permission != Permission.Public;
 
