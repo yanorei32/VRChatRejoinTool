@@ -18,8 +18,8 @@ class Program {
 		WorldNameFound,
 	}
 	static void readLogfile(FileStream fs, List<Visit> visitHistory) {
-		Regex instanceRegex = new Regex(@"wr?ld_.+");
-		Regex dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
+		var instanceRegex = new Regex(@"wr?ld_.+");
+		var dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
 
 		using (
 			StreamReader reader = new StreamReader(fs)
@@ -27,9 +27,9 @@ class Program {
 			var state = State.Cleared;
 
 			string lineString, dateTime = "", instance = "", worldName = "";
-			Match match;
 
 			while ((lineString = reader.ReadLine()) != null) {
+				Match match;
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
 					if ((state & State.DestinationSetFound) != 0)
@@ -118,11 +118,9 @@ class Program {
 			@"%AppData%\..\LocalLow\VRChat\VRChat"
 		);
 
-		if (!Directory.Exists(path)) {
-			return null;
-		}
-
-		return new DirectoryInfo(path).EnumerateFiles("output_log_*.txt");
+		return Directory.Exists(path) 
+			? new DirectoryInfo(path).EnumerateFiles("output_log_*.txt") 
+			: null;
 	}
 
 	static void showMessage(string message, bool noDialog) {
@@ -161,7 +159,6 @@ class Program {
 			ignoreByTimeMins	= 0,
 			index				= 0;
 
-		Match match;
 		var ignoreWorldsArgRegex	= new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
 		var ignoreByTimeRegex		= new Regex(@"\A--ignore-by-time=\d+\z");
 		var indexRegex				= new Regex(@"\A--index=\d+\z");
@@ -170,42 +167,32 @@ class Program {
 		|*| Parse arguments
 		\*/
 		foreach (var arg in Args) {
-			if (arg == "--quick-save") {
-				quickSave = true;
-				continue;
+			switch (arg)
+			{
+				case "--quick-save":
+					quickSave = true;
+					continue;
+				case "--quick-save-http":
+					quickSaveHTTP = true;
+					continue;
+				case "--no-gui":
+					noGUI = true;
+					continue;
+				case "--kill-vrc":
+					killVRC = true;
+					continue;
+				case "--ignore-public":
+					ignorePublic = true;
+					continue;
+				case "--no-dialog":
+					noDialog = true;
+					continue;
+				case "--invite-me":
+					inviteMe = true;
+					continue;
 			}
 
-			if (arg == "--quick-save-http") {
-				quickSaveHTTP = true;
-				continue;
-			}
-
-			if (arg == "--no-gui") {
-				noGUI = true;
-				continue;
-			}
-
-			if (arg == "--kill-vrc") {
-				killVRC = true;
-				continue;
-			}
-
-			if (arg == "--ignore-public") {
-				ignorePublic = true;
-				continue;
-			}
-
-			if (arg == "--no-dialog") {
-				noDialog = true;
-				continue;
-			}
-
-			if (arg == "--invite-me") {
-				inviteMe = true;
-				continue;
-			}
-
-			match = indexRegex.Match(arg);
+			var match = indexRegex.Match(arg);
 			if (match.Success) {
 				index = int.Parse(arg.Split('=')[1]);
 				continue;
