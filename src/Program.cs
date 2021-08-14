@@ -8,6 +8,15 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 class Program {
+	// TODO: Split this into another file
+	// TODO: Bad name
+	[Flags]
+	enum State
+	{
+		Cleared,
+		DestinationSetFound,
+		WorldNameFound,
+	}
 	static void readLogfile(FileStream fs, List<Visit> visitHistory) {
 		Regex instanceRegex = new Regex(@"wr?ld_.+");
 		Regex dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
@@ -15,11 +24,7 @@ class Program {
 		using (
 			StreamReader reader = new StreamReader(fs)
 		) {
-			const int CLEARED				= 0;
-			const int DESTINATION_SET_FOUND	= 1 << 0;
-			const int WORLD_NAME_FOUND		= 1 << 1;
-
-			int state = CLEARED;
+			var state = State.Cleared;
 
 			string lineString, dateTime = "", instance = "", worldName = "";
 			Match match;
@@ -27,16 +32,16 @@ class Program {
 			while ((lineString = reader.ReadLine()) != null) {
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
-					if ((state & DESTINATION_SET_FOUND) != 0)
+					if ((state & State.DestinationSetFound) != 0)
 						visitHistory.Add(new Visit(
 							new Instance(
 								instance,
-								(state & WORLD_NAME_FOUND) != 0 ? worldName : null
+								(state & State.WorldNameFound) != 0 ? worldName : null
 							),
 							dateTime
 						));
 
-					state = CLEARED;
+					state = State.Cleared;
 
 					match = instanceRegex.Match(lineString);
 
@@ -47,7 +52,7 @@ class Program {
 					if (!match.Success) continue;
 					dateTime = match.Value;
 
-					state = DESTINATION_SET_FOUND;
+					state = State.DestinationSetFound;
 
 					continue;
 				}
@@ -67,16 +72,16 @@ class Program {
 					lineString.Contains("[Behaviour] Joining or Creating Room: ")
 				) {
 					worldName = lineString.Split(':')[3].TrimStart();
-					state |= WORLD_NAME_FOUND;
+					state |= State.WorldNameFound;
 				}
 			}
 
 			// Push current instance if not cleared.
-			if ((state & DESTINATION_SET_FOUND) != 0)
+			if ((state & State.DestinationSetFound) != 0)
 				visitHistory.Add(new Visit(
 					new Instance(
 						instance,
-						(state & WORLD_NAME_FOUND) != 0 ? worldName : null
+						(state & State.WorldNameFound) != 0 ? worldName : null
 					),
 					dateTime
 				));
