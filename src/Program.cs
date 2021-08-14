@@ -131,11 +131,11 @@ class Program {
 
 	[STAThread]
 	public static void Main(string[] Args) {
-		List<Visit> visitHistory = new List<Visit>();
+		var visitHistory = new List<Visit>();
 
 		// Arguments
-		List<string> userSelectedLogFiles = new List<string>();
-		List<string> ignoreWorldIds = new List<string>();
+		var userSelectedLogFiles = new List<string>();
+		var ignoreWorldIds = new List<string>();
 
 		string vrcInviteMePath = FindInPath("vrc-invite-me.exe");
 
@@ -153,14 +153,14 @@ class Program {
 			index				= 0;
 
 		Match match;
-		Regex ignoreWorldsArgRegex	= new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
-		Regex ignoreByTimeRegex		= new Regex(@"\A--ignore-by-time=\d+\z");
-		Regex indexRegex			= new Regex(@"\A--index=\d+\z");
+		var ignoreWorldsArgRegex	= new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");
+		var ignoreByTimeRegex		= new Regex(@"\A--ignore-by-time=\d+\z");
+		var indexRegex				= new Regex(@"\A--index=\d+\z");
 
 		/*\
 		|*| Parse arguments
 		\*/
-		foreach (string arg in Args) {
+		foreach (var arg in Args) {
 			if (arg == "--quick-save") {
 				quickSave = true;
 				continue;
@@ -248,9 +248,9 @@ class Program {
 		|*|  (Find logfiles by AppData if userSelectedLogFiles is empty)
 		\*/
 		if (userSelectedLogFiles.Any()) {
-			foreach (string filepath in userSelectedLogFiles) {
+			foreach (var filepath in userSelectedLogFiles) {
 				using (
-					FileStream stream = new FileStream(
+					var stream = new FileStream(
 						filepath,
 						FileMode.Open,
 						FileAccess.Read,
@@ -261,21 +261,21 @@ class Program {
 				}
 			}
 		} else {
-			IEnumerable<FileInfo> logfiles = getLogFiles();
+			IEnumerable<FileInfo> logFiles = getLogFiles();
 
-			if (logfiles == null) {
+			if (logFiles == null) {
 				showMessage("Failed to lookup VRChat log directory.", noGUI && noDialog);
 				return;
 			}
 
-			if (!logfiles.Any()) {
+			if (!logFiles.Any()) {
 				showMessage("Could not find VRChat log.", noGUI && noDialog);
 				return;
 			}
 
-			foreach (FileInfo logfile in logfiles) {
+			foreach (var logFile in logFiles) {
 				using (
-					FileStream stream = logfile.Open(
+					var stream = logFile.Open(
 						FileMode.Open,
 						FileAccess.Read,
 						FileShare.ReadWrite
@@ -289,7 +289,7 @@ class Program {
 		/*\
 		|*| Filter and Sort
 		\*/
-		DateTime compDate = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
+		var compDate = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
 		List<Visit> sortedVisitHistory = visitHistory.Where(
 			v => (
 				!ignorePublic
@@ -371,7 +371,7 @@ class Program {
 					}
 				}
 
-				string filepath = string.Format(
+				var filePath = string.Format(
 					@"{0}\{3}{1}{2}.lnk",
 					saveDir,
 					v.DateTime.ToString("yyyyMMdd-hhmmss-"),
@@ -380,7 +380,7 @@ class Program {
 				);
 
 				try {
-					VRChat.SaveInstanceToShortcut(i, filepath, quickSaveHTTP);
+					VRChat.SaveInstanceToShortcut(i, filePath, quickSaveHTTP);
 				} catch (Exception e) {
 					showMessage(
 						"[QuickSave] Create Shortcut:\n" + e.Message,
