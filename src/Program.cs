@@ -89,20 +89,24 @@ class Program {
 	}
 
 	static string FindInPath(string filename) {
-		var path = Path.Combine(
-			Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString(),
-			filename
-		);
+		{
+			var path = Path.Combine(
+				Directory.GetParent(Assembly.GetExecutingAssembly().Location).ToString(),
+				filename
+			);
 
-		if (File.Exists(path)) return path;
-
-		foreach (var dir in Environment.GetEnvironmentVariable("PATH").Split(';')) {
-			path = Path.Combine(dir, filename);
 			if (File.Exists(path)) return path;
 		}
 
+		// ReSharper disable once PossibleNullReferenceException
+		foreach (var dir in Environment.GetEnvironmentVariable("PATH").Split(';')) {
+			var path = Path.Combine(dir, filename);
+			if (File.Exists(path)) return path;
+		}
+
+		// TODO: is it more readable if convert this into LINQ-style?
 		foreach (var dir in Environment.GetEnvironmentVariable("PATHEXT").Split(';')) {
-			path = Path.Combine(dir, filename);
+			var path = Path.Combine(dir, filename);
 			if (File.Exists(path)) return path;
 		}
 
