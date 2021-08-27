@@ -91,7 +91,7 @@ partial class MainForm : RejoinToolForm {
 	void update() {
 		Visit v = sortedHistory[index];
 
-		this.worldname.Text = v.Instance.WorldName == null ? "(!) Failed to Joining" : v.Instance.WorldName;
+		this.worldname.Text = v.Instance.WorldName ?? "(!) Failed to Joining";
 		this.instance.Text = v.Instance.Id;
 		this.datetime.Text = " " + v.DateTime.ToString("yyyy/MM/dd HH:mm:ss");
 		this.permission.Text = " " + Enum.GetName(
