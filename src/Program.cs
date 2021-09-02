@@ -6,6 +6,7 @@ using System.Media;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static FunctionalPiece;
 
 class Program {
 	// TODO: Split this into another file
@@ -30,7 +31,6 @@ class Program {
 			string lineString, dateTime = "", instance = "", worldName = "";
 
 			while ((lineString = reader.ReadLine()) != null) {
-				Match match;
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
 					if ((state & State.DestinationSetFound) != 0)
@@ -44,26 +44,27 @@ class Program {
 
 					state = State.Cleared;
 
-					match = instanceRegex.Match(lineString);
+					// FIXME: 名前がよくなさそう
+					var proceedParse = true;
+					proceedParse = proceedParse && actionIfMatch(lineString, instanceRegex, s => {
+						instance = s;
+					});
 
-					if (!match.Success) continue;
-					instance = match.Value;
+					proceedParse = proceedParse && actionIfMatch(lineString, dateTimeRegex, s => {
+						dateTime = s;
+					});
 
-					match = dateTimeRegex.Match(lineString);
-					if (!match.Success) continue;
-					dateTime = match.Value;
-
-					state = State.DestinationSetFound;
+					if (!proceedParse) {
+						state = State.DestinationSetFound;
+					}
 
 					continue;
 				}
 
 				if (lineString.Contains("[Behaviour] Joining w")) {
-					match = instanceRegex.Match(lineString);
-
-					if (!match.Success) continue;
-					instance = match.Value;
-
+					actionIfMatch(lineString, instanceRegex, s => {
+						instance = s;
+					});
 					continue;
 				}
 
@@ -193,26 +194,22 @@ class Program {
 					continue;
 			}
 
-			var match = indexRegex.Match(arg);
-			if (match.Success) {
-				index = int.Parse(arg.Split('=')[1]);
-				continue;
-			}
+			// continueがdelegateから外側に使えないため、代用のフラグ変数
+			var dontParse = false;
 
-			match = ignoreWorldsArgRegex.Match(arg);
-			if (match.Success) {
+			// NOTE: ||= isn't available as of C# 4.0
+			dontParse = dontParse || actionIfMatch(arg, indexRegex, () => {
+				index = int.Parse(arg.Split('=')[1]);
+			});
+			dontParse = dontParse || actionIfMatch(arg, ignoreWorldsArgRegex, () => {
 				foreach (string world in arg.Split('=')[1].Split(','))
 					ignoreWorldIds.Add(world);
-
-				continue;
-			}
-
-			match = ignoreByTimeRegex.Match(arg);
-			if (match.Success) {
+			});
+			dontParse = dontParse || actionIfMatch(arg, ignoreByTimeRegex, () => {
 				ignoreByTimeMins = int.Parse(arg.Split('=')[1]);
-				continue;
-			}
+			});
 
+			if (dontParse) continue;
 			if (!File.Exists(arg)) {
 				showMessage(
 					"Unknown option or invalid file.: " + arg,
