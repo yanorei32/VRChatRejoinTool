@@ -125,16 +125,23 @@ class Program {
 			: null;
 	}
 
-	static void showMessage(string message, bool noDialog) {
-		if (noDialog) {
-			SystemSounds.Exclamation.Play();
-		} else {
+	/**
+	 * <summary>警告を指定した方法で表示する。</summary>
+	 * <param name="lazyMessage">遅延評価される表示するメッセージ</param>
+	 * <param name="showDialog"><c>true</c>ならば画面を表示する。<c>false</c>ならば画面を表示しない。</param>
+	 */
+	static void showMessage(bool showDialog, Func<string> lazyMessage)
+	{
+		if (showDialog) {
+			var message = lazyMessage();
 			MessageBox.Show(
 				message,
 				message,
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Asterisk
 			);
+		} else {
+			SystemSounds.Exclamation.Play();
 		}
 	}
 
@@ -212,9 +219,8 @@ class Program {
 			if (dontParse) continue;
 			if (!File.Exists(arg)) {
 				showMessage(
-					"Unknown option or invalid file.: " + arg,
-					noGUI && noDialog
-				);
+					!(noGUI && noDialog), 
+					() => "Unknown option or invalid file.: " + arg);
 
 				return;
 			}
@@ -223,15 +229,14 @@ class Program {
 		}
 
 		if (inviteMe && vrcInviteMePath == null) {
-			showMessage("Failed to find vrc-invite-me.exe", noGUI && noDialog);
+			showMessage(!(noGUI && noDialog), () => "Failed to find vrc-invite-me.exe");
 			return;
 		}
 
 		if (quickSave && quickSaveHTTP) {
 			showMessage(
-				"The combination of --quick-save and --quick-save-http cannot be used.",
-				noGUI && noDialog
-			);
+				!(noGUI && noDialog), 
+				() => "The combination of --quick-save and --quick-save-http cannot be used.");
 
 			return;
 		}
@@ -258,12 +263,12 @@ class Program {
 			IEnumerable<FileInfo> logFiles = getLogFiles();
 
 			if (logFiles == null) {
-				showMessage("Failed to lookup VRChat log directory.", noGUI && noDialog);
+				showMessage(!(noGUI && noDialog), () => "Failed to lookup VRChat log directory.");
 				return;
 			}
 
 			if (!logFiles.Any()) {
-				showMessage("Could not find VRChat log.", noGUI && noDialog);
+				showMessage(!(noGUI && noDialog), () => "Could not find VRChat log.");
 				return;
 			}
 
@@ -309,7 +314,7 @@ class Program {
 		).ToList();
 
 		if (!sortedVisitHistory.Any()) {
-			showMessage("Could not find visits from VRChat log.", noGUI && noDialog);
+			showMessage(!(noGUI && noDialog), () => "Could not find visits from VRChat log.");
 			return;
 		}
 
@@ -318,7 +323,7 @@ class Program {
 		\*/
 		if (noGUI) {
 			if (index >= sortedVisitHistory.Count) {
-				showMessage("Out of bounds index: " + index.ToString(), noDialog);
+				showMessage(!noDialog, () => "Out of bounds index: " + index);
 				return;
 			}
 
@@ -335,8 +340,8 @@ class Program {
 						Directory.CreateDirectory(saveDir);
 				} catch (Exception e) {
 					showMessage(
-						"[QuickSave] Make Directory:\n" + e.Message,
-						noDialog
+						!noDialog,
+						() => "[QuickSave] Make Directory:\n" + e.Message
 					);
 
 					throw e;
@@ -377,8 +382,8 @@ class Program {
 					VRChat.SaveInstanceToShortcut(i, filePath, quickSaveHTTP);
 				} catch (Exception e) {
 					showMessage(
-						"[QuickSave] Create Shortcut:\n" + e.Message,
-						noDialog
+						!noDialog, 
+						() => "[QuickSave] Create Shortcut:\n" + e.Message
 					);
 
 					throw e;
@@ -386,8 +391,8 @@ class Program {
 			} else if (inviteMe) {
 				if (VRChat.InviteMe(i, vrcInviteMePath) != 0) {
 					showMessage(
-						"Check your vrc-invite-me.exe settings",
-						noDialog
+						!noDialog, 
+						() => "Check your vrc-invite-me.exe settings"
 					);
 				}
 			} else {
