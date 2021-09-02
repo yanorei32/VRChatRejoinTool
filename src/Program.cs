@@ -364,17 +364,17 @@ class Program {
 					instanceString += idWithoutWorldId;
 				}
 
-				var existsLinks = new DirectoryInfo(saveDir).EnumerateFiles(
+				var shortcuts = new DirectoryInfo(saveDir).EnumerateFiles(
 					quickSaveHTTP ? "web-*.lnk" : "*.lnk"
 				);
 
-				foreach (FileInfo link in existsLinks) {
-					if (quickSave && link.Name.StartsWith("web-")) {
+				foreach (FileInfo shortcut in shortcuts) {
+					if (quickSave && shortcut.Name.StartsWith("web-")) {
 						continue;
 					}
 
-					if (link.Name.EndsWith(instanceString + ".lnk")) {
-						File.SetLastWriteTime(link.FullName, DateTime.Now);
+					if (shortcut.Name.EndsWith(instanceString + ".lnk")) {
+						File.SetLastWriteTime(shortcut.FullName, DateTime.Now);
 						return;
 					}
 				}
