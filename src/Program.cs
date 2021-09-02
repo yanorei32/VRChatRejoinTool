@@ -344,7 +344,7 @@ class Program {
 						() => "[QuickSave] Make Directory:\n" + e.Message
 					);
 
-					throw e;
+					throw;
 				}
 
 				string instanceString = i.WorldId;
@@ -386,7 +386,7 @@ class Program {
 						() => "[QuickSave] Create Shortcut:\n" + e.Message
 					);
 
-					throw e;
+					throw;
 				}
 			} else if (inviteMe) {
 				if (VRChat.InviteMe(i, vrcInviteMePath) != 0) {
