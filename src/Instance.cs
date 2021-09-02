@@ -34,7 +34,7 @@ class Instance {
 
 			string id = InstanceName;
 
-			for (int i = 0; i < ArgumentOrder.Length; i++ ) {
+			for (var i = 0; i < ArgumentOrder.Length; i++ ) {
 				switch (ArgumentOrder[i]) {
 					case InstanceArgument.Region:
 						if (this.Permission == Permission.PublicWithIdentifier)
@@ -177,7 +177,7 @@ class Instance {
 		reference[2] = InstanceArgument.Region;
 		reference[3] = InstanceArgument.Nonce;
 
-		for (int i = 0; i < reference.Length; ++i)
+		for (var i = 0; i < reference.Length; ++i)
 			if (this.ArgumentOrder[i] != reference[i])
 				return false;
 
@@ -225,10 +225,10 @@ class Instance {
 		this.Permission = Permission.Public;
 		this.InstanceName = visibleInfo[1];
 
-		bool containsCanRequestInvite = false;
+		var containsCanRequestInvite = false;
 
 
-		for (int i = 1; i < splittedId.Length; i++) {
+		for (var i = 1; i < splittedId.Length; i++) {
 			if (splittedId[i] == "canRequestInvite") {
 				argumentPositions[InstanceArgument.CanRequestInvite] = i * 10;
 				containsCanRequestInvite = true;
