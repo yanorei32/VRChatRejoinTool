@@ -296,24 +296,25 @@ class Program {
 		/*\
 		|*| Filter and Sort
 		\*/
-		var compDate = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
+		var threshold = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
+		var dontFilterByTime = ignoreByTimeMins == 0;
+		bool PermissionFilter(Visit v) => v.Instance.Permission != Permission.Public 
+		                                  &&
+		                                  v.Instance.Permission != Permission.PublicWithIdentifier
+		                                  &&
+		                                  v.Instance.Permission != Permission.Unknown;
+
 		List<Visit> sortedVisitHistory = visitHistory.Where(
 			v => (
 				!ignorePublic
 				||
-				(
-					v.Instance.Permission != Permission.Public
-					&&
-					v.Instance.Permission != Permission.PublicWithIdentifier
-					&&
-					v.Instance.Permission != Permission.Unknown
-				)
+				PermissionFilter(v)
 			)
 			&&
 			(
-				ignoreByTimeMins == 0
+				dontFilterByTime
 				||
-				compDate < v.DateTime
+				threshold < v.DateTime
 			)
 			&&
 			!ignoreWorldIds.Contains(v.Instance.WorldId)
