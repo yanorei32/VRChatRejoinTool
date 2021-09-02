@@ -1,7 +1,9 @@
-enum InstanceArgument {
-	Permission,
-	CanRequestInvite,
-	Region,
-	Nonce,
-};
+namespace VRChatRejoinTool {
+	enum InstanceArgument {
+		Permission,
+		CanRequestInvite,
+		Region,
+		Nonce,
+	};
+}
 

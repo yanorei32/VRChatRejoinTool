@@ -1,10 +1,11 @@
-enum Permission {
-	Unknown,
-	InviteOnly,
-	InvitePlus,
-	Friends,
-	FriendsPlus,
-	PublicWithIdentifier,
-	Public,
-};
-
+namespace VRChatRejoinTool {
+	enum Permission {
+		Unknown,
+		InviteOnly,
+		InvitePlus,
+		Friends,
+		FriendsPlus,
+		PublicWithIdentifier,
+		Public,
+	}
+}
