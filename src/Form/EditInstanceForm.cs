@@ -220,6 +220,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void orderDownButtonClick(object sender, EventArgs e) {
 		int i = argumentOrder.SelectedIndex;
+		// TODO: swap
 		InstanceArgument temp = instance.ArgumentOrder[i];
 		instance.ArgumentOrder[i] = instance.ArgumentOrder[i+1];
 		instance.ArgumentOrder[i+1] = temp;
@@ -231,6 +232,7 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void orderUpButtonClick(object sender, EventArgs e) {
 		int i = argumentOrder.SelectedIndex;
+		// TODO: swap
 		InstanceArgument temp = instance.ArgumentOrder[i];
 		instance.ArgumentOrder[i] = instance.ArgumentOrder[i-1];
 		instance.ArgumentOrder[i-1] = temp;

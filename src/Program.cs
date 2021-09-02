@@ -30,6 +30,7 @@ class Program {
 
 			string lineString, dateTime = "", instance = "", worldName = "";
 
+			// TODO: lazy read lines?
 			while ((lineString = reader.ReadLine()) != null) {
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
@@ -101,12 +102,15 @@ class Program {
 		}
 
 		// ReSharper disable once PossibleNullReferenceException
+		// This is totally safe: PATH must be exist, even Windows DOES depend it
 		foreach (var dir in Environment.GetEnvironmentVariable("PATH").Split(';')) {
 			var path = Path.Combine(dir, filename);
 			if (File.Exists(path)) return path;
 		}
 
 		// TODO: is it more readable if convert this into LINQ-style?
+		// ReSharper disable once PossibleNullReferenceException
+		// This is totally safe: PATHEXT must be exist, even Windows DOES depend it
 		foreach (var dir in Environment.GetEnvironmentVariable("PATHEXT").Split(';')) {
 			var path = Path.Combine(dir, filename);
 			if (File.Exists(path)) return path;
@@ -115,6 +119,10 @@ class Program {
 		return null;
 	}
 
+	/*
+	 * <summary>VRChatのログファイルを格納するディレクトリを探索する。</summary>
+	 * <returns>ディレクトリが見つかればそのディレクトリ内に入っているファイル。見つからなければnull。</returns>
+	 */
 	static IEnumerable<FileInfo> getLogFiles() {
 		string path = Environment.ExpandEnvironmentVariables(
 			@"%AppData%\..\LocalLow\VRChat\VRChat"
@@ -165,7 +173,7 @@ class Program {
 			inviteMe		= false;
 
 		int
-			ignoreByTimeMins	= 0,
+			ignoreByTimeMins	= 0, // 0 means don't ignore
 			index				= 0;
 
 		var ignoreWorldsArgRegex	= new Regex(@"\A--ignore-worlds=wrld_.+(,wrld_.+)?\z");

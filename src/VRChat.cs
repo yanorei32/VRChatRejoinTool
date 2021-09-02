@@ -65,6 +65,8 @@ static class VRChat {
 			UseShellExecute = true,
 		});
 
+		// ReSharper disable once PossibleNullReferenceException
+		// アトミックな処理ではないのでそんなに頑張る必要はないとの結論に達した。
 		proc.WaitForExit();
 
 		return proc.ExitCode;
