@@ -9,16 +9,6 @@ using System.Windows.Forms;
 using static FunctionalPiece;
 
 class Program {
-	// TODO: Split this into another file
-	// TODO: Bad name
-	[Flags]
-	enum State
-	{
-		// ビット演算をしている箇所があり、0b00はclearな値であるため各エントリに明示的に値を与える
-		Cleared = 0b00,
-		DestinationSetFound = 0b01,
-		WorldNameFound = 0b10,
-	}
 	static void readLogfile(FileStream fs, List<Visit> visitHistory) {
 		var instanceRegex = new Regex(@"wr?ld_.+");
 		var dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
@@ -26,7 +16,7 @@ class Program {
 		using (
 			var reader = new StreamReader(fs)
 		) {
-			var state = State.Cleared;
+			var state = LogParseState.Cleared;
 
 			string lineString, dateTime = "", instance = "", worldName = "";
 
@@ -34,16 +24,16 @@ class Program {
 			while ((lineString = reader.ReadLine()) != null) {
 				if (lineString.Contains("[Behaviour] Destination set: w")) {
 					// Push current instance if not cleared.
-					if ((state & State.DestinationSetFound) != 0)
+					if ((state & LogParseState.DestinationSetFound) != 0)
 						visitHistory.Add(new Visit(
 							new Instance(
 								instance,
-								(state & State.WorldNameFound) != 0 ? worldName : null
+								(state & LogParseState.WorldNameFound) != 0 ? worldName : null
 							),
 							dateTime
 						));
 
-					state = State.Cleared;
+					state = LogParseState.Cleared;
 
 					// FIXME: 名前がよくなさそう
 					var proceedParse = true;
@@ -56,7 +46,7 @@ class Program {
 					});
 
 					if (!proceedParse) {
-						state = State.DestinationSetFound;
+						state = LogParseState.DestinationSetFound;
 					}
 
 					continue;
@@ -75,16 +65,16 @@ class Program {
 					lineString.Contains("[Behaviour] Joining or Creating Room: ")
 				) {
 					worldName = lineString.Split(':')[3].TrimStart();
-					state |= State.WorldNameFound;
+					state |= LogParseState.WorldNameFound;
 				}
 			}
 
 			// Push current instance if not cleared.
-			if ((state & State.DestinationSetFound) != 0)
+			if ((state & LogParseState.DestinationSetFound) != 0)
 				visitHistory.Add(new Visit(
 					new Instance(
 						instance,
-						(state & State.WorldNameFound) != 0 ? worldName : null
+						(state & LogParseState.WorldNameFound) != 0 ? worldName : null
 					),
 					dateTime
 				));
@@ -138,8 +128,7 @@ class Program {
 	 * <param name="lazyMessage">遅延評価される表示するメッセージ</param>
 	 * <param name="showDialog"><c>true</c>ならば画面を表示する。<c>false</c>ならば画面を表示しない。</param>
 	 */
-	static void showMessage(bool showDialog, Func<string> lazyMessage)
-	{
+	static void showMessage(bool showDialog, Func<string> lazyMessage) {
 		if (showDialog) {
 			var message = lazyMessage();
 			MessageBox.Show(
