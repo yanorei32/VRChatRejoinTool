@@ -60,9 +60,9 @@ partial class EditInstanceForm : RejoinToolForm {
 		argumentOrder.BeginUpdate();
 		argumentOrder.Items.Clear();
 
-		for (int i = 0; i < instance.ArgumentOrder.Length; i++) {
+		foreach (var arg in instance.ArgumentOrder) {
 			argumentOrder.Items.Add(
-				Enum.GetName(typeof(InstanceArgument), instance.ArgumentOrder[i])
+				Enum.GetName(typeof(InstanceArgument), arg)
 			);
 		}
 
