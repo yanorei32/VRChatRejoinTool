@@ -23,7 +23,7 @@ class Program {
 		var dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
 
 		using (
-			StreamReader reader = new StreamReader(fs)
+			var reader = new StreamReader(fs)
 		) {
 			var state = State.Cleared;
 
