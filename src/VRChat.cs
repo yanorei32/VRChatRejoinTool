@@ -59,7 +59,7 @@ static class VRChat {
 			return -1;
 		}
 
-		var proc = Process.Start(new ProcessStartInfo() {
+		var proc = Process.Start(new ProcessStartInfo {
 			FileName = vrcInviteMePath,
 			Arguments = GetLaunchInstanceLink(i),
 			UseShellExecute = true,
