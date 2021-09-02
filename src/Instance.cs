@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -117,10 +116,9 @@ class Instance {
 			string id = WorldId;
 			string idWithoutWorldId = this.IdWithoutWorldId;
 
-			if (idWithoutWorldId != "") {
-				id += ":";
-				id += idWithoutWorldId;
-			}
+			if (idWithoutWorldId == "") return id;
+			id += ":";
+			id += idWithoutWorldId;
 
 			return id;
 		}
