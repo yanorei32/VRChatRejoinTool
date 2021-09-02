@@ -195,11 +195,12 @@ class Instance {
 		//
 		//   ほんまか？
 
-		var argumentPositions = new SortedDictionary<InstanceArgument, int>();
-		argumentPositions.Add(InstanceArgument.Permission, -1);
-		argumentPositions.Add(InstanceArgument.CanRequestInvite, -1);
-		argumentPositions.Add(InstanceArgument.Region, -1);
-		argumentPositions.Add(InstanceArgument.Nonce, -1);
+		var argumentPositions = new SortedDictionary<InstanceArgument, int> {
+			{ InstanceArgument.Permission, -1 },
+			{ InstanceArgument.CanRequestInvite, -1 },
+			{ InstanceArgument.Region, -1 },
+			{ InstanceArgument.Nonce, -1 }
+		};
 
 		string[] splittedId = id.Split('~');
 
