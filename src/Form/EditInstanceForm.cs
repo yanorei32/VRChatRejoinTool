@@ -275,7 +275,7 @@ namespace VRChatRejoinTool.Form {
 		void openContextMenu(object sender, EventArgs e) {
 			// dirty Ctrl+C override avoidance (1/2)
 			if (ActiveControl.GetType().Name == "TextBox") {
-				TextBox t = (TextBox) ActiveControl;
+				var t = (TextBox) ActiveControl;
 				t.DeselectAll();
 			}
 		}
@@ -283,7 +283,7 @@ namespace VRChatRejoinTool.Form {
 		void copyInstanceLinkClick(object sender, EventArgs e) {
 			// dirty Ctrl+C override avoidance (2/2)
 			if (ActiveControl.GetType().Name == "TextBox") {
-				TextBox t = (TextBox) ActiveControl;
+				var t = (TextBox) ActiveControl;
 
 				if (t.SelectionLength != 0) {
 					Clipboard.SetText(t.SelectedText);
