@@ -34,8 +34,8 @@ namespace VRChatRejoinTool {
 
 				string id = InstanceName;
 
-				for (var i = 0; i < ArgumentOrder.Length; i++ ) {
-					switch (ArgumentOrder[i]) {
+				foreach (var t in ArgumentOrder) {
+					switch (t) {
 						case InstanceArgument.Region:
 							if (this.Permission == Permission.PublicWithIdentifier)
 								continue;
