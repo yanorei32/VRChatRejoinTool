@@ -17,8 +17,8 @@ namespace VRChatRejoinTool.Form {
 			Assembly execAsm = Assembly.GetExecutingAssembly();
 
 			/*\
-		|*| Contextmenu Initialization
-		\*/
+			|*| Contextmenu Initialization
+			\*/
 			this.components				= new Container();
 			this.instanceIdContextMenu	= new ContextMenuStrip(components);
 			this.copyLaunchInstanceLink	= new ToolStripMenuItem();
@@ -58,8 +58,8 @@ namespace VRChatRejoinTool.Form {
 			this.instanceIdContextMenu.ResumeLayout(false);
 
 			/*\
-		|*| UI Initialization
-		\*/
+			|*| UI Initialization
+			\*/
 			this.logo		= new PictureBox();
 			this.prev		= new Button();
 			this.next		= new Button();
@@ -77,8 +77,8 @@ namespace VRChatRejoinTool.Form {
 			curW = margin;
 
 			/*\
-		|*| Logo column
-		\*/
+			|*| Logo column
+			\*/
 			this.logo.Location			= new Point(curH, curW);
 			this.logo.Size				= new Size(imgW, imgH);
 			this.logo.BackgroundImage	= new Bitmap(
@@ -89,8 +89,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Prev/Next button column
-		\*/
+			|*| Prev/Next button column
+			\*/
 			// FIXME: (&N) will not shown if netcoreapp3.1
 			this.prev.Text			= "< Newer (&N)";
 			this.prev.Size			= new Size(75, 23);
@@ -113,8 +113,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| World column
-		\*/
+			|*| World column
+			\*/
 			this.worldname.Text		= "XXX";
 			this.worldname.AutoSize	= false;
 			this.worldname.Location	= new Point(curW, curH);
@@ -125,8 +125,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Permission column
-		\*/
+			|*| Permission column
+			\*/
 			this.permission.Text		= "Invite";
 			this.permission.AutoSize	= false;
 			this.permission.Location	= new Point(curW, curH);
@@ -137,8 +137,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Joined date time column
-		\*/
+			|*| Joined date time column
+			\*/
 			this.datetime.Text		= "0000.00.00 00:00:00";
 			this.datetime.AutoSize	= false;
 			this.datetime.Location	= new Point(curW, curH);
@@ -149,8 +149,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding * 2;
 
 			/*\
-		|*| Instance column
-		\*/
+			|*| Instance column
+			\*/
 			this.instance.Text		= "wrld_xxx";
 			this.instance.AutoSize	= false;
 			this.instance.Location	= new Point(curW, curH);
@@ -161,8 +161,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Launch button column
-		\*/
+			|*| Launch button column
+			\*/
 			this.launchVrc.Text			= "Launch (&L)";
 			this.launchVrc.Location		= new Point(curW, curH);
 			this.launchVrc.Size			= new Size(75, 23);
@@ -204,12 +204,12 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Form
-		\*/
+			|*| Form
+			\*/
 			this.Text				= "VRChat RejoinTool";
 
 #if NETCOREAPP
-		this.ClientSize			= new Size(imgW + (margin * 2), curH);
+			this.ClientSize			= new Size(imgW + (margin * 2), curH);
 #else
 			// net framework special fix
 			this.ClientSize			= new Size(imgW + (margin * 2) - 10, curH - 10);

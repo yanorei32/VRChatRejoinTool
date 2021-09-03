@@ -82,8 +82,8 @@ namespace VRChatRejoinTool.Form {
 
 		void updateTextBox() {
 			/*\
-		|*| World ID
-		\*/
+			|*| World ID
+			\*/
 			worldIdLabel.Text = "World ID";
 			worldIdLabel.ForeColor = Color.Black;
 
@@ -93,8 +93,8 @@ namespace VRChatRejoinTool.Form {
 			}
 
 			/*\
-		|*| Region
-		\*/
+			|*| Region
+			\*/
 			regionLabel.Text = "Region";
 			regionLabel.ForeColor = Color.Black;
 
@@ -106,8 +106,8 @@ namespace VRChatRejoinTool.Form {
 			}
 
 			/*\
-		|*| Instance Name
-		\*/
+			|*| Instance Name
+			\*/
 			instanceNameLabel.Text = "Instance Name";
 			instanceNameLabel.ForeColor = Color.Black;
 
@@ -122,8 +122,8 @@ namespace VRChatRejoinTool.Form {
 			}
 
 			/*\
-		|*| Owner ID
-		\*/
+			|*| Owner ID
+			\*/
 			ownerIdLabel.Text = "Owner ID";
 			ownerIdLabel.ForeColor = Color.Black;
 
@@ -138,8 +138,8 @@ namespace VRChatRejoinTool.Form {
 			}
 
 			/*\
-		|*| Nonce
-		\*/
+			|*| Nonce
+			\*/
 			nonceLabel.Text = "Nonce";
 			nonceLabel.ForeColor = Color.Black;
 

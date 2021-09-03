@@ -16,8 +16,8 @@ namespace VRChatRejoinTool.Form {
 			Assembly execAsm = Assembly.GetExecutingAssembly();
 
 			/*\
-		|*| Contextmenu Initialization
-		\*/
+			|*| Contextmenu Initialization
+			\*/
 			this.components				= new Container();
 			this.instanceIdContextMenu	= new ContextMenuStrip(components);
 			this.copyLaunchInstanceLink	= new ToolStripMenuItem();
@@ -52,8 +52,8 @@ namespace VRChatRejoinTool.Form {
 			this.instanceIdContextMenu.ResumeLayout(false);
 
 			/*\
-		|*| UI Initialization
-		\*/
+			|*| UI Initialization
+			\*/
 			this.worldIdLabel		= new Label();
 			this.worldId			= new TextBox();
 			this.permissionLabel	= new Label();
@@ -83,8 +83,8 @@ namespace VRChatRejoinTool.Form {
 			curW = margin;
 
 			/*\
-		|*| World ID
-		\*/
+			|*| World ID
+			\*/
 			this.worldIdLabel.Text		= "World ID";
 			this.worldIdLabel.AutoSize	= false;
 			this.worldIdLabel.Location	= new Point(curW, curH);
@@ -104,8 +104,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Permission
-		\*/
+			|*| Permission
+			\*/
 			this.permissionLabel.Text		= "Permission";
 			this.permissionLabel.AutoSize	= false;
 			this.permissionLabel.Location	= new Point(curW, curH);
@@ -126,8 +126,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Region
-		\*/
+			|*| Region
+			\*/
 			this.regionLabel.Text		= "Region";
 			this.regionLabel.AutoSize	= false;
 			this.regionLabel.Location	= new Point(curW, curH);
@@ -157,8 +157,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| InstanceName
-		\*/
+			|*| InstanceName
+			\*/
 			this.instanceNameLabel.Text		= "Instance Name (invalid)";
 			this.instanceNameLabel.AutoSize	= false;
 			this.instanceNameLabel.Location	= new Point(curW, curH);
@@ -178,8 +178,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Owner ID
-		\*/
+			|*| Owner ID
+			\*/
 			this.ownerIdLabel.Text		= "Owner ID (invalid)";
 			this.ownerIdLabel.AutoSize	= false;
 			this.ownerIdLabel.Location	= new Point(curW, curH);
@@ -199,8 +199,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Nonce
-		\*/
+			|*| Nonce
+			\*/
 			this.nonceLabel.Text		= "Nonce (invalid)";
 			this.nonceLabel.AutoSize	= false;
 			this.nonceLabel.Location	= new Point(curW, curH);
@@ -221,8 +221,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Argument Order
-		\*/
+			|*| Argument Order
+			\*/
 			this.argumentOrderLabel.Text		= "Argument Order";
 			this.argumentOrderLabel.AutoSize	= false;
 			this.argumentOrderLabel.Location	= new Point(curW, curH);
@@ -259,8 +259,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Instance Id
-		\*/
+			|*| Instance Id
+			\*/
 			this.instanceIdLabel.Text		= "Instance ID";
 			this.instanceIdLabel.AutoSize	= false;
 			this.instanceIdLabel.Location	= new Point(curW, curH);
@@ -280,8 +280,8 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Buttons
-		\*/
+			|*| Buttons
+			\*/
 			this.launchVrc.Text			= "Launch (&L)";
 			this.launchVrc.Location		= new Point(curW, curH);
 			this.launchVrc.Size			= new Size(75, 23);
@@ -323,12 +323,12 @@ namespace VRChatRejoinTool.Form {
 			curH += padding;
 
 			/*\
-		|*| Form
-		\*/
+			|*| Form
+			\*/
 			this.Text				= "Edit Instance - VRChat RejoinTool";
 
 #if NETCOREAPP
-		this.ClientSize			= new Size(textBoxW + (margin * 2), curH);
+			this.ClientSize			= new Size(textBoxW + (margin * 2), curH);
 #else
 			// net framework special fix
 			this.ClientSize			= new Size(textBoxW + (margin * 2) - 10, curH - 10);
