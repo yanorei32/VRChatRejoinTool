@@ -1,3 +1,7 @@
+﻿# Run this script before execute build-csc.bat
+$ls = ls -R -File "src" -Filter '**.cs' `
+| % { "`t" + $_.Fullname.replace($pwd.Path + "`\", "") }
+$buildCSC = @"
 @echo off
 @rem run Bootstrap.bat before this script.
 
@@ -11,21 +15,10 @@ mkdir bin\csc\
 	/out:bin\csc\VRChatRejoinTool.exe ^
 	/nologo ^
 	/optimize ^
-	src\FunctionalPiece.cs ^
-	src\Instance.cs ^
-	src\InstanceArgument.cs ^
-	src\LogParseState.cs ^
-	src\Permission.cs ^
-	src\Program.cs ^
-	src\ServerRegion.cs ^
-	src\Visit.cs ^
-	src\VRChat.cs ^
-	src\Form\EditInstanceForm.cs ^
-	src\Form\EditInstanceForm.Design.cs ^
-	src\Form\MainForm.cs ^
-	src\Form\MainForm.Design.cs ^
-	src\Form\RejoinToolForm.cs
+$($ls -join " ^`n")
 
 if not %errorlevel% == 0 (
 	pause
 )
+"@
+$buildCSC | Set-Content build-csc.bat

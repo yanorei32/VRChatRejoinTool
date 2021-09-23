@@ -5,18 +5,7 @@ TARGET_DIR	= bin/csc
 TARGET_DIR_	= $(shell echo $(TARGET_DIR) | sed -e 's/\//\\\\/g')
 TARGET		= $(TARGET_DIR_)\\$(PROJ_NAME).exe
 
-SRC			=	src/Program.cs \
-				src/Permission.cs \
-				src/ServerRegion.cs \
-				src/Instance.cs \
-				src/InstanceArgument.cs \
-				src/Visit.cs \
-				src/VRChat.cs \
-				src/Form/RejoinToolForm.cs \
-				src/Form/MainForm.cs \
-				src/Form/MainForm.Design.cs \
-				src/Form/EditInstanceForm.cs \
-				src/Form/EditInstanceForm.Design.cs
+SRC			=	$(shell find src -name '*.cs')
 
 SRC_		=	$(shell echo $(SRC) | sed -e 's/\//\\\\/g')
 
