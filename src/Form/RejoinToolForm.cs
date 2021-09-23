@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace VRChatRejoinTool.Form {
@@ -27,30 +26,6 @@ namespace VRChatRejoinTool.Form {
 			if (sfd.ShowDialog() != DialogResult.OK) return;
 
 			VRChat.SaveInstanceToShortcut(i, sfd.FileName, httpLink);
-		}
-
-		protected void copyLaunchInstanceLinkToClipboard(Instance i) {
-			Clipboard.SetText(VRChat.GetLaunchInstanceLink(i));
-		}
-
-		protected void copyInstanceLinkToClipboard(Instance i) {
-			Clipboard.SetText(VRChat.GetInstanceLink(i));
-		}
-
-		protected void showDetail(Instance i) {
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = VRChat.GetInstanceLink(i),
-				UseShellExecute = true,
-			});
-		}
-
-		protected void showUserDetail(Instance i) {
-			Process.Start(new ProcessStartInfo()
-			{
-				FileName = VRChat.GetUserIdLink(i),
-				UseShellExecute = true,
-			});
 		}
 	}
 }
