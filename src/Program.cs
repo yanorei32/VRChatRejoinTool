@@ -94,18 +94,22 @@ namespace VRChatRejoinTool {
 			}
 
 			// ReSharper disable once PossibleNullReferenceException
-			// This is totally safe: PATH must be exist, even Windows DOES depend it
+			// This is safe on Windows: PATH must be exist
+			// FIXME: this logic is not correct because separator is not same:.
+			// Windows is semi-colon, non-Windows environment (includes WSL) is colon.
+			// also note for future implementation: ext4 allows mostly ANY character.
 			foreach (var dir in Environment.GetEnvironmentVariable("PATH").Split(';')) {
 				var path = Path.Combine(dir, filename);
 				if (File.Exists(path)) return path;
 			}
 
-			// TODO: is it more readable if convert this into LINQ-style?
-			// ReSharper disable once PossibleNullReferenceException
-			// This is totally safe: PATHEXT must be exist, even Windows DOES depend it
-			foreach (var dir in Environment.GetEnvironmentVariable("PATHEXT").Split(';')) {
-				var path = Path.Combine(dir, filename);
-				if (File.Exists(path)) return path;
+			var pathExt = Environment.GetEnvironmentVariable("PATHEXT");
+			// on Windows, it is `true` always. It may not exist on other platform.
+			if (pathExt != null) {
+				foreach (var dir in pathExt.Split(';')) {
+					var path = Path.Combine(dir, filename);
+					if (File.Exists(path)) return path;
+				}
 			}
 
 			return null;
