@@ -115,25 +115,25 @@ namespace VRChatRejoinTool {
 			return null;
 		}
 
-		/*
-	 * <summary>VRChatのログファイルを格納するディレクトリを探索する。</summary>
-	 * <returns>ディレクトリが見つかればそのディレクトリ内に入っているファイル。見つからなければnull。</returns>
-	 */
+		/**
+		 * <summary>VRChatのログファイルを格納するディレクトリを探索する。</summary>
+		 * <returns>ディレクトリが見つかればそのディレクトリ内に入っているファイル。見つからなければnull。</returns>
+		 */
 		static IEnumerable<FileInfo> getLogFiles() {
 			string path = Environment.ExpandEnvironmentVariables(
 				@"%AppData%\..\LocalLow\VRChat\VRChat"
 			);
 
-			return Directory.Exists(path) 
+			return Directory.Exists(path)
 				? new DirectoryInfo(path).EnumerateFiles("output_log_*.txt") 
 				: null;
 		}
 
 		/**
-	 * <summary>警告を指定した方法で表示する。</summary>
-	 * <param name="lazyMessage">遅延評価される表示するメッセージ</param>
-	 * <param name="showDialog"><c>true</c>ならば画面を表示する。<c>false</c>ならば画面を表示しない。</param>
-	 */
+		 * <summary>警告を指定した方法で表示する。</summary>
+		 * <param name="showDialog"><c>true</c>ならば画面を表示する。<c>false</c>ならば画面を表示しない。</param>
+		 * <param name="lazyMessage">遅延評価で表示されるメッセージ</param>
+		 */
 		static void showMessage(bool showDialog, Func<string> lazyMessage) {
 			if (showDialog) {
 				var message = lazyMessage();
@@ -176,8 +176,8 @@ namespace VRChatRejoinTool {
 			var indexRegex				= new Regex(@"\A--index=\d+\z");
 
 			/*\
-		|*| Parse arguments
-		\*/
+			|*| Parse arguments
+			\*/
 			foreach (var arg in Args) {
 				switch (arg)
 				{
@@ -246,9 +246,9 @@ namespace VRChatRejoinTool {
 
 
 			/*\
-		|*| Read logfiles
-		|*|  (Find logfiles by AppData if userSelectedLogFiles is empty)
-		\*/
+			|*| Read logfiles
+			|*|  (Find logfiles by AppData if userSelectedLogFiles is empty)
+			\*/
 			if (userSelectedLogFiles.Any()) {
 				foreach (var filepath in userSelectedLogFiles) {
 					using (
@@ -289,8 +289,8 @@ namespace VRChatRejoinTool {
 			}
 
 			/*\
-		|*| Filter and Sort
-		\*/
+			|*| Filter and Sort
+			\*/
 			var threshold = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
 			var dontFilterByTime = ignoreByTimeMins == 0;
 			bool PermissionFilter(Visit v) => v.Instance.Permission != Permission.Public 
@@ -323,8 +323,8 @@ namespace VRChatRejoinTool {
 			}
 
 			/*\
-		|*| Action
-		\*/
+			|*| Action
+			\*/
 			if (noGUI) {
 				if (index >= sortedVisitHistory.Count) {
 					showMessage(!noDialog, () => "Out of bounds index: " + index);
