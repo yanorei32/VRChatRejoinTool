@@ -1,10 +1,10 @@
 using System;
 
 namespace VRChatRejoinTool {
-	class Visit {
-		public DateTime DateTime { get; private set; }
+	internal readonly struct Visit {
+		public DateTime DateTime { get; }
 
-		public Instance Instance { get; private set; }
+		public Instance Instance { get; }
 
 		public Visit(Instance instance, string dateTime) {
 			this.Instance = instance;
