@@ -170,11 +170,12 @@ namespace VRChatRejoinTool {
 		}
 
 		public bool IsValidArgumentOrder() {
-			var reference = new InstanceArgument[4];
-			reference[0] = InstanceArgument.Permission;
-			reference[1] = InstanceArgument.CanRequestInvite;
-			reference[2] = InstanceArgument.Region;
-			reference[3] = InstanceArgument.Nonce;
+			var reference = new[] {
+				InstanceArgument.Permission,
+				InstanceArgument.CanRequestInvite,
+				InstanceArgument.Region,
+				InstanceArgument.Nonce,
+			};
 
 			for (var i = 0; i < reference.Length; ++i)
 				if (this.ArgumentOrder[i] != reference[i])
@@ -214,10 +215,12 @@ namespace VRChatRejoinTool {
 			if (visibleInfo.Length != 2) {
 				this.Permission = Permission.Unknown;
 
-				ArgumentOrder[0] = InstanceArgument.Permission;
-				ArgumentOrder[1] = InstanceArgument.CanRequestInvite;
-				ArgumentOrder[2] = InstanceArgument.Region;
-				ArgumentOrder[3] = InstanceArgument.Nonce;
+				ArgumentOrder = new[] {
+					InstanceArgument.Permission,
+					InstanceArgument.CanRequestInvite,
+					InstanceArgument.Region,
+					InstanceArgument.Nonce,
+				};
 
 				return;
 			}
