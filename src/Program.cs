@@ -294,17 +294,17 @@ namespace VRChatRejoinTool {
 			\*/
 			var threshold = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
 			var dontFilterByTime = ignoreByTimeMins == 0;
-			bool PermissionFilter(Visit v) => v.Instance.Permission != Permission.Public 
+			bool permissionSelector(Permission p) => p != Permission.Public
 			                                  &&
-			                                  v.Instance.Permission != Permission.PublicWithIdentifier
+			                                  p != Permission.PublicWithIdentifier
 			                                  &&
-			                                  v.Instance.Permission != Permission.Unknown;
+			                                  p != Permission.Unknown;
 
 			List<Visit> sortedVisitHistory = visitHistory.Where(
 				v => (
 					     !ignorePublic
 					     ||
-					     PermissionFilter(v)
+					     permissionSelector(v.Instance.Permission)
 				     )
 				     &&
 				     (
