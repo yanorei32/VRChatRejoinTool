@@ -202,13 +202,14 @@ namespace VRChatRejoinTool {
 				{ InstanceArgument.Nonce, -1 }
 			};
 
-			string[] splittedId = id.Split('~');
+			// NOTE: splitは過去分詞
+			string[] splitId = id.Split('~');
 
 			this.Permission = Permission.Unknown;
 			this.Region = ServerRegion.US;
 			this.CustomRegion = "";
 
-			string[] visibleInfo = splittedId[0].Split(':');
+			string[] visibleInfo = splitId[0].Split(':');
 
 			this.WorldId = visibleInfo[0];
 
@@ -231,8 +232,8 @@ namespace VRChatRejoinTool {
 			var containsCanRequestInvite = false;
 
 
-			for (var i = 1; i < splittedId.Length; i++) {
-				if (splittedId[i] == "canRequestInvite") {
+			for (var i = 1; i < splitId.Length; i++) {
+				if (splitId[i] == "canRequestInvite") {
 					argumentPositions[InstanceArgument.CanRequestInvite] = i * 10;
 					containsCanRequestInvite = true;
 					continue;
@@ -241,14 +242,14 @@ namespace VRChatRejoinTool {
 				string pKey, pValue;
 
 				{
-					string[] splittedParam = splittedId[i].Split('(');
+					var splitParam = splitId[i].Split('(');
 
-					if (2 < splittedParam.Length) continue;
+					if (2 < splitParam.Length) continue;
 
-					pKey = splittedParam[0];
+					pKey = splitParam[0];
 
-					if (splittedParam.Length == 2) {
-						pValue = splittedParam[1].Substring(0, splittedParam[1].Length-1);
+					if (splitParam.Length == 2) {
+						pValue = splitParam[1].Substring(0, splitParam[1].Length-1);
 						if (pValue == "") pValue = null;
 					} else {
 						pValue = null;
