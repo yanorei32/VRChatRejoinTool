@@ -1,5 +1,5 @@
 namespace VRChatRejoinTool {
-	enum Permission {
+	public enum Permission {
 		Unknown,
 		InviteOnly,
 		InvitePlus,

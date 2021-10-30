@@ -1,5 +1,5 @@
 namespace VRChatRejoinTool {
-	enum ServerRegion {
+	public enum ServerRegion {
 		US,
 		USWithIdentifier,
 		EU,
