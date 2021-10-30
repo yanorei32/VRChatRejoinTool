@@ -10,7 +10,7 @@ using VRChatRejoinTool.Form;
 using static VRChatRejoinTool.FunctionalPiece;
 
 namespace VRChatRejoinTool {
-	class Program {
+	static class Program {
 		static void readLogfile(FileStream fs, List<Visit> visitHistory) {
 			var instanceRegex = new Regex(@"wr?ld_.+");
 			var dateTimeRegex = new Regex(@"\d{4}(\.\d{2}){2} \d{2}(:\d{2}){2}");
