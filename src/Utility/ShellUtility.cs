@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace VRChatRejoinTool {
+namespace VRChatRejoinTool.Utility {
     public static class ShellUtility {
         internal static void showDetail(Instance i) {
             openFileWithShell(VRChat.GetInstanceLink(i));
