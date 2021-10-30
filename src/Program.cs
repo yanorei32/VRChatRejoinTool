@@ -119,13 +119,13 @@ namespace VRChatRejoinTool {
 		 * <summary>VRChatのログファイルを格納するディレクトリを探索する。</summary>
 		 * <returns>ディレクトリが見つかればそのディレクトリ内に入っているファイル。見つからなければnull。</returns>
 		 */
-		static IEnumerable<FileInfo> getLogFiles() {
+		static ICollection<FileInfo> getLogFiles() {
 			string path = Environment.ExpandEnvironmentVariables(
 				@"%AppData%\..\LocalLow\VRChat\VRChat"
 			);
 
 			return Directory.Exists(path)
-				? new DirectoryInfo(path).EnumerateFiles("output_log_*.txt") 
+				? new DirectoryInfo(path).EnumerateFiles("output_log_*.txt").ToList()
 				: null;
 		}
 
@@ -263,14 +263,15 @@ namespace VRChatRejoinTool {
 					}
 				}
 			} else {
-				IEnumerable<FileInfo> logFiles = getLogFiles();
+				// !files.Any()をしたあとにfor-eachするとRiderから警告が出るのでそれを黙らせる
+				var logFiles = getLogFiles();
 
 				if (logFiles == null) {
 					showMessage(!(noGUI && noDialog), () => "Failed to lookup VRChat log directory.");
 					return;
 				}
 
-				if (!logFiles.Any()) {
+				if (logFiles.Count == 0) {
 					showMessage(!(noGUI && noDialog), () => "Could not find VRChat log.");
 					return;
 				}
