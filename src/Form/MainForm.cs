@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using VRChatRejoinTool.Utility;
 
 namespace VRChatRejoinTool.Form
 {
-	partial class MainForm : RejoinToolForm {
+	partial class MainForm : System.Windows.Forms.Form {
 		// UI Elements
 		PictureBox	logo;
 
@@ -47,11 +48,11 @@ namespace VRChatRejoinTool.Form
 		}
 
 		void saveInstanceLinkClick(object sender, EventArgs e) {
-			saveInstanceToShortcutGUI(sortedHistory[index].Instance, true);
+			SaveInstanceUtility.saveInstanceToShortcutGUI(sortedHistory[index].Instance, true);
 		}
 
 		void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
-			saveInstanceToShortcutGUI(sortedHistory[index].Instance);
+			SaveInstanceUtility.saveInstanceToShortcutGUI(sortedHistory[index].Instance, false);
 		}
 
 		void copyLaunchInstanceLinkClick(object sender, EventArgs e) {

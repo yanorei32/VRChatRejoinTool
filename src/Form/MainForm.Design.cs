@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 namespace VRChatRejoinTool.Form {
-	partial class MainForm : RejoinToolForm {
+	partial class MainForm {
 		void initializeComponent() {
 			const int
 				imgW	= 320,

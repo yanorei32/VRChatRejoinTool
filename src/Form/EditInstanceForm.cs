@@ -2,9 +2,10 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using VRChatRejoinTool.Utility;
 
 namespace VRChatRejoinTool.Form {
-	partial class EditInstanceForm : RejoinToolForm {
+	partial class EditInstanceForm : System.Windows.Forms.Form {
 		// UI Elements
 		ComboBox	permission,
 			region;
@@ -256,15 +257,15 @@ namespace VRChatRejoinTool.Form {
 		}
 
 		void detailButtonClick(object sender, EventArgs e) {
-			showDetail(instance);
+			ShellUtility.showDetail(instance);
 		}
 
 		void userDetailButtonClick(object sender, EventArgs e) {
-			showUserDetail(instance);
+			ShellUtility.showUserDetail(instance);
 		}
 
 		void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
-			copyLaunchInstanceLinkToClipboard(instance);
+			ClipboardUtility.copyLaunchInstanceLinkToClipboard(instance);
 		}
 
 		void windowKeyDown(object sender, KeyEventArgs e) {
@@ -291,15 +292,15 @@ namespace VRChatRejoinTool.Form {
 				}
 			}
 
-			copyInstanceLinkToClipboard(instance);
+			ClipboardUtility.copyInstanceLinkToClipboard(instance);
 		}
 
 		void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
-			saveInstanceToShortcutGUI(instance);
+			SaveInstanceUtility.saveInstanceToShortcutGUI(instance, false);
 		}
 
 		void saveInstanceLinkClick(object sender, EventArgs e) {
-			saveInstanceToShortcutGUI(instance, true);
+			SaveInstanceUtility.saveInstanceToShortcutGUI(instance, true);
 		}
 
 		public EditInstanceForm(Instance instance, bool killVRC, string vrcInviteMePath) {

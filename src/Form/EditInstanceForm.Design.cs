@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 namespace VRChatRejoinTool.Form {
-	partial class EditInstanceForm : RejoinToolForm {
+	partial class EditInstanceForm {
 		void initializeComponent() {
 			const int
 				textBoxW = 320,
