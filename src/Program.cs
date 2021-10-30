@@ -308,9 +308,7 @@ namespace VRChatRejoinTool {
 				     )
 				     &&
 				     (
-					     dontFilterByTime
-					     ||
-					     threshold < v.DateTime
+					     dontFilterByTime || threshold < v.DateTime
 				     )
 				     &&
 				     !ignoreWorldIds.Contains(v.Instance.WorldId)
