@@ -3,16 +3,16 @@
 namespace VRChatRejoinTool.Utility {
     public static class ShellUtility {
         internal static void showDetail(Instance i) {
-            openFileWithShell(LinkGenerator.GetInstanceLink(i));
+            start(LinkGenerator.GetInstanceLink(i));
         }
 
         internal static void showUserDetail(Instance i) {
-            openFileWithShell(LinkGenerator.GetUserIdLink(i));
+            start(LinkGenerator.GetUserIdLink(i));
         }
         
-        private static void openFileWithShell(string fileName) {
+        private static void start(string path) {
             Process.Start(new ProcessStartInfo {
-                FileName = fileName,
+                FileName = path,
                 UseShellExecute = true,
             });
         }
