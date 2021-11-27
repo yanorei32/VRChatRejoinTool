@@ -41,12 +41,16 @@ class Instance {
 							continue;
 
 						switch (this.Region) {
-							case ServerRegion.US:
+							case ServerRegion.USW:
 								id += "";
 								break;
 
-							case ServerRegion.USWithIdentifier:
+							case ServerRegion.USWWithIdentifier:
 								id += "~region(us)";
+								break;
+
+							case ServerRegion.USE:
+								id += "~region(use)";
 								break;
 
 							case ServerRegion.JP:
@@ -129,9 +133,11 @@ class Instance {
 	public string RegionName {
 		get {
 			switch (this.Region) {
-				case ServerRegion.US:
-				case ServerRegion.USWithIdentifier:
-					return "US";
+				case ServerRegion.USWWithIdentifier:
+				case ServerRegion.USW:
+					return "USW";
+				case ServerRegion.USE:
+					return "USE";
 				case ServerRegion.EU:
 					return "EU";
 				case ServerRegion.JP:
@@ -204,7 +210,7 @@ class Instance {
 		string[] splittedId = id.Split('~');
 
 		this.Permission = Permission.Unknown;
-		this.Region = ServerRegion.US;
+		this.Region = ServerRegion.USW;
 		this.CustomRegion = "";
 
 		string[] visibleInfo = splittedId[0].Split(':');
@@ -258,7 +264,11 @@ class Instance {
 
 					switch (pValue) {
 						case "us":
-							this.Region = ServerRegion.USWithIdentifier;
+							this.Region = ServerRegion.USW;
+							break;
+
+						case "use":
+							this.Region = ServerRegion.USE;
 							break;
 
 						case "eu":

@@ -1,6 +1,7 @@
 enum ServerRegion {
-	US,
-	USWithIdentifier,
+	USW,
+	USWWithIdentifier,
+	USE,
 	EU,
 	JP,
 	Custom,
