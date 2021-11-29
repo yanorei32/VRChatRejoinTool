@@ -24,10 +24,9 @@ jobs:
         run: |
           make.exe genzip
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
           files: |
             VRChatRejoinTool.zip
 
