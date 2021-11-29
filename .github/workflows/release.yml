@@ -1,0 +1,33 @@
+name: "release"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: "build"
+    runs-on: "windows-2022"
+
+    steps:
+      - name: Set up Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          packages: make zip
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          make.exe genzip
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            VRChatRejoinTool.zip
+
