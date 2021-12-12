@@ -26,6 +26,15 @@ jobs:
         run: |
           make.exe genzip
 
+      - name: create installer
+        uses: joncloud/makensis-action@v3.6
+        with:
+          arguments: "/V3"
+
+      - name: compress installer (for BOOTH)
+        run: |
+          zip.exe VRChatRejoinTool.Installer.BOOTH.zip VRChatRejoinTool.Installer.exe
+
       - name: pre-release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -35,6 +44,8 @@ jobs:
           title: "Development Build"
           files: |
             VRChatRejoinTool.zip
+            VRChatRejoinTool.Installer.exe
+            VRChatRejoinTool.Installer.BOOTH.zip
 
       - name: tagged-release
         uses: softprops/action-gh-release@v1
@@ -42,4 +53,6 @@ jobs:
         with:
           files: |
             VRChatRejoinTool.zip
+            VRChatRejoinTool.Installer.exe
+            VRChatRejoinTool.Installer.BOOTH.zip
 
