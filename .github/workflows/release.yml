@@ -2,6 +2,8 @@ name: "release"
 
 on:
   push:
+    branches:
+      - "master"
     tags:
       - "v*"
 
@@ -11,21 +13,32 @@ jobs:
     runs-on: "windows-2022"
 
     steps:
-      - name: Set up Cygwin
+      - name: set up Cygwin
         uses: egor-tensin/setup-cygwin@v3
         with:
           platform: x64
           packages: make zip
 
-      - name: Checkout
+      - name: checkout
         uses: actions/checkout@v2
 
-      - name: Build
+      - name: build
         run: |
           make.exe genzip
 
-      - name: Release
+      - name: pre-release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            VRChatRejoinTool.zip
+
+      - name: tagged-release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             VRChatRejoinTool.zip
