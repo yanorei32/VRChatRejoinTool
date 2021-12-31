@@ -140,8 +140,6 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		ownerId.Enabled &= instance.Permission != Permission.Public;
 		nonce.Enabled &= instance.Permission != Permission.Public;
-
-		permissionLabel.Text = "Permission";
 	}
 
 	void permissionChanged(object sender, EventArgs e) {
