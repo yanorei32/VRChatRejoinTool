@@ -68,10 +68,6 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.ownerIdLabel		= new Label();
 		this.instanceIdLabel	= new Label();
 		this.instanceId			= new Label();
-		this.argumentOrderLabel	= new Label();
-		this.argumentOrder		= new ListBox();
-		this.orderUp			= new Button();
-		this.orderDown			= new Button();
 		this.launchVrc			= new Button();
 		this.detail				= new Button();
 		this.userDetail			= new Button();
@@ -220,44 +216,6 @@ partial class EditInstanceForm : RejoinToolForm {
 		curH += padding;
 
 		/*\
-		|*| Argument Order
-		\*/
-		this.argumentOrderLabel.Text		= "Argument Order";
-		this.argumentOrderLabel.AutoSize	= false;
-		this.argumentOrderLabel.Location	= new Point(curW, curH);
-		this.argumentOrderLabel.Size		= new Size(textBoxW, 18);
-		this.argumentOrderLabel.Font		= new Font("Consolas", 12F);
-
-		curH += this.argumentOrderLabel.Size.Height;
-		curH += padding;
-
-		this.argumentOrder.AutoSize				= false;
-		this.argumentOrder.Location				= new Point(curW, curH);
-		this.argumentOrder.Size					= new Size(textBoxW, 63);
-		this.argumentOrder.Font					= new Font("Consolas", 9F);
-		this.argumentOrder.SelectedIndexChanged	+= new EventHandler(argumentOrderSelectedIndexChanged);
-
-		curH += this.argumentOrder.Size.Height;
-		curH += padding;
-
-		this.orderUp.Text		= "Up";
-		this.orderUp.Location	= new Point(curW, curH);
-		this.orderUp.Size		= new Size(50, 23);
-		this.orderUp.Click		+= new EventHandler(orderUpButtonClick);
-
-		curW += this.orderUp.Size.Width;
-		curW += padding;
-
-		this.orderDown.Text		= "Down";
-		this.orderDown.Location	= new Point(curW, curH);
-		this.orderDown.Size		= new Size(50, 23);
-		this.orderDown.Click	+= new EventHandler(orderDownButtonClick);
-
-		curW = margin;
-		curH += this.orderDown.Size.Height;
-		curH += padding;
-
-		/*\
 		|*| Instance Id
 		\*/
 		this.instanceIdLabel.Text		= "Instance ID";
@@ -354,10 +312,6 @@ partial class EditInstanceForm : RejoinToolForm {
 		this.Controls.Add(this.ownerId);
 		this.Controls.Add(this.nonceLabel);
 		this.Controls.Add(this.nonce);
-		this.Controls.Add(this.argumentOrderLabel);
-		this.Controls.Add(this.argumentOrder);
-		this.Controls.Add(this.orderUp);
-		this.Controls.Add(this.orderDown);
 		this.Controls.Add(this.instanceId);
 		this.Controls.Add(this.instanceIdLabel);
 		this.Controls.Add(this.instanceId);

@@ -10,8 +10,6 @@ class Instance {
 	static Regex worldIdR		= new Regex(@"\Awr?ld_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\z");
 	static Regex regionR		= new Regex(@"\A[a-z]{1,3}\z");
 
-	public InstanceArgument[] ArgumentOrder { get; set; }
-
 	public Permission Permission { get; set; }
 
 	public ServerRegion Region { get; set; }
@@ -29,88 +27,65 @@ class Instance {
 
 	public string IdWithoutWorldId {
 		get {
-			if (this.Permission == Permission.Unknown)
-				return "";
-
 			string id = InstanceName;
 
-			for (int i = 0; i < ArgumentOrder.Length; i++ ) {
-				switch (ArgumentOrder[i]) {
-					case InstanceArgument.Region:
-						if (this.Permission == Permission.PublicWithIdentifier)
-							continue;
+			switch (this.Permission) {
+				case Permission.Unknown:
+					return "";
 
-						switch (this.Region) {
-							case ServerRegion.USW:
-								id += "";
-								break;
+				case Permission.Public:
+					break;
 
-							case ServerRegion.USWWithIdentifier:
-								id += "~region(us)";
-								break;
+				case Permission.FriendsPlus:
+					id += "~hidden";
+					break;
 
-							case ServerRegion.USE:
-								id += "~region(use)";
-								break;
+				case Permission.Friends:
+					id += "~friends";
+					break;
 
-							case ServerRegion.JP:
-								id += "~region(jp)";
-								break;
-
-							case ServerRegion.EU:
-								id += "~region(eu)";
-								break;
-
-							case ServerRegion.Custom:
-								id += "~region(" + this.CustomRegion + ")";
-								break;
-						}
-
-						break;
-
-					case InstanceArgument.Permission:
-						if (this.Permission == Permission.Public)
-							break;
-
-						switch (this.Permission) {
-							case Permission.PublicWithIdentifier:
-								id += "~public";
-								break;
-
-							case Permission.FriendsPlus:
-								id += "~hidden";
-								break;
-
-							case Permission.Friends:
-								id += "~friends";
-								break;
-
-							case Permission.InvitePlus:
-							case Permission.InviteOnly:
-								id += "~private";
-								break;
-						}
-
-						if (this.Permission != Permission.PublicWithIdentifier)
-							if (this.OwnerId != null)
-								id += "(" + this.OwnerId + ")";
-
-						break;
-
-					case InstanceArgument.Nonce:
-						if (this.Permission != Permission.PublicWithIdentifier)
-							if (this.Nonce != null)
-								id += "~nonce(" + this.Nonce + ")";
-
-						break;
-
-					case InstanceArgument.CanRequestInvite:
-						if (this.Permission == Permission.InvitePlus)
-							id += "~canRequestInvite";
-
-						break;
-				}
+				case Permission.InvitePlus:
+				case Permission.InviteOnly:
+					id += "~private";
+					break;
 			}
+
+			if (this.Permission != Permission.Public)
+				if (this.OwnerId != null)
+					id += "(" + this.OwnerId + ")";
+
+			if (this.Permission == Permission.InvitePlus)
+				id += "~canRequestInvite";
+
+			switch (this.Region) {
+				case ServerRegion.USW:
+					id += "";
+					break;
+
+				case ServerRegion.USWWithIdentifier:
+					id += "~region(us)";
+					break;
+
+				case ServerRegion.USE:
+					id += "~region(use)";
+					break;
+
+				case ServerRegion.JP:
+					id += "~region(jp)";
+					break;
+
+				case ServerRegion.EU:
+					id += "~region(eu)";
+					break;
+
+				case ServerRegion.Custom:
+					id += "~region(" + this.CustomRegion + ")";
+					break;
+			}
+
+			if (this.Permission != Permission.Public)
+				if (this.Nonce != null)
+					id += "~nonce(" + this.Nonce + ")";
 
 			return id;
 		}
@@ -168,28 +143,6 @@ class Instance {
 		return userIdR.Match(this.OwnerId).Success;
 	}
 
-	public bool IsObsoletePermission() {
-		return (
-			this.Permission == Permission.PublicWithIdentifier
-			||
-			this.Permission == Permission.Unknown
-		);
-	}
-
-	public bool IsValidArgumentOrder() {
-		var reference = new InstanceArgument[4];
-		reference[0] = InstanceArgument.Permission;
-		reference[1] = InstanceArgument.CanRequestInvite;
-		reference[2] = InstanceArgument.Region;
-		reference[3] = InstanceArgument.Nonce;
-
-		for (int i = 0; i < reference.Length; ++i)
-			if (this.ArgumentOrder[i] != reference[i])
-				return false;
-
-		return true;
-	}
-
 	void parseId(string id) {
 		// NOTE:
 		//   instanceName isn't contains ':'
@@ -200,12 +153,6 @@ class Instance {
 		//   Is valid? wrld_xx~aa
 		//
 		//   ほんまか？
-
-		var argumentPositions = new SortedDictionary<InstanceArgument, int>();
-		argumentPositions.Add(InstanceArgument.Permission, -1);
-		argumentPositions.Add(InstanceArgument.CanRequestInvite, -1);
-		argumentPositions.Add(InstanceArgument.Region, -1);
-		argumentPositions.Add(InstanceArgument.Nonce, -1);
 
 		string[] splittedId = id.Split('~');
 
@@ -219,12 +166,6 @@ class Instance {
 
 		if (visibleInfo.Length != 2) {
 			this.Permission = Permission.Unknown;
-
-			ArgumentOrder[0] = InstanceArgument.Permission;
-			ArgumentOrder[1] = InstanceArgument.CanRequestInvite;
-			ArgumentOrder[2] = InstanceArgument.Region;
-			ArgumentOrder[3] = InstanceArgument.Nonce;
-
 			return;
 		}
 
@@ -236,7 +177,6 @@ class Instance {
 
 		for (int i = 1; i < splittedId.Length; i++) {
 			if (splittedId[i] == "canRequestInvite") {
-				argumentPositions[InstanceArgument.CanRequestInvite] = i * 10;
 				containsCanRequestInvite = true;
 				continue;
 			}
@@ -260,8 +200,6 @@ class Instance {
 
 			switch (pKey) {
 				case "region":
-					argumentPositions[InstanceArgument.Region] = i * 10;
-
 					switch (pValue) {
 						case "us":
 							this.Region = ServerRegion.USW;
@@ -288,29 +226,20 @@ class Instance {
 					break;
 
 				case "nonce":
-					argumentPositions[InstanceArgument.Nonce] = i * 10;
 					this.Nonce = pValue;
 					break;
 
-				case "public":
-					argumentPositions[InstanceArgument.Permission] = i * 10;
-					this.Permission = Permission.PublicWithIdentifier;
-					break;
-
 				case "private":
-					argumentPositions[InstanceArgument.Permission] = i * 10;
 					this.Permission = Permission.InviteOnly;
 					this.OwnerId = pValue;
 					break;
 
 				case "friends":
-					argumentPositions[InstanceArgument.Permission] = i * 10;
 					this.Permission = Permission.Friends;
 					this.OwnerId = pValue;
 					break;
 
 				case "hidden":
-					argumentPositions[InstanceArgument.Permission] = i * 10;
 					this.Permission = Permission.FriendsPlus;
 					this.OwnerId = pValue;
 					break;
@@ -320,28 +249,6 @@ class Instance {
 			}
 		}
 
-		if (argumentPositions[InstanceArgument.Permission] == -1)
-			argumentPositions[InstanceArgument.Permission] = 0;
-
-		if (argumentPositions[InstanceArgument.CanRequestInvite] == -1)
-			argumentPositions[InstanceArgument.CanRequestInvite]
-				= argumentPositions[InstanceArgument.Permission] + 1;
-
-		if (argumentPositions[InstanceArgument.Region] == -1)
-			argumentPositions[InstanceArgument.Region]
-				= argumentPositions[InstanceArgument.CanRequestInvite] + 1;
-
-		if (argumentPositions[InstanceArgument.Nonce] == -1)
-			argumentPositions[InstanceArgument.Nonce]
-				= argumentPositions[InstanceArgument.Region] + 1;
-
-		int j = 0;
-		foreach (
-			KeyValuePair<InstanceArgument, int> argument
-				in argumentPositions.OrderBy(v => v.Value)
-		) {
-			ArgumentOrder[j++] = argument.Key;
-		}
 
 		if (containsCanRequestInvite)
 			this.Permission = Permission.InvitePlus;
@@ -352,7 +259,6 @@ class Instance {
 	}
 
 	public Instance(string id, string worldName) {
-		ArgumentOrder = new InstanceArgument[4];
 		parseId(id);
 		this.WorldName = worldName;
 	}

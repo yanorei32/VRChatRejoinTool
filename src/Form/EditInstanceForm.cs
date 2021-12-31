@@ -14,21 +14,16 @@ partial class EditInstanceForm : RejoinToolForm {
 				ownerId,
 				nonce;
 
-	ListBox		argumentOrder;
-
 	Label		worldIdLabel,
 				regionLabel,
 				permissionLabel,
 				instanceNameLabel,
 				ownerIdLabel,
 				nonceLabel,
-				argumentOrderLabel,
 				instanceId,
 				instanceIdLabel;
 
-	Button		orderUp,
-				orderDown,
-				launchVrc,
+	Button		launchVrc,
 				inviteMe,
 				detail,
 				userDetail;
@@ -54,29 +49,6 @@ partial class EditInstanceForm : RejoinToolForm {
 
 	void updateInstanceId() {
 		this.instanceId.Text = instance.Id;
-	}
-
-	void updateListBox() {
-		argumentOrder.BeginUpdate();
-		argumentOrder.Items.Clear();
-
-		for (int i = 0; i < instance.ArgumentOrder.Length; i++) {
-			argumentOrder.Items.Add(
-				Enum.GetName(typeof(InstanceArgument), instance.ArgumentOrder[i])
-			);
-		}
-
-		argumentOrder.EndUpdate();
-
-		argumentOrderLabel.Text = "Argument Order";
-		argumentOrderLabel.ForeColor = Color.Black;
-
-		if (!instance.IsValidArgumentOrder()) {
-			argumentOrderLabel.Text += " (mustbe P/CRI/R/N)";
-			argumentOrderLabel.ForeColor = Color.Red;
-		}
-
-		updateOrderButton();
 	}
 
 	void updateTextBox() {
@@ -143,7 +115,10 @@ partial class EditInstanceForm : RejoinToolForm {
 		nonceLabel.ForeColor = Color.Black;
 
 		if (nonce.Enabled) {
-			if (instance.Nonce != null && !instance.IsValidNonceValue()) {
+			if (instance.Nonce == null) {
+				nonceLabel.Text += " (required)";
+				nonceLabel.ForeColor = Color.Red;
+			} else if (!instance.IsValidNonceValue()) {
 				nonceLabel.Text += " (invalid)";
 				nonceLabel.ForeColor = Color.Red;
 			}
@@ -161,17 +136,12 @@ partial class EditInstanceForm : RejoinToolForm {
 			= instanceName.Enabled
 			= ownerId.Enabled
 			= region.Enabled
-			= !instance.IsObsoletePermission();
+			= instance.Permission != Permission.Unknown;
 
 		ownerId.Enabled &= instance.Permission != Permission.Public;
+		nonce.Enabled &= instance.Permission != Permission.Public;
 
 		permissionLabel.Text = "Permission";
-		permissionLabel.ForeColor = Color.Black;
-
-		if (instance.IsObsoletePermission()) {
-			permissionLabel.Text += " (obsolete)";
-			permissionLabel.ForeColor = Color.Red;
-		}
 	}
 
 	void permissionChanged(object sender, EventArgs e) {
@@ -207,37 +177,6 @@ partial class EditInstanceForm : RejoinToolForm {
 			return;
 
 		nonce.Text = Guid.NewGuid().ToString();
-	}
-
-	void updateOrderButton() {
-		orderUp.Enabled = 0 < argumentOrder.SelectedIndex;
-		orderDown.Enabled = argumentOrder.SelectedIndex != -1 && argumentOrder.SelectedIndex < instance.ArgumentOrder.Length - 1;
-	}
-
-	void argumentOrderSelectedIndexChanged(object sender, EventArgs e) {
-		updateOrderButton();
-	}
-
-	void orderDownButtonClick(object sender, EventArgs e) {
-		int i = argumentOrder.SelectedIndex;
-		InstanceArgument temp = instance.ArgumentOrder[i];
-		instance.ArgumentOrder[i] = instance.ArgumentOrder[i+1];
-		instance.ArgumentOrder[i+1] = temp;
-		updateListBox();
-		argumentOrder.SelectedIndex = i+1;
-		updateOrderButton();
-		updateInstanceId();
-	}
-
-	void orderUpButtonClick(object sender, EventArgs e) {
-		int i = argumentOrder.SelectedIndex;
-		InstanceArgument temp = instance.ArgumentOrder[i];
-		instance.ArgumentOrder[i] = instance.ArgumentOrder[i-1];
-		instance.ArgumentOrder[i-1] = temp;
-		updateListBox();
-		argumentOrder.SelectedIndex = i-1;
-		updateOrderButton();
-		updateInstanceId();
 	}
 
 	void launchVrcButtonClick(object sender, EventArgs e) {
@@ -306,7 +245,6 @@ partial class EditInstanceForm : RejoinToolForm {
 
 		initializeComponent();
 
-		updateListBox();
 		updatePermission();
 		updateRegion();
 		updateTextBox();
