@@ -1,8 +1,10 @@
-enum ServerRegion {
-	USW,
-	USWWithIdentifier,
-	USE,
-	EU,
-	JP,
-	Custom,
-};
+namespace VRChatRejoinTool {
+	public enum ServerRegion {
+		USW,
+		USWWithIdentifier,
+		USE,
+		EU,
+		JP,
+		Custom,
+	};
+}
