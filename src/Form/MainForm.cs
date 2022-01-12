@@ -11,25 +11,25 @@ namespace VRChatRejoinTool.Form
 		PictureBox	logo;
 
 		Button	launchVrc,
-			inviteMe,
-			detail,
-			next,
-			prev,
-			userDetail;
+				inviteMe,
+				detail,
+				next,
+				prev,
+				userDetail;
 
 		Label	datetime,
-			instance,
-			worldname,
-			permission;
+				instance,
+				worldname,
+				permission;
 
 		// ContextMenu
 		IContainer			components;
 		ContextMenuStrip	instanceIdContextMenu;
 		ToolStripMenuItem	copyLaunchInstanceLink,
-			copyInstanceLink,
-			saveInstanceLink,
-			saveLaunchInstanceLink,
-			editInstance;
+							copyInstanceLink,
+							saveInstanceLink,
+							saveLaunchInstanceLink,
+							editInstance;
 
 		// Other instance variables
 		List<Visit>	sortedHistory;

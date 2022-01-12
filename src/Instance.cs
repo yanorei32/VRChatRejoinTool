@@ -27,65 +27,65 @@ namespace VRChatRejoinTool {
 
 		public string IdWithoutWorldId {
 			get {
-				
-
 				string id = InstanceName;
 
-			switch (this.Permission) {
-				case Permission.Unknown:
-					return "";
+				switch (this.Permission) {
+					case Permission.Unknown:
+						return "";
 
-				case Permission.Public:
-					break;
+					case Permission.Public:
+						break;
 
-								case Permission.FriendsPlus:
-									id += "~hidden";
-									break;
+					case Permission.FriendsPlus:
+						id += "~hidden";
+						break;
 
-								case Permission.Friends:
-									id += "~friends";
-									break;
+					case Permission.Friends:
+						id += "~friends";
+						break;
 
-								case Permission.InvitePlus:
-								case Permission.InviteOnly:
-									id += "~private";
-									break;
-							}
+					case Permission.InvitePlus:
+					case Permission.InviteOnly:
+						id += "~private";
+						break;
+				}
 
-							if (this.Permission != Permission.Public)
-								if (this.OwnerId != null)
-									id += "(" + this.OwnerId + ")";
+				if (this.Permission != Permission.Public)
+					if (this.OwnerId != null)
+						id += "(" + this.OwnerId + ")";
 
 				if (this.Permission == Permission.InvitePlus)
-				id += "~canRequestInvite";
+					id += "~canRequestInvite";
 
-			switch (this.Region) {
-				case ServerRegion.USW:
-					id += "";
-					break;
+				switch (this.Region) {
+					case ServerRegion.USW:
+						id += "";
+						break;
 
-						case ServerRegion.USWWithIdentifier:
-								id += "~region(us)";
-									break;
+					case ServerRegion.USWWithIdentifier:
+						id += "~region(us)";
+						break;
 
 					case ServerRegion.USE:
-					id += "~region(use)";
-					break;
+						id += "~region(use)";
+						break;
 
-						case ServerRegion.JP:
-								id += "~region(jp)";
-					break;
+					case ServerRegion.JP:
+						id += "~region(jp)";
+						break;
 
 					case ServerRegion.EU:
-					id += "~region(eu)";
-					break;
+						id += "~region(eu)";
+						break;
 
-				case ServerRegion.Custom:
-					id += "~region(" + this.CustomRegion + ")";		break;
-					}
+					case ServerRegion.Custom:
+						id += "~region(" + this.CustomRegion + ")";
+						break;
+				}
+
 				if (this.Permission != Permission.Public)
-				if (this.Nonce != null)
-					id += "~nonce(" + this.Nonce + ")";
+					if (this.Nonce != null)
+						id += "~nonce(" + this.Nonce + ")";
 
 				return id;
 			}
@@ -110,8 +110,8 @@ namespace VRChatRejoinTool {
 					case ServerRegion.USWWithIdentifier:
 					case ServerRegion.USW:
 						return "USW";
-				case ServerRegion.USE:
-					return "USE";
+					case ServerRegion.USE:
+						return "USE";
 					case ServerRegion.EU:
 						return "EU";
 					case ServerRegion.JP:
@@ -142,32 +142,32 @@ namespace VRChatRejoinTool {
 			return userIdR.Match(this.OwnerId).Success;
 		}
 
-	void parseId(string id) {
-		// NOTE:
-		//   instanceName isn't contains ':'
-		//   nonce, instanceName isn't contains '~'
-		//   non-invite+ instances isn't contains
-		//	 "canRequestInvite" parameter
-		//   all non-home instances has instance-name
-		//   Is valid? wrld_xx~aa
-		//
-		//   ほんまか？
+		void parseId(string id) {
+			// NOTE:
+			//   instanceName isn't contains ':'
+			//   nonce, instanceName isn't contains '~'
+			//   non-invite+ instances isn't contains
+			//	 "canRequestInvite" parameter
+			//   all non-home instances has instance-name
+			//   Is valid? wrld_xx~aa
+			//
+			//   ほんまか？
 
-		// NOTE: splitは過去分詞
-		string[] splitId = id.Split('~');
+			// NOTE: splitは過去分詞
+			string[] splitId = id.Split('~');
 
-		this.Permission = Permission.Unknown;
-		this.Region = ServerRegion.USW;
-		this.CustomRegion = "";
-
-		string[] visibleInfo = splitId[0].Split(':');
-
-		this.WorldId = visibleInfo[0];
-
-		if (visibleInfo.Length != 2) {
 			this.Permission = Permission.Unknown;
-			return;
-		}
+			this.Region = ServerRegion.USW;
+			this.CustomRegion = "";
+
+			string[] visibleInfo = splitId[0].Split(':');
+
+			this.WorldId = visibleInfo[0];
+
+			if (visibleInfo.Length != 2) {
+				this.Permission = Permission.Unknown;
+				return;
+			}
 
 			this.Permission = Permission.Public;
 			this.InstanceName = visibleInfo[1];
@@ -266,7 +266,6 @@ namespace VRChatRejoinTool {
 		}
 
 		public Instance(string id, string worldName) {
-			
 			parseId(id);
 			this.WorldName = worldName;
 		}

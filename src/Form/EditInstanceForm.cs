@@ -8,39 +8,35 @@ namespace VRChatRejoinTool.Form {
 	partial class EditInstanceForm : System.Windows.Forms.Form {
 		// UI Elements
 		ComboBox	permission,
-			region;
+					region;
 
-		TextBox		worldId,
-			customRegion,
-			instanceName,
-			ownerId,
-			nonce;
+		TextBox	worldId,
+				customRegion,
+				instanceName,
+				ownerId,
+				nonce;
 
-		
+		Label	worldIdLabel,
+				regionLabel,
+				permissionLabel,
+				instanceNameLabel,
+				ownerIdLabel,
+				nonceLabel,
+				instanceId,
+				instanceIdLabel;
 
-		Label		worldIdLabel,
-			regionLabel,
-			permissionLabel,
-			instanceNameLabel,
-			ownerIdLabel,
-			nonceLabel,
-			
-			instanceId,
-			instanceIdLabel;
-
-		Button		
-			launchVrc,
-			inviteMe,
-			detail,
-			userDetail;
+		Button	launchVrc,
+				inviteMe,
+				detail,
+				userDetail;
 
 		// ContextMenu
 		IContainer			components;
 		ContextMenuStrip	instanceIdContextMenu;
 		ToolStripMenuItem	copyLaunchInstanceLink,
-			copyInstanceLink,
-			saveLaunchInstanceLink,
-			saveInstanceLink;
+							copyInstanceLink,
+							saveLaunchInstanceLink,
+							saveInstanceLink;
 	
 		// Other instance variables
 		Instance	instance;
@@ -57,12 +53,12 @@ namespace VRChatRejoinTool.Form {
 			this.instanceId.Text = instance.Id;
 		}
 
-	void updateTextBox() {
-		/*\
-		|*| World ID
-		\*/
-		worldIdLabel.Text = "World ID";
-		worldIdLabel.ForeColor = Color.Black;
+		void updateTextBox() {
+			/*\
+			|*| World ID
+			\*/
+			worldIdLabel.Text = "World ID";
+			worldIdLabel.ForeColor = Color.Black;
 
 			if (!instance.IsValidWorldId()) {
 				worldIdLabel.Text += " (invalid)";
