@@ -3,13 +3,11 @@ using System.Windows.Forms;
 
 namespace VRChatRejoinTool.Utility {
     public static class ClipboardUtility {
-        // clipboardを触れるのはGUIスレッド - STAThread - のみ
         [STAThread]
         internal static void copyLaunchInstanceLinkToClipboard(Instance i) {
             Clipboard.SetText(LinkGenerator.GetLaunchInstanceLink(i));
         }
 
-        // clipboardを触れるのはGUIスレッド - STAThread - のみ
         [STAThread]
         internal static void copyInstanceLinkToClipboard(Instance i) {
             Clipboard.SetText(LinkGenerator.GetInstanceLink(i));
