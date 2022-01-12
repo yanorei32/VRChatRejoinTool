@@ -6,13 +6,13 @@ namespace VRChatRejoinTool.Utility {
         // clipboardを触れるのはGUIスレッド - STAThread - のみ
         [STAThread]
         internal static void copyLaunchInstanceLinkToClipboard(Instance i) {
-            Clipboard.SetText(VRChat.GetLaunchInstanceLink(i));
+            Clipboard.SetText(LinkGenerator.GetLaunchInstanceLink(i));
         }
 
         // clipboardを触れるのはGUIスレッド - STAThread - のみ
         [STAThread]
         internal static void copyInstanceLinkToClipboard(Instance i) {
-            Clipboard.SetText(VRChat.GetInstanceLink(i));
+            Clipboard.SetText(LinkGenerator.GetInstanceLink(i));
         }
     }
 }
