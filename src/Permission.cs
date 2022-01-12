@@ -5,7 +5,6 @@ namespace VRChatRejoinTool {
 		InvitePlus,
 		Friends,
 		FriendsPlus,
-		PublicWithIdentifier,
 		Public,
 	}
 }

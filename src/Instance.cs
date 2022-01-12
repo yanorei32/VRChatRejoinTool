@@ -5,13 +5,11 @@ using System.Text.RegularExpressions;
 namespace VRChatRejoinTool {
 	public class Instance {
 		static Regex instanceNameR	= new Regex(@"\A[A-Za-z0-9]+\z");
-		static Regex nonceR			= new Regex(@"\A([0-9A-F]{48}|[0-9A-F]{64}|[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12})\z");
+		static Regex nonceR			= new Regex(@"\A([0-9A-F]{48}|[0-9A-F]{64}|[a-f0-9]{8}-[a-f0-9]{4}-[0-5][a-f0-9]{3}-[a-b0-9][a-f0-9]{3}-[a-f0-9]{12})\z");
 		static Regex userIdR		= new Regex(@"\Ausr_[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}\z");
 		static Regex worldIdR		= new Regex(@"\Awr?ld_[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\z");
 		static Regex regionR		= new Regex(@"\A[a-z]{1,3}\z");
-
-		public InstanceArgument[] ArgumentOrder { get; set; }
-
+	
 		public Permission Permission { get; set; }
 
 		public ServerRegion Region { get; set; }
@@ -29,49 +27,16 @@ namespace VRChatRejoinTool {
 
 		public string IdWithoutWorldId {
 			get {
-				if (this.Permission == Permission.Unknown)
-					return "";
+				
 
 				string id = InstanceName;
 
-				foreach (var t in ArgumentOrder) {
-					switch (t) {
-						case InstanceArgument.Region:
-							if (this.Permission == Permission.PublicWithIdentifier)
-								continue;
+			switch (this.Permission) {
+				case Permission.Unknown:
+					return "";
 
-							switch (this.Region) {
-								case ServerRegion.US:
-									id += "";
-									break;
-
-								case ServerRegion.USWithIdentifier:
-									id += "~region(us)";
-									break;
-
-								case ServerRegion.JP:
-									id += "~region(jp)";
-									break;
-
-								case ServerRegion.EU:
-									id += "~region(eu)";
-									break;
-
-								case ServerRegion.Custom:
-									id += "~region(" + this.CustomRegion + ")";
-									break;
-							}
-
-							break;
-
-						case InstanceArgument.Permission:
-							if (this.Permission == Permission.Public)
-								break;
-
-							switch (this.Permission) {
-								case Permission.PublicWithIdentifier:
-									id += "~public";
-									break;
+				case Permission.Public:
+					break;
 
 								case Permission.FriendsPlus:
 									id += "~hidden";
@@ -87,26 +52,40 @@ namespace VRChatRejoinTool {
 									break;
 							}
 
-							if (this.Permission != Permission.PublicWithIdentifier)
+							if (this.Permission != Permission.Public)
 								if (this.OwnerId != null)
 									id += "(" + this.OwnerId + ")";
 
-							break;
+				if (this.Permission == Permission.InvitePlus)
+				id += "~canRequestInvite";
 
-						case InstanceArgument.Nonce:
-							if (this.Permission != Permission.PublicWithIdentifier)
-								if (this.Nonce != null)
-									id += "~nonce(" + this.Nonce + ")";
+			switch (this.Region) {
+				case ServerRegion.USW:
+					id += "";
+					break;
 
-							break;
+						case ServerRegion.USWWithIdentifier:
+								id += "~region(us)";
+									break;
 
-						case InstanceArgument.CanRequestInvite:
-							if (this.Permission == Permission.InvitePlus)
-								id += "~canRequestInvite";
+					case ServerRegion.USE:
+					id += "~region(use)";
+					break;
 
-							break;
+						case ServerRegion.JP:
+								id += "~region(jp)";
+					break;
+
+					case ServerRegion.EU:
+					id += "~region(eu)";
+					break;
+
+				case ServerRegion.Custom:
+					id += "~region(" + this.CustomRegion + ")";		break;
 					}
-				}
+				if (this.Permission != Permission.Public)
+				if (this.Nonce != null)
+					id += "~nonce(" + this.Nonce + ")";
 
 				return id;
 			}
@@ -128,9 +107,11 @@ namespace VRChatRejoinTool {
 		public string RegionName {
 			get {
 				switch (this.Region) {
-					case ServerRegion.US:
-					case ServerRegion.USWithIdentifier:
-						return "US";
+					case ServerRegion.USWWithIdentifier:
+					case ServerRegion.USW:
+						return "USW";
+				case ServerRegion.USE:
+					return "USE";
 					case ServerRegion.EU:
 						return "EU";
 					case ServerRegion.JP:
@@ -161,70 +142,32 @@ namespace VRChatRejoinTool {
 			return userIdR.Match(this.OwnerId).Success;
 		}
 
-		public bool IsObsoletePermission() {
-			return (
-				this.Permission == Permission.PublicWithIdentifier
-				||
-				this.Permission == Permission.Unknown
-			);
-		}
+	void parseId(string id) {
+		// NOTE:
+		//   instanceName isn't contains ':'
+		//   nonce, instanceName isn't contains '~'
+		//   non-invite+ instances isn't contains
+		//	 "canRequestInvite" parameter
+		//   all non-home instances has instance-name
+		//   Is valid? wrld_xx~aa
+		//
+		//   ほんまか？
 
-		public bool IsValidArgumentOrder() {
-			var reference = new[] {
-				InstanceArgument.Permission,
-				InstanceArgument.CanRequestInvite,
-				InstanceArgument.Region,
-				InstanceArgument.Nonce,
-			};
+		// NOTE: splitは過去分詞
+		string[] splitId = id.Split('~');
 
-			for (var i = 0; i < reference.Length; ++i)
-				if (this.ArgumentOrder[i] != reference[i])
-					return false;
+		this.Permission = Permission.Unknown;
+		this.Region = ServerRegion.USW;
+		this.CustomRegion = "";
 
-			return true;
-		}
+		string[] visibleInfo = splitId[0].Split(':');
 
-		void parseId(string id) {
-			// NOTE:
-			//   instanceName isn't contains ':'
-			//   nonce, instanceName isn't contains '~'
-			//   non-invite+ instances isn't contains
-			//	 "canRequestInvite" parameter
-			//   all non-home instances has instance-name
-			//   Is valid? wrld_xx~aa
-			//
-			//   ほんまか？
+		this.WorldId = visibleInfo[0];
 
-			var argumentPositions = new SortedDictionary<InstanceArgument, int> {
-				{ InstanceArgument.Permission, -1 },
-				{ InstanceArgument.CanRequestInvite, -1 },
-				{ InstanceArgument.Region, -1 },
-				{ InstanceArgument.Nonce, -1 }
-			};
-
-			// NOTE: splitは過去分詞
-			string[] splitId = id.Split('~');
-
+		if (visibleInfo.Length != 2) {
 			this.Permission = Permission.Unknown;
-			this.Region = ServerRegion.US;
-			this.CustomRegion = "";
-
-			string[] visibleInfo = splitId[0].Split(':');
-
-			this.WorldId = visibleInfo[0];
-
-			if (visibleInfo.Length != 2) {
-				this.Permission = Permission.Unknown;
-
-				ArgumentOrder = new[] {
-					InstanceArgument.Permission,
-					InstanceArgument.CanRequestInvite,
-					InstanceArgument.Region,
-					InstanceArgument.Nonce,
-				};
-
-				return;
-			}
+			return;
+		}
 
 			this.Permission = Permission.Public;
 			this.InstanceName = visibleInfo[1];
@@ -234,7 +177,7 @@ namespace VRChatRejoinTool {
 
 			for (var i = 1; i < splitId.Length; i++) {
 				if (splitId[i] == "canRequestInvite") {
-					argumentPositions[InstanceArgument.CanRequestInvite] = i * 10;
+					
 					containsCanRequestInvite = true;
 					continue;
 				}
@@ -258,11 +201,13 @@ namespace VRChatRejoinTool {
 
 				switch (pKey) {
 					case "region":
-						argumentPositions[InstanceArgument.Region] = i * 10;
-
 						switch (pValue) {
-							case "us":
-								this.Region = ServerRegion.USWithIdentifier;
+						case "us":
+							this.Region = ServerRegion.USW;
+							break;
+						
+							case "use":
+								this.Region = ServerRegion.USE;
 								break;
 
 							case "eu":
@@ -282,29 +227,26 @@ namespace VRChatRejoinTool {
 						break;
 
 					case "nonce":
-						argumentPositions[InstanceArgument.Nonce] = i * 10;
+						
 						this.Nonce = pValue;
 						break;
 
-					case "public":
-						argumentPositions[InstanceArgument.Permission] = i * 10;
-						this.Permission = Permission.PublicWithIdentifier;
-						break;
+					
 
 					case "private":
-						argumentPositions[InstanceArgument.Permission] = i * 10;
+						
 						this.Permission = Permission.InviteOnly;
 						this.OwnerId = pValue;
 						break;
 
 					case "friends":
-						argumentPositions[InstanceArgument.Permission] = i * 10;
+						
 						this.Permission = Permission.Friends;
 						this.OwnerId = pValue;
 						break;
 
 					case "hidden":
-						argumentPositions[InstanceArgument.Permission] = i * 10;
+						
 						this.Permission = Permission.FriendsPlus;
 						this.OwnerId = pValue;
 						break;
@@ -314,28 +256,6 @@ namespace VRChatRejoinTool {
 				}
 			}
 
-			if (argumentPositions[InstanceArgument.Permission] == -1)
-				argumentPositions[InstanceArgument.Permission] = 0;
-
-			if (argumentPositions[InstanceArgument.CanRequestInvite] == -1)
-				argumentPositions[InstanceArgument.CanRequestInvite]
-					= argumentPositions[InstanceArgument.Permission] + 1;
-
-			if (argumentPositions[InstanceArgument.Region] == -1)
-				argumentPositions[InstanceArgument.Region]
-					= argumentPositions[InstanceArgument.CanRequestInvite] + 1;
-
-			if (argumentPositions[InstanceArgument.Nonce] == -1)
-				argumentPositions[InstanceArgument.Nonce]
-					= argumentPositions[InstanceArgument.Region] + 1;
-
-			int j = 0;
-			foreach (
-				KeyValuePair<InstanceArgument, int> argument
-				in argumentPositions.OrderBy(v => v.Value)
-			) {
-				ArgumentOrder[j++] = argument.Key;
-			}
 
 			if (containsCanRequestInvite)
 				this.Permission = Permission.InvitePlus;
@@ -346,7 +266,7 @@ namespace VRChatRejoinTool {
 		}
 
 		public Instance(string id, string worldName) {
-			ArgumentOrder = new InstanceArgument[4];
+			
 			parseId(id);
 			this.WorldName = worldName;
 		}

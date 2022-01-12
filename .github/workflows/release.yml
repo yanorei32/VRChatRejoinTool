@@ -1,0 +1,58 @@
+name: "release"
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: "build"
+    runs-on: "windows-2022"
+
+    steps:
+      - name: set up Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          packages: make zip
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          make.exe genzip
+
+      - name: create installer
+        uses: joncloud/makensis-action@v3.6
+        with:
+          arguments: "/V3"
+
+      - name: compress installer (for BOOTH)
+        run: |
+          zip.exe VRChatRejoinTool.Installer.BOOTH.zip VRChatRejoinTool.Installer.exe
+
+      - name: pre-release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            VRChatRejoinTool.zip
+            VRChatRejoinTool.Installer.exe
+            VRChatRejoinTool.Installer.BOOTH.zip
+
+      - name: tagged-release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            VRChatRejoinTool.zip
+            VRChatRejoinTool.Installer.exe
+            VRChatRejoinTool.Installer.BOOTH.zip
+

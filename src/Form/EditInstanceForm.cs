@@ -16,7 +16,7 @@ namespace VRChatRejoinTool.Form {
 			ownerId,
 			nonce;
 
-		ListBox		argumentOrder;
+		
 
 		Label		worldIdLabel,
 			regionLabel,
@@ -24,12 +24,11 @@ namespace VRChatRejoinTool.Form {
 			instanceNameLabel,
 			ownerIdLabel,
 			nonceLabel,
-			argumentOrderLabel,
+			
 			instanceId,
 			instanceIdLabel;
 
-		Button		orderUp,
-			orderDown,
+		Button		
 			launchVrc,
 			inviteMe,
 			detail,
@@ -58,35 +57,12 @@ namespace VRChatRejoinTool.Form {
 			this.instanceId.Text = instance.Id;
 		}
 
-		void updateListBox() {
-			argumentOrder.BeginUpdate();
-			argumentOrder.Items.Clear();
-
-			foreach (var arg in instance.ArgumentOrder) {
-				argumentOrder.Items.Add(
-					Enum.GetName(typeof(InstanceArgument), arg)
-				);
-			}
-
-			argumentOrder.EndUpdate();
-
-			argumentOrderLabel.Text = "Argument Order";
-			argumentOrderLabel.ForeColor = Color.Black;
-
-			if (!instance.IsValidArgumentOrder()) {
-				argumentOrderLabel.Text += " (mustbe P/CRI/R/N)";
-				argumentOrderLabel.ForeColor = Color.Red;
-			}
-
-			updateOrderButton();
-		}
-
-		void updateTextBox() {
-			/*\
-			|*| World ID
-			\*/
-			worldIdLabel.Text = "World ID";
-			worldIdLabel.ForeColor = Color.Black;
+	void updateTextBox() {
+		/*\
+		|*| World ID
+		\*/
+		worldIdLabel.Text = "World ID";
+		worldIdLabel.ForeColor = Color.Black;
 
 			if (!instance.IsValidWorldId()) {
 				worldIdLabel.Text += " (invalid)";
@@ -145,7 +121,10 @@ namespace VRChatRejoinTool.Form {
 			nonceLabel.ForeColor = Color.Black;
 
 			if (nonce.Enabled) {
-				if (instance.Nonce != null && !instance.IsValidNonceValue()) {
+				if (instance.Nonce == null) {
+				nonceLabel.Text += " (required)";
+				nonceLabel.ForeColor = Color.Red;
+			} else if (!instance.IsValidNonceValue()) {
 					nonceLabel.Text += " (invalid)";
 					nonceLabel.ForeColor = Color.Red;
 				}
@@ -158,23 +137,16 @@ namespace VRChatRejoinTool.Form {
 			customRegion.Enabled = region.Enabled && (instance.Region == ServerRegion.Custom);
 		}
 
-		void updatePermission() {
-			nonce.Enabled
-				= instanceName.Enabled
-					= ownerId.Enabled
-						= region.Enabled
-							= !instance.IsObsoletePermission();
+	void updatePermission() {
+		nonce.Enabled
+			= instanceName.Enabled
+			= ownerId.Enabled
+			= region.Enabled
+			= instance.Permission != Permission.Unknown;
 
-			ownerId.Enabled &= instance.Permission != Permission.Public;
-
-			permissionLabel.Text = "Permission";
-			permissionLabel.ForeColor = Color.Black;
-
-			if (instance.IsObsoletePermission()) {
-				permissionLabel.Text += " (obsolete)";
-				permissionLabel.ForeColor = Color.Red;
-			}
-		}
+		ownerId.Enabled &= instance.Permission != Permission.Public;
+		nonce.Enabled &= instance.Permission != Permission.Public;
+	}
 
 		void permissionChanged(object sender, EventArgs e) {
 			instance.Permission = (Permission) permission.SelectedItem;
@@ -209,39 +181,6 @@ namespace VRChatRejoinTool.Form {
 				return;
 
 			nonce.Text = Guid.NewGuid().ToString();
-		}
-
-		void updateOrderButton() {
-			orderUp.Enabled = 0 < argumentOrder.SelectedIndex;
-			orderDown.Enabled = argumentOrder.SelectedIndex != -1 && argumentOrder.SelectedIndex < instance.ArgumentOrder.Length - 1;
-		}
-
-		void argumentOrderSelectedIndexChanged(object sender, EventArgs e) {
-			updateOrderButton();
-		}
-
-		void orderDownButtonClick(object sender, EventArgs e) {
-			int i = argumentOrder.SelectedIndex;
-			// TODO: swap
-			InstanceArgument temp = instance.ArgumentOrder[i];
-			instance.ArgumentOrder[i] = instance.ArgumentOrder[i+1];
-			instance.ArgumentOrder[i+1] = temp;
-			updateListBox();
-			argumentOrder.SelectedIndex = i+1;
-			updateOrderButton();
-			updateInstanceId();
-		}
-
-		void orderUpButtonClick(object sender, EventArgs e) {
-			int i = argumentOrder.SelectedIndex;
-			// TODO: swap
-			InstanceArgument temp = instance.ArgumentOrder[i];
-			instance.ArgumentOrder[i] = instance.ArgumentOrder[i-1];
-			instance.ArgumentOrder[i-1] = temp;
-			updateListBox();
-			argumentOrder.SelectedIndex = i-1;
-			updateOrderButton();
-			updateInstanceId();
 		}
 
 		void launchVrcButtonClick(object sender, EventArgs e) {
@@ -309,8 +248,7 @@ namespace VRChatRejoinTool.Form {
 			this.killVRC = killVRC;
 
 			initializeComponent();
-
-			updateListBox();
+			
 			updatePermission();
 			updateRegion();
 			updateTextBox();
