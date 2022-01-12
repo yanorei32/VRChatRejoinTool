@@ -46,7 +46,7 @@ namespace VRChatRejoinTool {
 							dateTime = s;
 						});
 
-						if (!proceedParse) {
+						if (proceedParse) {
 							state = LogParseState.DestinationSetFound;
 						}
 
