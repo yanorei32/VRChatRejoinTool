@@ -2,11 +2,11 @@
 
 namespace VRChatRejoinTool.Utility {
 	public static class ShellUtility {
-	    internal static void showDetail(Instance i) {
+	    internal static void ShowDetail(Instance i) {
 	        start(LinkGenerator.GetInstanceLink(i));
 	    }
 
-	    internal static void showUserDetail(Instance i) {
+	    internal static void ShowUserDetail(Instance i) {
 	        start(LinkGenerator.GetUserIdLink(i));
 	    }
 	    

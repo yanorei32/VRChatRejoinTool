@@ -39,11 +39,11 @@ namespace VRChatRejoinTool {
 
 						// FIXME: 名前がよくなさそう
 						var proceedParse = true;
-						proceedParse = proceedParse && actionIfMatch(lineString, instanceRegex, s => {
+						proceedParse = proceedParse && ActionIfMatch(lineString, instanceRegex, s => {
 							instance = s;
 						});
 
-						proceedParse = proceedParse && actionIfMatch(lineString, dateTimeRegex, s => {
+						proceedParse = proceedParse && ActionIfMatch(lineString, dateTimeRegex, s => {
 							dateTime = s;
 						});
 
@@ -55,7 +55,7 @@ namespace VRChatRejoinTool {
 					}
 
 					if (lineString.Contains("[Behaviour] Joining w")) {
-						actionIfMatch(lineString, instanceRegex, s => {
+						ActionIfMatch(lineString, instanceRegex, s => {
 							instance = s;
 						});
 						continue;
@@ -134,7 +134,7 @@ namespace VRChatRejoinTool {
 		 * <param name="showDialog"><c>true</c>ならば画面を表示する。<c>false</c>ならば画面を表示しない。</param>
 		 * <param name="lazyMessage">遅延評価で表示されるメッセージ</param>
 		 */
-		static void showMessage(bool showDialog, Func<string> lazyMessage) {
+		static void ShowMessage(bool showDialog, Func<string> lazyMessage) {
 			if (showDialog) {
 				var message = lazyMessage();
 				MessageBox.Show(
@@ -208,20 +208,20 @@ namespace VRChatRejoinTool {
 				var dontParse = false;
 
 				// NOTE: ||= isn't available as of C# 4.0
-				dontParse = dontParse || actionIfMatch(arg, indexRegex, () => {
+				dontParse = dontParse || ActionIfMatch(arg, indexRegex, () => {
 					index = int.Parse(arg.Split('=')[1]);
 				});
-				dontParse = dontParse || actionIfMatch(arg, ignoreWorldsArgRegex, () => {
+				dontParse = dontParse || ActionIfMatch(arg, ignoreWorldsArgRegex, () => {
 					foreach (string world in arg.Split('=')[1].Split(','))
 						ignoreWorldIds.Add(world);
 				});
-				dontParse = dontParse || actionIfMatch(arg, ignoreByTimeRegex, () => {
+				dontParse = dontParse || ActionIfMatch(arg, ignoreByTimeRegex, () => {
 					ignoreByTimeMins = int.Parse(arg.Split('=')[1]);
 				});
 
 				if (dontParse) continue;
 				if (!File.Exists(arg)) {
-					showMessage(
+					ShowMessage(
 						!(noGUI && noDialog), 
 						() => "Unknown option or invalid file.: " + arg);
 
@@ -232,12 +232,12 @@ namespace VRChatRejoinTool {
 			}
 
 			if (inviteMe && vrcInviteMePath == null) {
-				showMessage(!(noGUI && noDialog), () => "Failed to find vrc-invite-me.exe");
+				ShowMessage(!(noGUI && noDialog), () => "Failed to find vrc-invite-me.exe");
 				return;
 			}
 
 			if (quickSave && quickSaveHTTP) {
-				showMessage(
+				ShowMessage(
 					!(noGUI && noDialog), 
 					() => "The combination of --quick-save and --quick-save-http cannot be used.");
 
@@ -267,12 +267,12 @@ namespace VRChatRejoinTool {
 				var logFiles = getLogFiles();
 
 				if (logFiles == null) {
-					showMessage(!(noGUI && noDialog), () => "Failed to lookup VRChat log directory.");
+					ShowMessage(!(noGUI && noDialog), () => "Failed to lookup VRChat log directory.");
 					return;
 				}
 
 				if (logFiles.Count == 0) {
-					showMessage(!(noGUI && noDialog), () => "Could not find VRChat log.");
+					ShowMessage(!(noGUI && noDialog), () => "Could not find VRChat log.");
 					return;
 				}
 
@@ -315,7 +315,7 @@ namespace VRChatRejoinTool {
 			).ToList();
 
 			if (!sortedVisitHistory.Any()) {
-				showMessage(!(noGUI && noDialog), () => "Could not find visits from VRChat log.");
+				ShowMessage(!(noGUI && noDialog), () => "Could not find visits from VRChat log.");
 				return;
 			}
 
@@ -324,7 +324,7 @@ namespace VRChatRejoinTool {
 			\*/
 			if (noGUI) {
 				if (index >= sortedVisitHistory.Count) {
-					showMessage(!noDialog, () => "Out of bounds index: " + index);
+					ShowMessage(!noDialog, () => "Out of bounds index: " + index);
 					return;
 				}
 
@@ -340,7 +340,7 @@ namespace VRChatRejoinTool {
 						if (!Directory.Exists(saveDir))
 							Directory.CreateDirectory(saveDir);
 					} catch (Exception e) {
-						showMessage(
+						ShowMessage(
 							!noDialog,
 							() => "[QuickSave] Make Directory:\n" + e.Message
 						);
@@ -382,7 +382,7 @@ namespace VRChatRejoinTool {
 					try {
 						VRChat.SaveInstanceToShortcut(i, filePath, quickSaveHTTP);
 					} catch (Exception e) {
-						showMessage(
+						ShowMessage(
 							!noDialog, 
 							() => "[QuickSave] Create Shortcut:\n" + e.Message
 						);
@@ -391,7 +391,7 @@ namespace VRChatRejoinTool {
 					}
 				} else if (inviteMe) {
 					if (VRChat.InviteMe(i, vrcInviteMePath) != 0) {
-						showMessage(
+						ShowMessage(
 							!noDialog, 
 							() => "Check your vrc-invite-me.exe settings"
 						);

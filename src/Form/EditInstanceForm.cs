@@ -196,15 +196,15 @@ namespace VRChatRejoinTool.Form {
 		}
 
 		void detailButtonClick(object sender, EventArgs e) {
-			ShellUtility.showDetail(instance);
+			ShellUtility.ShowDetail(instance);
 		}
 
 		void userDetailButtonClick(object sender, EventArgs e) {
-			ShellUtility.showUserDetail(instance);
+			ShellUtility.ShowUserDetail(instance);
 		}
 
 		void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
-			ClipboardUtility.copyLaunchInstanceLinkToClipboard(instance);
+			ClipboardUtility.CopyLaunchInstanceLinkToClipboard(instance);
 		}
 
 		void windowKeyDown(object sender, KeyEventArgs e) {
@@ -231,15 +231,15 @@ namespace VRChatRejoinTool.Form {
 				}
 			}
 
-			ClipboardUtility.copyInstanceLinkToClipboard(instance);
+			ClipboardUtility.CopyInstanceLinkToClipboard(instance);
 		}
 
 		void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
-			SaveInstanceUtility.saveInstanceToShortcutGUI(instance, false);
+			SaveInstanceUtility.SaveInstanceToShortcutGui(instance, false);
 		}
 
 		void saveInstanceLinkClick(object sender, EventArgs e) {
-			SaveInstanceUtility.saveInstanceToShortcutGUI(instance, true);
+			SaveInstanceUtility.SaveInstanceToShortcutGui(instance, true);
 		}
 
 		public EditInstanceForm(Instance instance, bool killVRC, string vrcInviteMePath) {

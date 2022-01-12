@@ -2,7 +2,7 @@
 
 namespace VRChatRejoinTool.Utility {
 	static class SaveInstanceUtility {
-	    internal static void saveInstanceToShortcutGUI(Instance i, bool httpLink = false) {
+	    internal static void SaveInstanceToShortcutGui(Instance i, bool httpLink = false) {
 	        var sfd = new SaveFileDialog();
 
 	        var filename = i.WorldId;

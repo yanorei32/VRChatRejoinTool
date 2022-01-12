@@ -44,27 +44,27 @@ namespace VRChatRejoinTool.Form
 		}
 
 		void copyInstanceLinkClick(object sender, EventArgs e) {
-			ClipboardUtility.copyInstanceLinkToClipboard(sortedHistory[index].Instance);
+			ClipboardUtility.CopyInstanceLinkToClipboard(sortedHistory[index].Instance);
 		}
 
 		void saveInstanceLinkClick(object sender, EventArgs e) {
-			SaveInstanceUtility.saveInstanceToShortcutGUI(sortedHistory[index].Instance, true);
+			SaveInstanceUtility.SaveInstanceToShortcutGui(sortedHistory[index].Instance, true);
 		}
 
 		void saveLaunchInstanceLinkClick(object sender, EventArgs e) {
-			SaveInstanceUtility.saveInstanceToShortcutGUI(sortedHistory[index].Instance, false);
+			SaveInstanceUtility.SaveInstanceToShortcutGui(sortedHistory[index].Instance, false);
 		}
 
 		void copyLaunchInstanceLinkClick(object sender, EventArgs e) {
-			ClipboardUtility.copyLaunchInstanceLinkToClipboard(sortedHistory[index].Instance);
+			ClipboardUtility.CopyLaunchInstanceLinkToClipboard(sortedHistory[index].Instance);
 		}
 
 		void detailButtonClick(object sender, EventArgs e) {
-			ShellUtility.showDetail(sortedHistory[index].Instance);
+			ShellUtility.ShowDetail(sortedHistory[index].Instance);
 		}
 
 		void userDetailButtonClick(object sender, EventArgs e) {
-			ShellUtility.showUserDetail(sortedHistory[index].Instance);
+			ShellUtility.ShowUserDetail(sortedHistory[index].Instance);
 		}
 
 		void inviteMeButtonClick(object sender, EventArgs e) {
