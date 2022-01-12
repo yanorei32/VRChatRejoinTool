@@ -1,4 +1,4 @@
-﻿namespace VRChatRejoinTool.Utility {
+namespace VRChatRejoinTool.Utility {
 	public static class LinkGenerator {
 	    public static string GetLaunchInstanceLink(Instance i) {
 	        return "vrchat://launch?id=" + i.Id;

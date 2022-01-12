@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace VRChatRejoinTool.Utility {
 	public static class ShellUtility {
@@ -9,7 +9,7 @@ namespace VRChatRejoinTool.Utility {
 	    internal static void ShowUserDetail(Instance i) {
 	        start(LinkGenerator.GetUserIdLink(i));
 	    }
-	    
+
 	    private static void start(string path) {
 	        Process.Start(new ProcessStartInfo {
 	            FileName = path,
