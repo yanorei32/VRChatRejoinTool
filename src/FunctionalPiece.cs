@@ -1,10 +1,10 @@
 using System;
 using System.Text.RegularExpressions;
 
+/**
+* ユーティリティー関数を集めたネームスペース
+*/
 namespace VRChatRejoinTool { 
-	/**
-	* ユーティリティー関数を集めたクラス
-	*/
 	public static class FunctionalPiece {
 		/* 
 		* <summary><c>input</c>が<c>regex</c>にマッチしたときのみ<c>ifMatch</c>で指定された<c>Action</c>を呼び出す。</summary>

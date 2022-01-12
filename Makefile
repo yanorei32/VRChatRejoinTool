@@ -5,17 +5,7 @@ TARGET_DIR	= bin/csc
 TARGET_DIR_	= $(shell echo $(TARGET_DIR) | sed -e 's/\//\\\\/g')
 TARGET		= $(TARGET_DIR_)\\$(PROJ_NAME).exe
 
-SRC			=	src/Program.cs \
-				src/Permission.cs \
-				src/ServerRegion.cs \
-				src/Instance.cs \
-				src/Visit.cs \
-				src/VRChat.cs \
-				src/Form/RejoinToolForm.cs \
-				src/Form/MainForm.cs \
-				src/Form/MainForm.Design.cs \
-				src/Form/EditInstanceForm.cs \
-				src/Form/EditInstanceForm.Design.cs
+SRC			=	$(shell echo ./src/**/*.cs ./src/*.cs)
 
 SRC_		=	$(shell echo $(SRC) | sed -e 's/\//\\\\/g')
 
@@ -27,19 +17,15 @@ CSC_FLAGS		=	/nologo \
 					/win32icon:res\\icon.ico \
 					/resource:res\\icon.ico,icon \
 					/resource:res\\logo.png,logo \
-					/utf8output
+					/utf8output \
+					/optimize
 
 DEBUG_FLAGS		= 
-RELEASE_FLAGS	= /optimize
-
-.PHONY: debug
-debug: CSC_FLAGS+=$(DEBUG_FLAGS)
-debug: all
+RELEASE_FLAGS	=
 
 .PHONY: release
 release: CSC_FLAGS+=$(RELEASE_FLAGS)
 release: all
-
 
 $(PROJ_NAME).zip: all
 	zip -r \

@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using VRChatRejoinTool.Form;
-using static VRChatRejoinTool.FunctionalPiece;
 
 namespace VRChatRejoinTool {
 	static class Program {
@@ -39,11 +38,11 @@ namespace VRChatRejoinTool {
 
 						// FIXME: 名前がよくなさそう
 						var proceedParse = true;
-						proceedParse = proceedParse && ActionIfMatch(lineString, instanceRegex, s => {
+						proceedParse = proceedParse && FunctionalPiece.ActionIfMatch(lineString, instanceRegex, s => {
 							instance = s;
 						});
 
-						proceedParse = proceedParse && ActionIfMatch(lineString, dateTimeRegex, s => {
+						proceedParse = proceedParse && FunctionalPiece.ActionIfMatch(lineString, dateTimeRegex, s => {
 							dateTime = s;
 						});
 
@@ -55,7 +54,7 @@ namespace VRChatRejoinTool {
 					}
 
 					if (lineString.Contains("[Behaviour] Joining w")) {
-						ActionIfMatch(lineString, instanceRegex, s => {
+						FunctionalPiece.ActionIfMatch(lineString, instanceRegex, s => {
 							instance = s;
 						});
 						continue;
@@ -148,6 +147,10 @@ namespace VRChatRejoinTool {
 			}
 		}
 
+		static bool permissionSelector(Permission p) {
+			return p != Permission.Public && p != Permission.Unknown;
+		}
+
 		[STAThread]
 		public static void Main(string[] Args) {
 			var visitHistory = new List<Visit>();
@@ -208,14 +211,14 @@ namespace VRChatRejoinTool {
 				var dontParse = false;
 
 				// NOTE: ||= isn't available as of C# 4.0
-				dontParse = dontParse || ActionIfMatch(arg, indexRegex, () => {
+				dontParse = dontParse || FunctionalPiece.ActionIfMatch(arg, indexRegex, () => {
 					index = int.Parse(arg.Split('=')[1]);
 				});
-				dontParse = dontParse || ActionIfMatch(arg, ignoreWorldsArgRegex, () => {
+				dontParse = dontParse || FunctionalPiece.ActionIfMatch(arg, ignoreWorldsArgRegex, () => {
 					foreach (string world in arg.Split('=')[1].Split(','))
 						ignoreWorldIds.Add(world);
 				});
-				dontParse = dontParse || ActionIfMatch(arg, ignoreByTimeRegex, () => {
+				dontParse = dontParse || FunctionalPiece.ActionIfMatch(arg, ignoreByTimeRegex, () => {
 					ignoreByTimeMins = int.Parse(arg.Split('=')[1]);
 				});
 
@@ -294,9 +297,6 @@ namespace VRChatRejoinTool {
 			\*/
 			var threshold = DateTime.Now.AddMinutes(ignoreByTimeMins * -1);
 			var dontFilterByTime = ignoreByTimeMins == 0;
-			bool permissionSelector(Permission p) => p != Permission.Public
-			                                        &&
-													p != Permission.Unknown;
 
 			List<Visit> sortedVisitHistory = visitHistory.Where(
 				v => (

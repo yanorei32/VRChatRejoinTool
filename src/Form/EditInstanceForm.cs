@@ -137,16 +137,16 @@ namespace VRChatRejoinTool.Form {
 			customRegion.Enabled = region.Enabled && (instance.Region == ServerRegion.Custom);
 		}
 
-	void updatePermission() {
-		nonce.Enabled
-			= instanceName.Enabled
-			= ownerId.Enabled
-			= region.Enabled
-			= instance.Permission != Permission.Unknown;
+		void updatePermission() {
+			nonce.Enabled
+				= instanceName.Enabled
+				= ownerId.Enabled
+				= region.Enabled
+				= instance.Permission != Permission.Unknown;
 
-		ownerId.Enabled &= instance.Permission != Permission.Public;
-		nonce.Enabled &= instance.Permission != Permission.Public;
-	}
+			ownerId.Enabled &= instance.Permission != Permission.Public;
+			nonce.Enabled &= instance.Permission != Permission.Public;
+		}
 
 		void permissionChanged(object sender, EventArgs e) {
 			instance.Permission = (Permission) permission.SelectedItem;
