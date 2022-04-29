@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: actionlint
-        uses: reviewdog/action-actionlint@v1.22.1
+        uses: reviewdog/action-actionlint@v1.24.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
