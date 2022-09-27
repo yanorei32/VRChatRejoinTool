@@ -1,4 +1,4 @@
-PREFIX		= $(shell if [ "`uname`" = "CYGWIN_NT-10.0" ]; then echo cygdrive; else echo mnt; fi)
+PREFIX		= $(shell if [ "`uname | tr -d 0-9`" = "CYGWIN_NT-.-" ]; then echo cygdrive; else echo mnt; fi)
 CSC			= /$(PREFIX)/c/windows/microsoft.net/framework/v4.0.30319/csc.exe
 PROJ_NAME	= VRChatRejoinTool
 TARGET_DIR	= bin/csc
