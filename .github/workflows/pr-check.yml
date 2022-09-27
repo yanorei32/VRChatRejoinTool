@@ -1,0 +1,28 @@
+name: "pr-check"
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: "build"
+    runs-on: "windows-2022"
+
+    steps:
+      - name: set up Cygwin
+        uses: egor-tensin/setup-cygwin@v3
+        with:
+          platform: x64
+          packages: make zip
+
+      - name: checkout
+        uses: actions/checkout@v3.0.2
+
+      - name: build
+        run: |
+          make.exe genzip
+
+      - name: create installer
+        uses: joncloud/makensis-action@v3.7
+        with:
+          arguments: "/V3"
