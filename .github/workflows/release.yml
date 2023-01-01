@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: set up Cygwin
-        uses: egor-tensin/setup-cygwin@v3
+        uses: egor-tensin/setup-cygwin@v4
         with:
           platform: x64
           packages: make zip
