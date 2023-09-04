@@ -13,7 +13,7 @@ jobs:
     name: actionlint with reviewdog
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v4.0.0
       - name: actionlint
         uses: reviewdog/action-actionlint@v1.37.1
         with:
