@@ -23,6 +23,6 @@ jobs:
           make.exe genzip
 
       - name: create installer
-        uses: joncloud/makensis-action@v3.7
+        uses: joncloud/makensis-action@v4.1
         with:
           arguments: "/V3"
