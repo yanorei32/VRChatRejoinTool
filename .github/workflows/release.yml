@@ -36,19 +36,18 @@ jobs:
           zip.exe VRChatRejoinTool.Installer.BOOTH.zip VRChatRejoinTool.Installer.exe
 
       - name: pre-release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: softprops/action-gh-release@v2.0.5
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          tag_name: "latest"
           prerelease: true
-          title: "Development Build"
+          name: "Development Build"
           files: |
             VRChatRejoinTool.zip
             VRChatRejoinTool.Installer.exe
             VRChatRejoinTool.Installer.BOOTH.zip
 
       - name: tagged-release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v2.0.5
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
