@@ -9,6 +9,12 @@ jobs:
     runs-on: "windows-2025"
 
     steps:
+    
+    steps:
+      - name: Add NSIS
+        run: |
+          winget install -e --id NSIS.NSIS 
+
       - name: set up Cygwin
         uses: egor-tensin/setup-cygwin@v4
         with:
