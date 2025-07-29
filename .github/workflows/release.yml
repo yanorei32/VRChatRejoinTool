@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Add NSIS
         run: |
-          winget install -e --id NSIS.NSIS 
+          winget install -e --id NSIS.NSIS --accept-source-agreement --accept-package-agreements
 
       - name: set up Cygwin
         uses: egor-tensin/setup-cygwin@v4
