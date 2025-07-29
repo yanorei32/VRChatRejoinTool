@@ -9,8 +9,6 @@ jobs:
     runs-on: "windows-2025"
 
     steps:
-    
-    steps:
       - name: Add NSIS
         run: |
           winget install -e --id NSIS.NSIS 
