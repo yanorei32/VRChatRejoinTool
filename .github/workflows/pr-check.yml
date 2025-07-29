@@ -6,9 +6,13 @@ on:
 jobs:
   build:
     name: "build"
-    runs-on: "windows-2022"
+    runs-on: "windows-2025"
 
     steps:
+      - name: Add NSIS
+        run: |
+          winget install -e --id NSIS.NSIS --accept-source-agreements --accept-package-agreements
+
       - name: set up Cygwin
         uses: egor-tensin/setup-cygwin@v4
         with:
