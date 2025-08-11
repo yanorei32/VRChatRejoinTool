@@ -20,7 +20,7 @@ jobs:
           packages: make zip
 
       - name: checkout
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.3.0
 
       - name: build
         run: |
